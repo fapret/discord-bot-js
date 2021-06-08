@@ -1,0 +1,15 @@
+{
+    "bot-token": "",
+    "secondary-bot-tokens": [],
+    "default-prefix": "trymate!",
+    "activity": "'a fapret programar', { type: 'WATCHING'}",
+    "Messages": {
+        "unknown-command": "Comando Desconocido",
+        "guild-not-registered": "Guild no registrada! Registrando guild >> ",
+        "disabled-module": "El modulo de este comando esta desactivado",
+        "bot-loaded": "Bot cargado",
+        "activity-setted": "Actividad colocada >> ",
+        "module-load-started": "Carga de modulos iniciada",
+        "modules-loaded": "Modulos cargados:"
+    }
+}

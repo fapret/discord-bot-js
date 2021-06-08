@@ -1,0 +1,57 @@
+{
+    "ID": "00000000000000000",
+    "prefix": "trymate!",
+    "operatorRole": "00000000000000000",
+    "SupportChannels": [
+        {
+            "ID": "00000000000000000",
+            "Advise": {
+                "Message": "",
+                "Embeed":{
+                    "Title": "",
+                    "Description": "",
+                    "color": "",
+                    "Fields": [
+                        {
+                            "name": "",
+                            "value": "",
+                            "inline": false
+                        }
+                    ]
+                }
+            },
+            "Categorys": [
+                {
+                    "Name": "",
+                    "Questions": []
+                }
+            ]
+        }
+    ],
+    "CustomMessages":[
+        {
+            "Channel": "00000000000000000",
+            "Messages": [
+                {
+                    "Keywords": [],
+                    "WildCard": false,
+                    "Message": "",
+                    "Embeed":{
+                        "Title": "",
+                        "Description": "",
+                        "color": "",
+                        "Fields": [
+                            {
+                                "name": "",
+                                "value": "",
+                                "inline": false
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "DisabledModules": [],
+    "Aliases": []
+}
