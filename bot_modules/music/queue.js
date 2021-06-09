@@ -11,12 +11,12 @@ module.exports = {
             return;
         }
         if(queue.length == 0){
-            await message.channel.send(config.Messages['no-songs-on-queue']);
+            message.channel.send(config.Messages['no-songs-on-queue']);
             return;
         }
         var songs = "```\n";
         var songAmount = -1;
-        var playing;
+        var playing = config.Messages['playing-nothing'];
         queue.songs.forEach(element => {
             songAmount++;
             if(songAmount == 0){
@@ -26,7 +26,7 @@ module.exports = {
             }
         });
         songs += "```";
-        if(songAmount == 0){
+        if(songAmount <= 0){
             songs = config.Messages['no-songs-on-queue'];
         }
         const embeed = new Discord.MessageEmbed()

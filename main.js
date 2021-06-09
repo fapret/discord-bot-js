@@ -35,17 +35,12 @@ mainClient.modules.forEach(key =>{
     console.log('-' + key.name);
 });
 console.log('--------------------');
-/*
-console.log(config['secondary-bot-tokens'].length);
-console.log(config['secondary-bot-tokens'][0]);
-*/
 
-/* comandos */
-mainClient.on('message', message => {
-    if(message.author.bot){return};
-    const guild = message.guild.id;
+/* Obtiene la informacion de la guild que se le pasa como parametro, si no existe la crea */
+const getguild = function(guild){
+    var getguilddata;
     try {
-        var getguilddata = fs.readFileSync('./guilds/' + guild + '.json');
+        getguilddata = fs.readFileSync('./guilds/' + guild + '.json');
     } catch (error){
         if (error.code === 'ENOENT') {
             d = new Date();
@@ -62,13 +57,24 @@ mainClient.on('message', message => {
                 getguilddata = fs.readFileSync('./guilds/' + guild + '.json');
             } catch (err){
                 console.log(err);
-                return;
+                return undefined;
             }
-          } else {
+        } else {
             console.log(error);
-            return;
-          }
+            return undefined;
+        }
     }
+    return getguilddata;
+};
+
+/* comandos */
+mainClient.on('message', message => {
+    if(message.author.bot){return};
+    const guild = message.guild.id;
+    var getguilddata = getguild(guild);
+    if (getguilddata == undefined){
+        return;
+    };
     var guilddata = JSON.parse(getguilddata);
     var prefix = guilddata.prefix;
     guilddata.Aliases.forEach(alias => {
@@ -94,13 +100,35 @@ mainClient.on('message', message => {
     }
 });
 
+/* Acciones cuando un usuario hace algo en un canal de voz */
+mainClient.on('voiceStateUpdate', (oldstate, newstate) => {
+    if(oldstate.guild.id != newstate.guild.id){
+        d = new Date();
+        console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] error >> ' + 'newstate tiene diferente guild que oldstate, REVISAR CODIGO');
+        console.log('oldstate guild: ' + oldstate.guild.id);
+        console.log('newstate guild: ' + newstate.guild.id);
+        return;
+    };
+    
+    const guild = oldstate.guild.id;
+    var getguilddata = getguild(guild);
+    if (getguilddata == undefined){
+        return;
+    };
+    var guilddata = JSON.parse(getguilddata);
+
+    mainClient.modules.forEach(module => {
+        module.voiceStateUpdate(guilddata, oldstate, newstate);
+    });
+});
+
 /* Se ejecuta cuando el bot ya esta activo */
-mainClient.on("ready", () => {
+mainClient.on('ready', () => {
     d = new Date();
     console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['bot-loaded']);
-    mainClient.user.setActivity('a fapret programar', { type: 'WATCHING'});
+    mainClient.user.setActivity(config.activity.value, { type: config.activity.type });
     d = new Date();
-    console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['activity-setted'] + config.activity);
+    console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['activity-setted'] + config.activity.value + ', type: ' + config.activity.type);
 });
 
 /* Inicia sesion con los bots */

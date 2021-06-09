@@ -17,6 +17,7 @@
         "now-playing": "Ahora reproduciendo: ",
         "skip-forced": "Se salto la cancion actual forzosamente",
         "song-skipped": "Se salto la cancion actual",
+        "votes-to-skip": "Votos para saltar la cancion actual: ",
         "no-songs-to-skip": "No hay canciones para saltar",
         "only-operators-can-forceskip": "solo los operadores pueden forzar el salto de cancion",
         "only-operators-can-stop": "solo los operadores pueden detener el bot",
@@ -29,6 +30,7 @@
         "must-specify-index": "Debes especificar un lugar en la cola",
         "queue-song-skipped": "Se salto la cancion que estaba en la cola: ",
         "help-title": "Comandos del modulo de musica (music)",
+        "playing-nothing": "No se esta reproduciendo nada",
         "help-description": "Estos son los comandos del modulo de musica, y que hacen, recuerda los comandos de este modulo se utilizan de la forma <bot-prefix>music <command> [args]",
         "help-commands": [
             {

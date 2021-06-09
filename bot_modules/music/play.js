@@ -81,5 +81,5 @@ const playmusic = async (queue, song) => {
         queue.skipVotes.shift();
         playmusic(queue, queue.songs[0]);
     });
-    await queue.textChannel.send(config.Messages['now-playing'] + song.title);
+    queue.textChannel.send(config.Messages['now-playing'] + song.title);
 }

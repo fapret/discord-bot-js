@@ -18,6 +18,6 @@ module.exports = {
         queue.textChannel = null,
         queue.conection = null,
         queue.skipVotes = [];
-        await message.channel.send(config.Messages['stop-music']);
+        message.channel.send(config.Messages['stop-music']);
     }
 }

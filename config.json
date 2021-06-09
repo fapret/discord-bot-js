@@ -2,7 +2,10 @@
     "bot-token": "",
     "secondary-bot-tokens": [],
     "default-prefix": "trymate!",
-    "activity": "'a fapret programar', { type: 'WATCHING'}",
+    "activity": {
+        "value": "a fapret hacer cositas",
+        "type": "WATCHING"
+    },
     "Messages": {
         "unknown-command": "Comando Desconocido",
         "guild-not-registered": "Guild no registrada! Registrando guild >> ",

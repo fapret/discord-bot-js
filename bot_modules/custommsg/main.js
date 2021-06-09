@@ -47,5 +47,8 @@ module.exports = {
         } catch (err) {
             console.log(err);
         }
+    },
+    async voiceStateUpdate(guild, oldstate, newstate){
+        return;
     }
 }

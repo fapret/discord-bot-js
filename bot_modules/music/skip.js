@@ -10,7 +10,7 @@ module.exports = {
             return;
         }
         if(queue.songs.length == 0){
-            await message.channel.send(config.Messages['no-songs-to-skip']);
+            message.channel.send(config.Messages['no-songs-to-skip']);
             return;
         }
         const member = message.member.id;
@@ -20,15 +20,16 @@ module.exports = {
         var memberID = queue.skipVotes[0].find(element => element == member);
         if(!memberID){
             queue.skipVotes[0].push(member);
-            await message.reply(config.Messages['skip-vote-sent']);
+            message.reply(config.Messages['skip-vote-sent']);
+            message.channel.send(config.Messages['votes-to-skip'] + queue.skipVotes[0].length + '/' + voiceChannel.members.size / 2);
         } else {
-            await message.reply(config.Messages['already-skip-voted']);
+            message.reply(config.Messages['already-skip-voted']);
             return;
         }
         membersPlaying = voiceChannel.members.size;
         if((membersPlaying/2) <= queue.skipVotes[0].length){
             queue.conection.dispatcher.end();
-            await message.channel.send(config.Messages['song-skipped']);
+            message.channel.send(config.Messages['song-skipped']);
         }
     }
 }
