@@ -85,5 +85,8 @@ module.exports = {
                 }
             };
         };
+    },
+    async OnMemberJoin(guild, member){
+        return;
     }
 }

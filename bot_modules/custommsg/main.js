@@ -50,5 +50,8 @@ module.exports = {
     },
     async voiceStateUpdate(guild, oldstate, newstate){
         return;
+    },
+    async OnMemberJoin(guild, member){
+        return;
     }
 }

@@ -118,7 +118,25 @@ mainClient.on('voiceStateUpdate', (oldstate, newstate) => {
     var guilddata = JSON.parse(getguilddata);
 
     mainClient.modules.forEach(module => {
-        module.voiceStateUpdate(guilddata, oldstate, newstate);
+        if(!guilddata.DisabledModules.includes(module.name)){
+            module.voiceStateUpdate(guilddata, oldstate, newstate);
+        }
+    });
+});
+
+/* Se ejecuta cuando alguien se une a la guild */
+mainClient.on('guildMemberAdd', member => {
+    const guild = member.guild.id;
+    var getguilddata = getguild(guild);
+    if (getguilddata == undefined){
+        return;
+    };
+    var guilddata = JSON.parse(getguilddata);
+
+    mainClient.modules.forEach(module => {
+        if(!guilddata.DisabledModules.includes(module.name)){
+            module.OnMemberJoin(guilddata, member);
+        }
     });
 });
 
