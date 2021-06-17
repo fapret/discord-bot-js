@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 require('discord-reply');
+const disbut = require('discord-buttons');
 const fs = require('fs');
 const path = require('path');
 const config = require('./config.json');
@@ -7,6 +8,7 @@ const config = require('./config.json');
 const DiscordClients = new Map;
 DiscordClients.set("main", new Discord.Client());
 const mainClient = DiscordClients.get("main");
+disbut(mainClient);
 
 /* Carga los modulos */
 d = new Date();
@@ -49,8 +51,8 @@ const getguild = function(guild){
                 ID: guild,
                 prefix: config['default-prefix'],
                 operatorRole: '00000000000000000',
-                DisabledModules: [],
-                Aliases: []
+                DisabledModules: ['welcome'],
+                Aliases: ['t!']
             }
             try {
                 fs.writeFileSync('./guilds/' + guild + '.json', JSON.stringify(newguild, null, 4));
@@ -70,6 +72,7 @@ const getguild = function(guild){
 /* comandos */
 mainClient.on('message', message => {
     if(message.author.bot){return};
+    if((message.guild == undefined) || (message.guild == null)){return};
     const guild = message.guild.id;
     var getguilddata = getguild(guild);
     if (getguilddata == undefined){
@@ -136,6 +139,23 @@ mainClient.on('guildMemberAdd', member => {
     mainClient.modules.forEach(module => {
         if(!guilddata.DisabledModules.includes(module.name)){
             module.OnMemberJoin(guilddata, member);
+        }
+    });
+});
+
+/* Se ejecuta cuando alguien presiona un boton */
+mainClient.on('clickButton', button => {
+    if((button.guild == undefined) || (button.guild == null)){return};
+    const guild = button.guild.id;
+    var getguilddata = getguild(guild);
+    if (getguilddata == undefined){
+        return;
+    };
+    var guilddata = JSON.parse(getguilddata);
+
+    mainClient.modules.forEach(module => {
+        if(!guilddata.DisabledModules.includes(module.name)){
+            module.onButtonClick(guilddata, button);
         }
     });
 });

@@ -53,5 +53,8 @@ module.exports = {
     },
     async OnMemberJoin(guild, member){
         return;
+    },
+    async onButtonClick(guild, button){
+        return;
     }
 }
