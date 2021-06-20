@@ -1,13 +1,13 @@
 {
   "name": "trymate",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Discord bot made by fapret",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "fapret (Santiago Nicolas Diaz Conde)",
-  "license": "ISC",
+  "license": "RIGHTS RESERVED",
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
     "canvas": "^2.8.0",
