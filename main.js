@@ -51,7 +51,7 @@ const getguild = function(guild){
                 ID: guild,
                 prefix: config['default-prefix'],
                 operatorRole: '00000000000000000',
-                DisabledModules: ['welcome'],
+                DisabledModules: ['welcome','apps'],
                 Aliases: ['t!']
             }
             try {
@@ -98,7 +98,7 @@ mainClient.on('message', message => {
     } else {
         //estos modulos tienen comportamientos especiales y tienen su propio manejo de comandos cuando no inician con el prefix
         if(!guilddata.DisabledModules.includes('custommsg')){
-            mainClient.modules.get('custommsg').execute(message, guilddata, args);
+            mainClient.modules.get('custommsg').execute(message, guilddata);
         }
     }
 });

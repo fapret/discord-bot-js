@@ -1,4 +1,5 @@
 const avatar = require('./avatar.js');
+const hug = require('./hug.js');
 const config = require('./config.json');
 
 module.exports = {
@@ -9,6 +10,9 @@ module.exports = {
         switch (args[0]){
             case 'avatar':
                 avatar.execute(message);
+                break;
+            case 'hug':
+                hug.execute(message);
                 break;
             default:
                 message.reply(config.Messages['no-action']);
