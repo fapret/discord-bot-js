@@ -12,7 +12,7 @@ module.exports = {
                 avatar.execute(message);
                 break;
             case 'hug':
-                hug.execute(message);
+                hug.execute(message, args);
                 break;
             default:
                 message.reply(config.Messages['no-action']);

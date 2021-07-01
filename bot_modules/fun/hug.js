@@ -21,16 +21,39 @@ module.exports = {
     name: 'fun.hug',
     description: 'modulo de diversion',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    async execute(message){
+    async execute(message, args){
         var member = message.mentions.users.first();
         const animations = JSON.parse(fs.readFileSync('./bot_modules/fun/hug/animations.json'));
         const animationsAmount = Object.keys(animations.animation).length;
-        const imageIndex = Math.floor(Math.random() * (animationsAmount) + 1) - 1;
+        var imageIndex = Math.floor(Math.random() * (animationsAmount) + 1) - 1;
+        var opt = false;
+        if(args.length > 3){
+            try{
+                //const imageIndexCheck = parseInt(args[2].replace("#",""));
+                var index = 0;
+                for(; (index < animationsAmount) && !opt; index++){
+                    if(animations.animation[index].ID == args[2].replace("#","")){
+                        imageIndex = index;
+                        opt = true;
+                    }
+                }
+                if(!opt){
+                    message.channel.send("No se encontro la imagen " + args[2] + "\n procediendo aleatoriamente...");
+                }
+            } catch (err) {
+                console.log(err);
+                message.channel.send("Valores opcionales erroneos, procesando de forma aleatoria");
+                imageIndex = Math.floor(Math.random() * (animationsAmount) + 1) - 1;
+            }
+        }
         const selectedImage = animations.animation[imageIndex];
         var messageToSend = selectedImage.message;
-        if (member == undefined){
+        if ((member == undefined) || member == message.author){
             member = message.author;
             messageToSend = selectedImage.selfMessage;
+        }
+        if(opt){
+            messageToSend = args.slice(3, args.length).join(' ');
         }
         messageToSend = internalParser(messageToSend, member, message.author);
         const authorAvatarURL = message.author.displayAvatarURL({ format: 'png', size: 1024});
