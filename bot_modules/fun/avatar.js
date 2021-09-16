@@ -17,11 +17,10 @@ module.exports = {
         context.drawImage(memberAvatar, 0, 0, 1024, 1024);
         const embeed = new Discord.MessageEmbed().setFooter("trymate bot by Fapret");
         const attach = new Discord.MessageAttachment(img.toBuffer(), `${member.id}.png`);
-        embeed.attachFiles(attach);
         embeed.setImage(`attachment://${member.id}.png`);
         embeed.setURL(memberAvatarURL);
         embeed.setDescription(`[URL Avatar](${memberAvatarURL}) | ID: ${member.id}`);
         embeed.setAuthor(`${member.tag}`, memberAvatarURL);
-        message.channel.send(embeed);
+        message.channel.send({embeds: [embeed], files: [attach]});
     }
 }
