@@ -40,6 +40,11 @@ console.log('--------------------');
 /* Obtiene la informacion de la guild que se le pasa como parametro, si no existe la crea */
 const getguild = function(guild){
     var getguilddata;
+    if (!fs.existsSync('./guilds/')) {
+        fs.mkdirSync("./guilds/");
+        d = new Date();
+        console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['created-guilds-directory']);
+    }
     try {
         getguilddata = fs.readFileSync('./guilds/' + guild + '.json');
     } catch (error){

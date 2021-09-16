@@ -13,6 +13,8 @@
         "bot-loaded": "Bot cargado",
         "activity-setted": "Actividad colocada >> ",
         "module-load-started": "Carga de modulos iniciada",
-        "modules-loaded": "Modulos cargados:"
+        "modules-loaded": "Modulos cargados:",
+        "created-cache-directory": "Creado directorio cache",
+        "created-guilds-directory": "Creado directorio guilds"
     }
 }

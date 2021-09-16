@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const GIFEncoder = require('gifencoder');
 const { createCanvas, loadImage, registerFont } = require('canvas');
 const fs = require('fs');
+const config = require('./config.json');
 
 function internalParser(text, member, author){
     if (member != null){
@@ -62,6 +63,11 @@ module.exports = {
         const memberAvatar = await loadImage(memberAvatarURL);
 
         const encoder = new GIFEncoder(parseInt(selectedImage.width), parseInt(selectedImage.height));
+        if (!fs.existsSync('./cache/')) {
+            fs.mkdirSync("./cache/");
+            d = new Date();
+    		console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['created-cache-directory']);
+		}
         const output = fs.createWriteStream('./cache/' + message.id + '.gif');
         encoder.createReadStream().pipe(output);
         encoder.start();
