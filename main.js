@@ -4,10 +4,17 @@ const fs = require('fs');
 const path = require('path');
 const config = require('./config.json');
 
+/* Interfaz de lectura de consola */
+const readline = require('readline');
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+/* Clientes Discord */
 const DiscordClients = new Map;
 DiscordClients.set("main", new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_INTEGRATIONS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES] }));
 const mainClient = DiscordClients.get("main");
-//disbut(mainClient);
 
 /* Carga los modulos */
 d = new Date();
@@ -175,3 +182,17 @@ mainClient.on('ready', () => {
 
 /* Inicia sesion con los bots */
 mainClient.login(config['bot-token']);
+
+/* Comandos de la consola */
+rl.on('line', (input) => {
+    if(input.toLowerCase().startsWith("help")){
+        d = new Date();
+        console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + "Comandos de consola disponibles:");
+        console.log("help : Este mensaje");
+        console.log("updateActivity : Actualiza la actividad con la que se encuentra en config.json");
+    } else if(input.toLowerCase().startsWith("updateactivity")){
+        mainClient.user.setActivity(config.activity.value, { type: config.activity.type });
+        d = new Date();
+        console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['activity-setted'] + config.activity.value + ', type: ' + config.activity.type);
+    }
+});
