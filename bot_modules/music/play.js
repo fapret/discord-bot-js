@@ -1,6 +1,16 @@
 const ytdl = require('ytdl-core');
 const ytSearch = require('yt-search');
 const config = require('./config.json');
+const {
+	joinVoiceChannel,
+	createAudioPlayer,
+	createAudioResource,
+	entersState,
+	StreamType,
+	AudioPlayerStatus,
+	VoiceConnectionStatus,
+    getVoiceConnection
+} = require('@discordjs/voice');
 module.exports = {
     name: 'music.play',
     description: 'modulo de musica, comando play',
@@ -36,7 +46,12 @@ module.exports = {
             }
             if(queue.conection == null){
                 try{
-                    const conexion = await voiceChannel.join();
+                    const conexion = await joinVoiceChannel({
+						channelId: voiceChannel.id,
+						guildId: voiceChannel.guild.id,
+						adapterCreator: voiceChannel.guild.voiceAdapterCreator
+					});
+                    await entersState(conexion, VoiceConnectionStatus.Ready, 30e3);
                     queue.conection = conexion;
                 } catch (err){
                     console.log(config.Messages['error-at-connect']);
@@ -48,6 +63,10 @@ module.exports = {
             }
             if(queue.textChannel == null){
                 queue.textChannel = message.channel;
+            }
+            if(queue.player == null){
+                const player = createAudioPlayer();
+                queue.player = player;
             }
             if(queue.songs.length == 0){
                 queue.songs.push(song);
@@ -68,15 +87,21 @@ module.exports = {
 
 const playmusic = async (queue, song) => {
     if(!song){
-        queue.voiceChannel.leave();
+       	getVoiceConnection(queue.voiceChannel.guild.id).destroy();
         queue.voiceChannel = null;
         queue.textChannel = null;
         queue.songs = [];
         queue.conection = null;
+        if(queue.player != null){
+            queue.player.stop();
+        }
+        queue.player = null;
         return;
     }
-    const stream = ytdl(song.url, {filter: 'audioonly'});
-    queue.conection.play(stream, {seek: 0, volume: 1}).on('finish', () => {
+    const stream = createAudioResource(ytdl(song.url, {filter: 'audioonly'}));
+    queue.conection.subscribe(queue.player);
+    queue.player.play(stream);
+    queue.player.on(AudioPlayerStatus.Idle, () => {
         queue.songs.shift();
         queue.skipVotes.shift();
         playmusic(queue, queue.songs[0]);

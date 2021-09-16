@@ -73,10 +73,10 @@ module.exports = {
                                             embeedmessage.addField(field.name, field.value, field.inline);
                                         });
                                     }
-                                    message.lineReply(embeedmessage);
+                                    message.reply({embeds: [embeedmessage]});
                                 }
                                 if(custommessage.hasOwnProperty('Message')){
-                                    message.lineReply(custommessage.Message);
+                                    message.Reply(custommessage.Message);
                                 }
                                 if(custommessage.hasOwnProperty('RandomComponent')){
                                     const componentAmount = Object.keys(custommessage.RandomComponent).length;
@@ -97,10 +97,10 @@ module.exports = {
                                                 embeedmessageComponent.addField(field.name, field.value, field.inline);
                                             });
                                         }
-                                        message.lineReply(embeedmessageComponent);
+                                        message.reply({embeds: [embeedmessageComponent]});
                                     }
                                     if(custommessage.RandomComponent[componentIndex].hasOwnProperty('Message')){
-                                        message.lineReply(custommessage.RandomComponent[componentIndex].Message);
+                                        message.reply(custommessage.RandomComponent[componentIndex].Message);
                                     }
                                 }
                             };

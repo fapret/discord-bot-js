@@ -6,6 +6,16 @@ const skipindex = require('./skipindex.js');
 const queuejs = require('./queue.js');
 const help = require('./help.js');
 const config = require('./config.json');
+const {
+	joinVoiceChannel,
+	createAudioPlayer,
+	createAudioResource,
+	entersState,
+	StreamType,
+	AudioPlayerStatus,
+	VoiceConnectionStatus,
+    getVoiceConnection
+} = require('@discordjs/voice');
 
 const globalqueue = new Map();
 module.exports = {
@@ -67,7 +77,7 @@ module.exports = {
             globalqueue.set(guild.ID, queue_build);
         };
         const queue = globalqueue.get(guild.ID);
-        if((queue.voiceChannel != null) && (oldstate.channelID == queue.voiceChannel)){
+        if((queue.voiceChannel != null) && (oldstate.channel.id == queue.voiceChannel)){
             if(newstate.channelID != queue.voiceChannel){
                 queue.skipVotes.forEach(element => {
                     if(element.includes(oldstate.id)){
@@ -75,7 +85,7 @@ module.exports = {
                     };
                 });
                 if(oldstate.channel.members.size == 1){
-                    oldstate.channel.leave();
+                    getVoiceConnection(oldstate.channel.guild.id).destroy();
                     await queue.textChannel.send(config.Messages['stop-music']);
                     queue.songs = [];
                     queue.voiceChannel = null;

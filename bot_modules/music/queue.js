@@ -35,6 +35,6 @@ module.exports = {
         .setDescription(songs)
         .setFooter("trymate bot by Fapret")
         .addFields({name: config.Messages['now-playing'], value: playing});
-        message.channel.send(embeed);
+        message.channel.send({embeds: [embeed]});
     }
 }

@@ -62,7 +62,8 @@ module.exports = {
         const memberAvatar = await loadImage(memberAvatarURL);
 
         const encoder = new GIFEncoder(parseInt(selectedImage.width), parseInt(selectedImage.height));
-        encoder.createReadStream().pipe(fs.createWriteStream('./cache/' + message.id + '.gif'));
+        const output = fs.createWriteStream('./cache/' + message.id + '.gif');
+        encoder.createReadStream().pipe(output);
         encoder.start();
         if(selectedImage.repeat){
             encoder.setRepeat(0);
@@ -112,12 +113,13 @@ module.exports = {
         }
         encoder.finish();
 
-        const embeed = new Discord.MessageEmbed().setFooter("trymate bot by Fapret");
-        const attach = new Discord.MessageAttachment('./cache/' + message.id + '.gif', `animatedhug.gif`);
-        embeed.attachFiles(attach);
-        embeed.setDescription(messageToSend);
-        embeed.setImage(`attachment://animatedhug.gif`);
-        await message.channel.send(embeed);
-        fs.unlink('./cache/' + message.id + '.gif', (err => {if(err) console.log(err)}));
+        output.on('finish', async () => {
+            const embeed = new Discord.MessageEmbed().setFooter("trymate bot by Fapret");
+        	const attach = new Discord.MessageAttachment('./cache/' + message.id + '.gif', `animatedhug.gif`);
+        	embeed.setDescription(messageToSend);
+        	embeed.setImage(`attachment://animatedhug.gif`);
+        	await message.channel.send({embeds: [embeed], files: [attach]});
+        	fs.unlink('./cache/' + message.id + '.gif', (err => {if(err) console.log(err)}));
+        });
     }
 }

@@ -1,14 +1,13 @@
 const Discord = require('discord.js');
-require('discord-reply');
-const disbut = require('discord-buttons');
+const {Intents} = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const config = require('./config.json');
 
 const DiscordClients = new Map;
-DiscordClients.set("main", new Discord.Client());
+DiscordClients.set("main", new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_INTEGRATIONS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES] }));
 const mainClient = DiscordClients.get("main");
-disbut(mainClient);
+//disbut(mainClient);
 
 /* Carga los modulos */
 d = new Date();
@@ -51,7 +50,7 @@ const getguild = function(guild){
                 ID: guild,
                 prefix: config['default-prefix'],
                 operatorRole: '00000000000000000',
-                DisabledModules: ['welcome','apps'],
+                DisabledModules: ['welcome'],
                 Aliases: ['t!']
             }
             try {
@@ -70,7 +69,7 @@ const getguild = function(guild){
 };
 
 /* comandos */
-mainClient.on('message', message => {
+mainClient.on('messageCreate', message => {
     if(message.author.bot){return};
     if((message.guild == undefined) || (message.guild == null)){return};
     const guild = message.guild.id;
@@ -144,7 +143,7 @@ mainClient.on('guildMemberAdd', member => {
 });
 
 /* Se ejecuta cuando alguien presiona un boton */
-mainClient.on('clickButton', button => {
+mainClient.on('interactionCreate', button => {
     if((button.guild == undefined) || (button.guild == null)){return};
     const guild = button.guild.id;
     var getguilddata = getguild(guild);

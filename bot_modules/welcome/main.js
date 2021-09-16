@@ -108,12 +108,11 @@ module.exports = {
             message.setDescription(internalParser(guild.welcomeModule.description, member));
         }
         const attach = new Discord.MessageAttachment(img.toBuffer(), `${member.user.id}.png`);
-        message.attachFiles(attach);
         message.setImage(`attachment://${member.user.id}.png`);
         channel = member.guild.channels.resolve(guild.welcomeModule.channel);
         if(guild.welcomeModule.message != ""){
             await channel.send(internalParser(guild.welcomeModule.message, member));
         };
-        channel.send(message);
+        channel.send({embeds: [message], files: [attach]});
     }
 }

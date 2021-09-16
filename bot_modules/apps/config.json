@@ -2,7 +2,8 @@
     "Embeed": {
         "title": "Apps",
         "Description": "Cliquea el boton de la aplicacion de discord que quieres iniciar en el canal: <#${voiceChannelID}>",
-        "color" : "#00A9D3"
+        "color" : "#00A9D3",
+        "Error": "Error no se pudo generar ninguna App"
     },
     "Messages": {
         "must-be-on-voice-channel": "debes estar en un canal de voz para usar este comando"
@@ -26,7 +27,7 @@
         {
             "Name": "Ajedrez",
             "Emoji": "♟",
-            "ID": "832012586023256104"
+            "ID": "832012774040141894"
         },
         {
             "Name": "Betrayal game",

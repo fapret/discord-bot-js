@@ -28,7 +28,7 @@ module.exports = {
         }
         membersPlaying = voiceChannel.members.size;
         if((membersPlaying/2) <= queue.skipVotes[0].length){
-            queue.conection.dispatcher.end();
+            queue.player.stop();
             message.channel.send(config.Messages['song-skipped']);
         }
     }

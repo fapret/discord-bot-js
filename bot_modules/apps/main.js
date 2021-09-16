@@ -1,6 +1,6 @@
 const config = require('./config.json');
+const mainConfig = require('../../config.json');
 const Discord = require('discord.js');
-const {MessageButton} = require('discord-buttons');
 const fetch = require('node-fetch');
 
 function internalParser(text, member, voiceChannel){
@@ -20,7 +20,7 @@ function internalParser(text, member, voiceChannel){
 
 async function getInvite(appID, voiceChannel) {
     var code;
-    await fetch(`https://discord.com/api/v8/channels/${voiceChannel.id}/invites`, {
+    await fetch(`https://discord.com/api/v9/channels/${voiceChannel.id}/invites`, {
         method: 'POST',
         body: JSON.stringify({
             max_age: 86400,
@@ -32,14 +32,16 @@ async function getInvite(appID, voiceChannel) {
         }),
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bot ${config.Token}`
+            'Authorization': `Bot ${mainConfig['bot-token']}`
         }
     }).then(res => res.json()).then(Data => {
         if (Data.error || !Data.code) {
             console.log(Data);
-            throw new Error('No se pudo obtener el enlace');
-        };
-        code = Data.code;
+            console.log('No se pudo obtener el enlace. AppID: ' + appID);
+            code = 'NULL';
+        } else {
+            code = Data.code;
+        }
     });
     return `https://discord.com/invite/${code}`;
 };
@@ -56,25 +58,40 @@ module.exports = {
         }
         try {
             var Apps = [];
+            var row = new Discord.MessageActionRow();
             for (App of config.Apps) {
-                let application = new MessageButton();
-                application.setStyle('url');
+                let application = new Discord.MessageButton();
+                application.setStyle('LINK');
                 application.setLabel(App.Name);
                 application.setEmoji(App.Emoji);
                 var url = await getInvite(App.ID, voiceChannel);
                 application.setURL(url);
-                Apps.push(application);
+                if(url != 'https://discord.com/invite/NULL'){
+                    Apps.push(application);
+                }
             };
+            row.addComponents(Apps);
 
             const embeedmessage = new Discord.MessageEmbed().setFooter("trymate bot by Fapret");
             embeedmessage.setTitle(config.Embeed.title);
             embeedmessage.setColor(config.Embeed.color);
             embeedmessage.setDescription(internalParser(config.Embeed.Description, message.member, voiceChannel));
 
-            message.channel.send({
-                embed: embeedmessage,
-                buttons: Apps
-            });
+            const embeedError = new Discord.MessageEmbed().setFooter("trymate bot by Fapret");
+            embeedError.setTitle("Error");
+            embeedError.setColor("#FF0000");
+            embeedError.setDescription(internalParser(config.Embeed.Error, message.member, voiceChannel));
+
+            if(Apps.length != 0){
+                message.channel.send({
+                    embeds: [embeedmessage],
+                    components: [row]
+                });
+            } else {
+                message.channel.send({
+                    embeds: {embeedError}
+                });
+            }
         } catch (err) {
             console.log(err);
         }
