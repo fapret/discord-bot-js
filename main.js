@@ -36,7 +36,7 @@ const getModules = function(dirPath, arrayOfModules){
 
     return arrayOfModules;
 };
-const loadmodules = getModules('./bot_modules');
+getModules('./bot_modules');
 d = new Date();
 console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['modules-loaded']);
 mainClient.modules.forEach(key =>{
@@ -190,9 +190,21 @@ rl.on('line', (input) => {
         console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + "Comandos de consola disponibles:");
         console.log("help : Este mensaje");
         console.log("updateActivity : Actualiza la actividad con la que se encuentra en config.json");
+        console.log("flushModules : Recarga todos los modulos");
     } else if(input.toLowerCase().startsWith("updateactivity")){
         mainClient.user.setActivity(config.activity.value, { type: config.activity.type });
         d = new Date();
         console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['activity-setted'] + config.activity.value + ', type: ' + config.activity.type);
+    } else if(input.toLowerCase().startsWith("flushmodules")){
+        d = new Date();
+        console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['module-load-started']);
+        mainClient.modules = new Discord.Collection();
+        getModules('./bot_modules');
+        d = new Date();
+        console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['modules-loaded']);
+        mainClient.modules.forEach(key =>{
+            console.log('-' + key.name);
+        });
+        console.log('--------------------');
     }
 });
