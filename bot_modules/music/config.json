@@ -31,6 +31,9 @@
         "queue-song-skipped": "Se salto la cancion que estaba en la cola: ",
         "help-title": "Comandos del modulo de musica (music)",
         "playing-nothing": "No se esta reproduciendo nada",
+        "cant-pause": "No es posible pausar el reproductor de musica, dado a que no esta reproduciendo nada.",
+        "cant-unpause": "No es posible resumir el reproductor de musica, dado a que no hay ninguna cancion pausada.",
+        "shuffled-correctly": "Se mezclo la lista de reproduccion de forma correcta",
         "help-description": "Estos son los comandos del modulo de musica, y que hacen, recuerda los comandos de este modulo se utilizan de la forma <bot-prefix>music <command> [args]",
         "help-commands": [
             {

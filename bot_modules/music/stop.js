@@ -1,4 +1,7 @@
 const config = require('./config.json');
+const {
+    getVoiceConnection
+} = require('@discordjs/voice');
 module.exports = {
     name: 'music.stop',
     description: 'modulo de musica',
@@ -12,12 +15,17 @@ module.exports = {
             message.reply(config.Messages['only-operators-can-stop']);
             return;
         }
-        await voiceChannel.leave();
+        getVoiceConnection(message.guild.id).destroy();
         queue.songs = [];
         queue.voiceChannel = null;
         queue.textChannel = null,
         queue.conection = null,
         queue.skipVotes = [];
+        queue.status = null;
+        if(queue.player != null){
+            queue.player.stop();
+        }
+        queue.player = null;
         message.channel.send(config.Messages['stop-music']);
     }
 }

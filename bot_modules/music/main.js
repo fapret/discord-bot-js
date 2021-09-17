@@ -5,6 +5,9 @@ const skip = require('./skip.js');
 const skipindex = require('./skipindex.js');
 const queuejs = require('./queue.js');
 const help = require('./help.js');
+const pause = require('./pause.js');
+const resume = require('./resume.js');
+const shuffle = require('./shuffle.js');
 const config = require('./config.json');
 const {
 	joinVoiceChannel,
@@ -29,7 +32,8 @@ module.exports = {
                 textChannel: null,
                 conection: null,
                 songs: [],
-                skipVotes: []
+                skipVotes: [],
+                player: null
             };
             globalqueue.set(message.guild.id, queue_build);
         }
@@ -57,6 +61,15 @@ module.exports = {
                 case 'help':
                     help.execute(message, queue);
                     break;
+                case 'pause':
+                    pause.execute(message, queue);
+                    break;
+                case 'resume':
+                    resume.execute(message, queue);
+                    break;
+                case 'shuffle':
+                    shuffle.execute(message, queue);
+                    break;
                 default:
                     message.reply(config.Messages['no-action']);
                     break;
@@ -72,7 +85,8 @@ module.exports = {
                 textChannel: null,
                 conection: null,
                 songs: [],
-                skipVotes: []
+                skipVotes: [],
+                player: null
             };
             globalqueue.set(guild.ID, queue_build);
         };
@@ -89,9 +103,13 @@ module.exports = {
                     await queue.textChannel.send(config.Messages['stop-music']);
                     queue.songs = [];
                     queue.voiceChannel = null;
-                    queue.textChannel = null,
-                    queue.conection = null,
+                    queue.textChannel = null;
+                    queue.conection = null;
                     queue.skipVotes = [];
+                    if(queue.player != null){
+                        queue.player.stop();
+                    }
+                    queue.player = null;
                 }
             };
         };

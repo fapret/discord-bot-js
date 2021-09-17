@@ -91,6 +91,7 @@ const playmusic = async (queue, song) => {
         queue.voiceChannel = null;
         queue.textChannel = null;
         queue.songs = [];
+        queue.skipVotes = [];
         queue.conection = null;
         if(queue.player != null){
             queue.player.stop();
@@ -102,9 +103,22 @@ const playmusic = async (queue, song) => {
     queue.conection.subscribe(queue.player);
     queue.player.play(stream);
     queue.player.on(AudioPlayerStatus.Idle, () => {
+        queue.status = "Idle";
         queue.songs.shift();
         queue.skipVotes.shift();
         playmusic(queue, queue.songs[0]);
+    });
+    queue.player.on(AudioPlayerStatus.Paused, () => {
+        queue.status = "Paused";
+    });
+    queue.player.on(AudioPlayerStatus.Playing, () => {
+        queue.status = "Playing";
+    });
+    queue.player.on(AudioPlayerStatus.Bufferring, () => {
+        queue.status = "Bufferring";
+    });
+    queue.player.on(AudioPlayerStatus.AutoPaused, () => {
+        queue.status = "AutoPaused";
     });
     queue.textChannel.send(config.Messages['now-playing'] + song.title);
 }
