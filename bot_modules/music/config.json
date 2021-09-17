@@ -63,6 +63,18 @@
             {
                 "title": "queue",
                 "description": "Muestra las canciones en la cola y el nombre de la cancion que se esta reproduciendo"
+            },
+            {
+                "title": "shuffle",
+                "description": "Mezcla las canciones en la lista de reproducción"
+            },
+            {
+                "title": "pause",
+                "description": "Pausa el reproductor de musica"
+            },
+            {
+                "title": "resume",
+                "description": "Resume el reproductor de musica"
             }
         ]
     }

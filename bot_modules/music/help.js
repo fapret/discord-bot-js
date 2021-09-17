@@ -13,6 +13,6 @@ module.exports = {
         config.Messages['help-commands'].forEach(element => {
             embeed.addField(element.title, element.description);
         });
-        message.channel.send({embeeds: [embeed]});
+        message.channel.send({embeds: [embeed]});
     }
 }
