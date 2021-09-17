@@ -154,7 +154,7 @@ mainClient.on('guildMemberAdd', member => {
     });
 });
 
-/* Se ejecuta cuando alguien presiona un boton */
+/* Se ejecuta cuando alguien genera una interaccion como presionar un boton */
 mainClient.on('interactionCreate', button => {
     if((button.guild == undefined) || (button.guild == null)){return};
     const guild = button.guild.id;
@@ -190,7 +190,7 @@ rl.on('line', (input) => {
         console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + "Comandos de consola disponibles:");
         console.log("- help : Este mensaje");
         console.log("- updateActivity : Actualiza la actividad con la que se encuentra en config.json");
-        console.log("- flushModules : Carga nuevos modulos (modulos ya cargados anteriormente NO SE RECARGAN!)");
+        console.log("- flushModules : Carga nuevos modulos y vuelve a cargar los ya cargados");
         console.log('--------------------');
     } else if(input.toLowerCase().startsWith("updateactivity")){
         mainClient.user.setActivity(config.activity.value, { type: config.activity.type });
@@ -201,7 +201,6 @@ rl.on('line', (input) => {
         console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['module-load-started']);
         //delete mainClient.modules;
         mainClient.modules = new Discord.Collection();
-        /*
         const deleteModules = function(dirPath, arrayOfModules){
             files = fs.readdirSync(dirPath);
             arrayOfModules = arrayOfModules || [];
@@ -211,14 +210,13 @@ rl.on('line', (input) => {
                     arrayOfModules = deleteModules(dirPath + '/' + file, arrayOfModules);
                 } else if(file == 'main.js'){
                     arrayOfModules.push(path.join(__dirname, dirPath, '/', file));
-                    delete require.cache[dirPath + '/' + file];
+                    delete require.cache[require.resolve(dirPath + '/' + file)];
                 }
             });
         
             return arrayOfModules;
         };
         deleteModules('./bot_modules');
-        */
         getModules('./bot_modules');
         d = new Date();
         console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['modules-loaded']);
