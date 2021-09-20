@@ -7,6 +7,7 @@ module.exports = {
     async execute(message, queue){
         if(queue.status == "Playing"){
             queue.player.pause();
+            message.reply(config.Messages['paused']);
         } else {
             message.reply(config.Messages['cant-pause']);
         }

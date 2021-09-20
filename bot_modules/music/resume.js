@@ -7,6 +7,7 @@ module.exports = {
     async execute(message, queue){
         if(queue.status == "Paused"){
             queue.player.unpause();
+            message.reply(config.Messages['resumed']);
         } else {
             message.reply(config.Messages['cant-unpause']);
         }

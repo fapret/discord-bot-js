@@ -11,6 +11,7 @@ const {
 	VoiceConnectionStatus,
     getVoiceConnection
 } = require('@discordjs/voice');
+
 module.exports = {
     name: 'music.play',
     description: 'modulo de musica, comando play',
@@ -34,58 +35,57 @@ module.exports = {
             return;
         }
         const videobusqueda = async (query) => {
-            const resultado = await ytSearch(query);
-            return (resultado.videos.length > 1) ? resultado.videos[0] : null;
-        }
-        args.shift();
-        var video = await videobusqueda(args.join(' '));
-        if(video){
-            let song = {
-                title: video.title,
-                url: video.url
-            }
-            if(queue.conection == null){
+            var resultado;
+            if(query.startsWith("https://www.youtube.com/watch?v=")){
                 try{
-                    const conexion = await joinVoiceChannel({
-						channelId: voiceChannel.id,
-						guildId: voiceChannel.guild.id,
-						adapterCreator: voiceChannel.guild.voiceAdapterCreator
-					});
-                    await entersState(conexion, VoiceConnectionStatus.Ready, 30e3);
-                    queue.conection = conexion;
-                } catch (err){
-                    console.log(config.Messages['error-at-connect']);
-                    console.log(err);
-                }
-            }
-            if(queue.voiceChannel == null){
-                queue.voiceChannel = voiceChannel;
-            }
-            if(queue.textChannel == null){
-                queue.textChannel = message.channel;
-            }
-            if(queue.player == null){
-                const player = createAudioPlayer();
-                queue.player = player;
-            }
-            if(queue.songs.length == 0){
-                queue.songs.push(song);
-                try{
-                    playmusic(queue, queue.songs[0]);
-                } catch (err){
-                    console.log(err);
+                    resultado = { videos: [], playlists: []};
+                    resultado.videos[0] = await ytSearch({ videoId: query.slice(32,43) });
+                    resultado.playlists[0] = null;
+                } catch {
+                    resultado = await ytSearch(query);
                 }
             } else {
-                queue.songs.push(song);
-                message.reply(config.Messages['song-added-to-queue'][0] + song.title + config.Messages['song-added-to-queue'][1])
+                resultado = await ytSearch(query);
             }
-        } else {
+            if((resultado.playlists[0] != null) && query.includes("playlist")){
+                var playlist = await ytSearch({ listId: resultado.playlists[0].listId });
+                for(video of playlist.videos){
+                    if(video.videoId != null){
+                        var localurl = "https://www.youtube.com/watch?v=" + video.videoId;
+                        video.url = localurl;
+                    } else {
+                        var index = playlist.videos.indexOf(video);
+                        if (index > -1) {
+                            playlist.videos.splice(index, 1);
+                        }
+                    }
+                }
+                if(playlist.videos == [] || playlist.videos == null){
+                    playlist = null;
+                }
+            } else {
+                var playlist = null;
+            }
+            return (resultado.videos.length >= 1) ? [resultado.videos[0], playlist] : null;
+        }
+        args.shift();
+        var videolist = await videobusqueda(args.join(' '));
+        if(videolist == null || (videolist[0] == null && videolist[1] == null)){
             message.reply(config.Messages['video-not-found']);
+            return;
+        }
+        var video = videolist[0];
+        await playVideo(video, true, queue, voiceChannel, message);
+        if(videolist[1] != null){
+            message.reply(config.Messages['playlist-added-to-queue'] + videolist[1].title);
+            for(video of videolist[1].videos){
+                await playVideo(video, false, queue, voiceChannel, message);
+            }
         }
     }
 }
 
-const playmusic = async (queue, song) => {
+const playmusic = async function(queue, song){
     if(!song){
        	getVoiceConnection(queue.voiceChannel.guild.id).destroy();
         queue.voiceChannel = null;
@@ -121,4 +121,50 @@ const playmusic = async (queue, song) => {
         queue.status = "AutoPaused";
     });
     queue.textChannel.send(config.Messages['now-playing'] + song.title);
+}
+
+const playVideo = async function(video, sayAddedToQueue, queue, voiceChannel, message){
+    if(video){
+        let song = {
+            title: video.title,
+            url: video.url
+        };
+        if(queue.conection == null){
+            try{
+                const conexion = await joinVoiceChannel({
+                    channelId: voiceChannel.id,
+                    guildId: voiceChannel.guild.id,
+                    adapterCreator: voiceChannel.guild.voiceAdapterCreator
+                });
+                await entersState(conexion, VoiceConnectionStatus.Ready, 30e3);
+                queue.conection = conexion;
+            } catch (err){
+                console.log(config.Messages['error-at-connect']);
+                console.log(err);
+            }
+        }
+        if(queue.voiceChannel == null){
+            queue.voiceChannel = voiceChannel;
+        }
+        if(queue.textChannel == null){
+            queue.textChannel = message.channel;
+        }
+        if(queue.player == null){
+            const player = createAudioPlayer();
+            queue.player = player;
+        }
+        if(queue.songs.length == 0){
+            queue.songs.push(song);
+            try{
+                playmusic(queue, queue.songs[0]);
+            } catch (err){
+                console.log(err);
+            }
+        } else {
+            queue.songs.push(song);
+            if(sayAddedToQueue){
+                message.reply(config.Messages['song-added-to-queue'][0] + song.title + config.Messages['song-added-to-queue'][1]);
+            }
+        }
+    }
 }

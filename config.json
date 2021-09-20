@@ -15,6 +15,11 @@
         "module-load-started": "Carga de modulos iniciada",
         "modules-loaded": "Modulos cargados:",
         "created-cache-directory": "Creado directorio cache",
-        "created-guilds-directory": "Creado directorio guilds"
+        "created-guilds-directory": "Creado directorio guilds",
+        "console-help": [
+            "- help : Este mensaje",
+            "- updateActivity : Actualiza la actividad con la que se encuentra en config.json",
+            "- flushModules : Carga nuevos modulos y vuelve a cargar los ya cargados"
+        ]
     }
 }

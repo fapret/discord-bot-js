@@ -40,7 +40,7 @@ getModules('./bot_modules');
 d = new Date();
 console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + config.Messages['modules-loaded']);
 mainClient.modules.forEach(key =>{
-    console.log('-' + key.name);
+    console.log('- ' + key.name);
 });
 console.log('--------------------');
 
@@ -188,9 +188,9 @@ rl.on('line', (input) => {
     if(input.toLowerCase().startsWith("help")){
         d = new Date();
         console.log('[' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + "Comandos de consola disponibles:");
-        console.log("- help : Este mensaje");
-        console.log("- updateActivity : Actualiza la actividad con la que se encuentra en config.json");
-        console.log("- flushModules : Carga nuevos modulos y vuelve a cargar los ya cargados");
+        for(helpCommandText of config.Messages['console-help']){
+            console.log(helpCommandText);
+        }
         console.log('--------------------');
     } else if(input.toLowerCase().startsWith("updateactivity")){
         mainClient.user.setActivity(config.activity.value, { type: config.activity.type });
