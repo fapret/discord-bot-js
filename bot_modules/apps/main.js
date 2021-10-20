@@ -72,12 +72,12 @@ module.exports = {
             };
             row.addComponents(Apps);
 
-            const embeedmessage = new Discord.MessageEmbed().setFooter("trymate bot by Fapret");
+            const embeedmessage = new Discord.MessageEmbed().setFooter("FapretBot");
             embeedmessage.setTitle(config.Embeed.title);
             embeedmessage.setColor(config.Embeed.color);
             embeedmessage.setDescription(internalParser(config.Embeed.Description, message.member, voiceChannel));
 
-            const embeedError = new Discord.MessageEmbed().setFooter("trymate bot by Fapret");
+            const embeedError = new Discord.MessageEmbed().setFooter("FapretBot");
             embeedError.setTitle("Error");
             embeedError.setColor("#FF0000");
             embeedError.setDescription(internalParser(config.Embeed.Error, message.member, voiceChannel));

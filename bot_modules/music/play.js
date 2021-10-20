@@ -1,5 +1,5 @@
 const ytdl = require('ytdl-core');
-const ytSearch = require('yt-search');
+const ytSearch = require('yt-search'); //TODO: Cambiarlo por otra libreria, ya que esta no es async
 const config = require('./config.json');
 const {
 	joinVoiceChannel,
@@ -93,6 +93,7 @@ const playmusic = async function(queue, song){
         queue.songs = [];
         queue.skipVotes = [];
         queue.conection = null;
+        queue.suscription = null;
         if(queue.player != null){
             queue.player.stop();
         }
@@ -100,14 +101,18 @@ const playmusic = async function(queue, song){
         return;
     }
     const stream = createAudioResource(ytdl(song.url, {filter: 'audioonly'}));
-    queue.conection.subscribe(queue.player);
-    queue.player.play(stream);
-    queue.player.on(AudioPlayerStatus.Idle, () => {
-        queue.status = "Idle";
-        queue.songs.shift();
-        queue.skipVotes.shift();
-        playmusic(queue, queue.songs[0]);
-    });
+    if(!queue.suscription){
+        queue.suscription = queue.conection.subscribe(queue.player);
+        queue.player.play(stream);
+        queue.player.on(AudioPlayerStatus.Idle, () => {
+            queue.status = "Idle";
+            queue.songs.shift();
+            queue.skipVotes.shift();
+            playmusic(queue, queue.songs[0]);
+        });
+    } else {
+        queue.player.play(stream);
+    }
     queue.player.on(AudioPlayerStatus.Paused, () => {
         queue.status = "Paused";
     });

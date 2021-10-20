@@ -1,6 +1,6 @@
 {
-  "name": "trymate",
-  "version": "2.0.0",
+  "name": "fapretbot",
+  "version": "2.1.0",
   "description": "Discord bot made by fapret",
   "main": "main.js",
   "scripts": {

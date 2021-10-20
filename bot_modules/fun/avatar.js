@@ -15,7 +15,7 @@ module.exports = {
         const memberAvatarURL = member.displayAvatarURL({ format: 'png', size: 1024});
         const memberAvatar = await loadImage(memberAvatarURL);
         context.drawImage(memberAvatar, 0, 0, 1024, 1024);
-        const embeed = new Discord.MessageEmbed().setFooter("trymate bot by Fapret");
+        const embeed = new Discord.MessageEmbed().setFooter("FapretBot");
         const attach = new Discord.MessageAttachment(img.toBuffer(), `${member.id}.png`);
         embeed.setImage(`attachment://${member.id}.png`);
         embeed.setURL(memberAvatarURL);

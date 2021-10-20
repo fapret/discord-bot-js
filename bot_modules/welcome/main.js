@@ -100,7 +100,7 @@ module.exports = {
             context.textAlign = "start";
         });
 
-        const message = new Discord.MessageEmbed().setFooter("trymate bot by Fapret");
+        const message = new Discord.MessageEmbed().setFooter("FapretBot");
         if(guild.welcomeModule.title != ""){
             message.setTitle(guild.welcomeModule.title);
         }

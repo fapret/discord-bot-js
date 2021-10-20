@@ -15,6 +15,7 @@ module.exports = {
             message.reply(config.Messages['only-operators-can-stop']);
             return;
         }
+        queue.suscription.unsubscribe();
         getVoiceConnection(message.guild.id).destroy();
         queue.songs = [];
         queue.voiceChannel = null;
@@ -22,6 +23,7 @@ module.exports = {
         queue.conection = null,
         queue.skipVotes = [];
         queue.status = null;
+        queue.suscription = null;
         if(queue.player != null){
             queue.player.stop();
         }

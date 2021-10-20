@@ -9,7 +9,7 @@ module.exports = {
         .setColor(config.Embeed.color)
         .setTitle(config.Messages['help-title'])
         .setDescription(config.Messages['help-description'])
-        .setFooter("trymate bot by Fapret");
+        .setFooter("Fapretbot");
         config.Messages['help-commands'].forEach(element => {
             embeed.addField(element.title, element.description);
         });

@@ -58,7 +58,7 @@ module.exports = {
                                     unlockMsg();
                                 }
                                 if(custommessage.hasOwnProperty('Embeed')){
-                                    const embeedmessage = new Discord.MessageEmbed().setFooter("trymate bot by Fapret");
+                                    const embeedmessage = new Discord.MessageEmbed().setFooter("Fapretbot");
                                     if(custommessage.Embeed.hasOwnProperty('Title')){
                                         embeedmessage.setTitle(custommessage.Embeed.Title);
                                     }
@@ -82,7 +82,7 @@ module.exports = {
                                     const componentAmount = Object.keys(custommessage.RandomComponent).length;
                                     var componentIndex = Math.floor(Math.random() * (componentAmount) + 1) - 1;
                                     if(custommessage.RandomComponent[componentIndex].hasOwnProperty('Embeed')){
-                                        const embeedmessageComponent = new Discord.MessageEmbed().setFooter("trymate bot by Fapret");
+                                        const embeedmessageComponent = new Discord.MessageEmbed().setFooter("Fapretbot");
                                         if(custommessage.RandomComponent[componentIndex].Embeed.hasOwnProperty('Title')){
                                             embeedmessageComponent.setTitle(custommessage.RandomComponent[componentIndex].Embeed.Title);
                                         }

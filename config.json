@@ -1,7 +1,7 @@
 {
     "bot-token": "",
     "secondary-bot-tokens": [],
-    "default-prefix": "trymate!",
+    "default-prefix": "fapret!",
     "activity": {
         "value": "a fapret hacer cositas",
         "type": "WATCHING"
@@ -13,13 +13,18 @@
         "bot-loaded": "Bot cargado",
         "activity-setted": "Actividad colocada >> ",
         "module-load-started": "Carga de modulos iniciada",
+        "loading-slashcommands": "Carga de comandos slash iniciada",
         "modules-loaded": "Modulos cargados:",
         "created-cache-directory": "Creado directorio cache",
         "created-guilds-directory": "Creado directorio guilds",
+        "flushmodules-doesnt-refresh-slashcommands": "ADVERTENCIA> Recargar los modulos no recarga los slashcommands, utilice flushAllSlashCommands para hacerlo",
         "console-help": [
             "- help : Este mensaje",
             "- updateActivity : Actualiza la actividad con la que se encuentra en config.json",
-            "- flushModules : Carga nuevos modulos y vuelve a cargar los ya cargados"
-        ]
+            "- flushModules : Carga nuevos modulos y vuelve a cargar los ya cargados",
+            "- flushAllSlashCommands : Borra todos los slashcommands y luego crea los slashcommands configurados"
+        ],
+        "slashCommands-loaded": "Cargados comandos slash para la guild >> ",
+        "guild-has-no-permission-for-slashCommands": "La guild no tiene el permiso de modificar o crear comandos slash >> "
     }
 }

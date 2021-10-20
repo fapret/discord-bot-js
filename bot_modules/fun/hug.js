@@ -120,7 +120,7 @@ module.exports = {
         encoder.finish();
 
         output.on('finish', async () => {
-            const embeed = new Discord.MessageEmbed().setFooter("trymate bot by Fapret");
+            const embeed = new Discord.MessageEmbed().setFooter("FapretBot");
         	const attach = new Discord.MessageAttachment('./cache/' + message.id + '.gif', `animatedhug.gif`);
         	embeed.setDescription(messageToSend);
         	embeed.setImage(`attachment://animatedhug.gif`);

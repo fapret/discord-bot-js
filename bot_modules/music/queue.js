@@ -33,7 +33,7 @@ module.exports = {
         .setColor(config.Embeed.color)
         .setTitle(config.Messages['songs-list'])
         .setDescription(songs)
-        .setFooter("trymate bot by Fapret")
+        .setFooter("Fapretbot")
         .addFields({name: config.Messages['now-playing'], value: playing});
         message.channel.send({embeds: [embeed]});
     }
