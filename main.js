@@ -99,7 +99,7 @@ const flushSlashCommands = async function(guildId){
     } else {
         return;
     }
-    var getguilddata = getguild(guild);
+    var getguilddata = getguild(guildId);
     if (getguilddata == undefined){
         return;
     };
@@ -149,7 +149,11 @@ mainClient.on('messageCreate', message => {
         if(guilddata.DisabledModules.includes(command)){
             message.reply(config.Messages['disabled-module']);
         } else if(mainClient.modules.has(command)){
-            mainClient.modules.get(command).execute(message, guilddata, args);
+            if(typeof mainClient.modules.get(command).execute === 'function'){
+                mainClient.modules.get(command).execute(message, guilddata, args);
+            } else {
+                message.reply(config.Messages['module-doesnt-handle-commands']);
+            }
         } else {
             message.reply(config.Messages['unknown-command']);
         }
@@ -180,7 +184,9 @@ mainClient.on('voiceStateUpdate', (oldstate, newstate) => {
 
     mainClient.modules.forEach(module => {
         if(!guilddata.DisabledModules.includes(module.name)){
-            module.voiceStateUpdate(guilddata, oldstate, newstate);
+            if(typeof module.voiceStateUpdate === 'function'){
+                module.voiceStateUpdate(guilddata, oldstate, newstate);
+            }
         }
     });
 });
@@ -196,7 +202,9 @@ mainClient.on('guildMemberAdd', member => {
 
     mainClient.modules.forEach(module => {
         if(!guilddata.DisabledModules.includes(module.name)){
-            module.OnMemberJoin(guilddata, member);
+            if(typeof module.OnMemberJoin === 'function'){
+                module.OnMemberJoin(guilddata, member);
+            }
         }
     });
 });
@@ -214,9 +222,11 @@ mainClient.on('interactionCreate', async (interaction) => {
     mainClient.modules.forEach(module => {
         if(!guilddata.DisabledModules.includes(module.name)){
             if(interaction.isButton()){
-                module.onButtonClick(guilddata, interaction);
+                if (typeof module.onButtonClick === 'function'){
+                    module.onButtonClick(guilddata, interaction);
+                }
             } else if(interaction.isCommand()){
-                if (module.onSlashCommand != undefined){
+                if (typeof module.onSlashCommand === 'function'){
                     module.onSlashCommand(guilddata, interaction);
                 }
             }

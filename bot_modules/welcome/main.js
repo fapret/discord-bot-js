@@ -26,15 +26,6 @@ module.exports = {
     name: 'welcome',
     description: 'modulo de bienvenida customizada',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    async execute(message, guild, args){
-        return;
-    },
-    async voiceStateUpdate(guild, oldstate, newstate){
-        return;
-    },
-    async onButtonClick(guild, button){
-        return;
-    },
     async OnMemberJoin(guild, member){
         if(!guild.hasOwnProperty('welcomeModule')){
             guild.welcomeModule = {

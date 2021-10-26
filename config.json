@@ -8,6 +8,7 @@
     },
     "Messages": {
         "unknown-command": "Comando Desconocido",
+        "module-doesnt-handle-commands": "El modulo no posee comandos registrados",
         "guild-not-registered": "Guild no registrada! Registrando guild >> ",
         "disabled-module": "El modulo de este comando esta desactivado",
         "bot-loaded": "Bot cargado",

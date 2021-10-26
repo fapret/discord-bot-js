@@ -95,14 +95,5 @@ module.exports = {
         } catch (err) {
             console.log(err);
         }
-    },
-    async voiceStateUpdate(guild, oldstate, newstate) {
-        return;
-    },
-    async OnMemberJoin(guild, member) {
-        return;
-    },
-    async onButtonClick(guild, button) {
-        return;
     }
 }

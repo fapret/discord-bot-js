@@ -125,12 +125,6 @@ module.exports = {
             };
         };
     },
-    async OnMemberJoin(guild, member){
-        return;
-    },
-    async onButtonClick(guild, button){
-        return;
-    },
     async onSlashCommand(guild, slashcommand){
         const {options} = slashcommand;
         if(!globalqueue.has(guild.ID)){

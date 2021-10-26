@@ -18,14 +18,5 @@ module.exports = {
                 message.reply(config.Messages['no-action']);
                 break;
         }
-    },
-    async voiceStateUpdate(guild, oldstate, newstate){
-        return;
-    },
-    async OnMemberJoin(guild, member){
-        return;
-    },
-    async onButtonClick(guild, button){
-        return;
     }
 }
