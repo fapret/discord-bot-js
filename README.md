@@ -4,5 +4,40 @@
  Este bot no posee una licencia para uso general, si deseas utilizar codigo de este bot, deberas solicitar permiso a Fapret.
  El uso, distribucion, venta, edicion o cualquier otra acción sobre y del codigo esta prohibida sin la autorizacion de Fapret.
 # Dependencias
- Es necesario instalar las siguientes dependencias aparte de las que se instalen con node js (npm i / npm ci)  
+ -Nodejs v16  
+ Todas las demas dependencias son instaladas con npm i / npm ci  
+
+ Algunos modulos necesitan algunas dependencias en especifico.    
+ Para el modulo de Musica:  
  -FFmpeg
+
+# Proceso de instalacion (Ubuntu)
+ Ejemplo de proceso de instalacion en una instalacion limpia de Ubuntu 21.04 con todos los modulos incluidos.  
+
+ Primero es necesario instalar Nodejs v16
+ ```sh
+curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+sudo apt update
+sudo apt-get install -y nodejs
+ ```
+
+ Luego instalamos la dependencias del modulo de musica < music > **(opcional)**
+ ```sh
+sudo apt-get install -y ffmpeg
+ ```
+
+ Luego instalamos las dependencias del modulo de bienvenida < welcome > y de diversion < fun > **(opcional)**
+ ```sh
+sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+ ```
+
+ Por ultimo instalamos todas las dependencias restantes (Debemos estar situados en la raiz del bot)
+ ```sh
+npm install
+ ```
+
+ El bot necesita que se coloque un token de discord, esto se puede realizar editando el archivo config.json  
+ Una vez colocado el token del bot de discord puedes iniciar el bot con el siguiente comando (estando en la raiz del bot):
+  ```sh
+node .
+ ```

@@ -2,10 +2,10 @@
 
 ## Versiones soportadas
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 2.1.x   | :white_check_mark: |
-| < 2.1   | :x:                |
+| Version | Codename           | Supported          |
+| ------- | ------------------ | ------------------ |
+| 2.1.x   | Mint               | :white_check_mark: |
+| < 2.1   | Legacy             | :x:                |
 
 ## Reportar una vulnerabilidad
 
