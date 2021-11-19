@@ -24,16 +24,16 @@ module.exports = {
     name: 'custommsg',
     description: 'modulo de mensajes customizados',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    async execute(message, guild, args){
+    async onMessage(message, dataManager){
         try{
             lowercasemessage = message.content.toLowerCase();
-            if(!guild.hasOwnProperty('CustomMessages')){
-                guild.CustomMessages = [];
-                fs.writeFileSync('./guilds/' + guild.ID + '.json', JSON.stringify(guild, null, 4));
-                var guildread = fs.readFileSync('./guilds/' + guild.ID + '.json');
-                guild = JSON.parse(guildread);
+            pluginManager = dataManager.PluginDataManager;
+            CustomMessages = pluginManager.readData(dataManager.GuildDataManager.getGuildID());
+            if(CustomMessages == undefined){
+                CustomMessages = [];
+                pluginManager.writeData(dataManager.GuildDataManager.getGuildID(), CustomMessages);
             }
-            guild.CustomMessages.forEach(element => {
+            CustomMessages.forEach(element => {
                 if(element.Channel == message.channel.id){
                     element.Messages.forEach(async (custommessage) => {
                         custommessage.Keywords.forEach(async (keyword) => {
@@ -53,7 +53,8 @@ module.exports = {
                                     if(custommessage.RemainingUses > 0) {
                                         custommessage.RemainingUses = custommessage.RemainingUses - 1;
                                     }
-                                    fs.writeFileSync('./guilds/' + guild.ID + '.json', JSON.stringify(guild, null, 4));
+                                    //fs.writeFileSync('./guilds/' + guild.ID + '.json', JSON.stringify(guild, null, 4));
+                                    pluginManager.writeData(dataManager.GuildDataManager.getGuildID(), CustomMessages);
                                     console.log(custommessage);
                                     unlockMsg();
                                 }

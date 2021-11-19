@@ -50,7 +50,7 @@ module.exports = {
     name: 'apps',
     description: 'modulo de apps',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    async execute(message, guild) {
+    async onMessage(message) {
         const voiceChannel = message.member.voice.channel;
         if(!voiceChannel) {
             message.reply(config.Messages['must-be-on-voice-channel']);

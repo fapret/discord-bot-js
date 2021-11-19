@@ -3,6 +3,7 @@ const GIFEncoder = require('gifencoder');
 const { createCanvas, loadImage, registerFont } = require('canvas');
 const fs = require('fs');
 const config = require('./config.json');
+const animationsDefault = require('./hug/animations.json');
 
 function internalParser(text, member, author){
     if (member != null){
@@ -22,9 +23,14 @@ module.exports = {
     name: 'fun.hug',
     description: 'modulo de diversion',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    async execute(message, args){
+    async execute(message, dataManager, args){
         var member = message.mentions.users.first();
-        const animations = JSON.parse(fs.readFileSync('./bot_modules/fun/hug/animations.json'));
+        pluginDataManager = dataManager.PluginDataManager;
+        animations = pluginDataManager.readData('animations');
+        if(animations == undefined){
+            pluginDataManager.writeData('animations', animationsDefault);
+            animations = pluginDataManager.readData('animations');
+        }
         const animationsAmount = Object.keys(animations.animation).length;
         var imageIndex = Math.floor(Math.random() * (animationsAmount) + 1) - 1;
         var opt = false;

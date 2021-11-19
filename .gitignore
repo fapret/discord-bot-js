@@ -1,4 +1,5 @@
-bot_modules/fun/hug/1/*
-bot_modules/fun/hug/2/*
-bot_modules/fun/hug/3/*
-bot_modules/fun/hug/toBeDone/*
+plugins/fun/hug/1/*
+plugins/fun/hug/2/*
+plugins/fun/hug/3/*
+plugins/fun/hug/toBeDone/*
+updatelog.txt

@@ -4,6 +4,7 @@
 
 | Version | Codename           | Supported          |
 | ------- | ------------------ | ------------------ |
+| 2.2.x   | Frosty             | :white_check_mark: |
 | 2.1.x   | Mint               | :white_check_mark: |
 | < 2.1   | Legacy             | :x:                |
 

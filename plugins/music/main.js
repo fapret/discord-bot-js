@@ -32,8 +32,8 @@ module.exports = {
         {name: 'shuffle', description: 'Mezcla las canciones en la lista de reproduccion', options: []},
         {name: 'queue', description: 'Muestra las canciones en la lista de reproduccion y la cancion que se esta reproduciendo', options: []}
     ],
-    async execute(message, guild, args){
-        if(!globalqueue.has(guild.ID)){
+    async onMessage(message, dataManager, args){
+        if(!globalqueue.has(dataManager.GuildDataManager.getGuildID())){
             const queue_build = {
                 voiceChannel: null,
                 textChannel: null,
@@ -43,19 +43,19 @@ module.exports = {
                 player: null,
                 suscription: null
             };
-            globalqueue.set(message.guild.id, queue_build);
+            globalqueue.set(dataManager.GuildDataManager.getGuildID(), queue_build);
         }
-        const queue = globalqueue.get(guild.ID);
+        const queue = globalqueue.get(dataManager.GuildDataManager.getGuildID());
         if((queue.textChannel == message.channel.id) || (queue.textChannel == null)){
             switch (args[0]) {
                 case 'play':
                     play.execute(message, queue, args);
                     break;
                 case 'stop':
-                    stop.execute(message, queue, guild);
+                    stop.execute(message, queue, dataManager);
                     break;
                 case 'forceskip':
-                    forceskip.execute(message, queue, guild);
+                    forceskip.execute(message, queue, dataManager);
                     break;
                 case 'skipindex':
                     skipindex.execute(message, queue, args);
