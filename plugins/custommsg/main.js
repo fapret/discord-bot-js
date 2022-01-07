@@ -53,7 +53,6 @@ module.exports = {
                                     if(custommessage.RemainingUses > 0) {
                                         custommessage.RemainingUses = custommessage.RemainingUses - 1;
                                     }
-                                    //fs.writeFileSync('./guilds/' + guild.ID + '.json', JSON.stringify(guild, null, 4));
                                     pluginManager.writeData(dataManager.GuildDataManager.getGuildID(), CustomMessages);
                                     console.log(custommessage);
                                     unlockMsg();

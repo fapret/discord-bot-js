@@ -125,9 +125,10 @@ module.exports = {
             };
         };
     },
-    async onSlashCommand(guild, slashcommand){
+    async onSlashCommand(dataManager, slashcommand){
         const {options} = slashcommand;
-        if(!globalqueue.has(guild.ID)){
+        guilddata = dataManager.GuildDataManager;
+        if(!globalqueue.has(guilddata.getGuildID())){
             const queue_build = {
                 voiceChannel: null,
                 textChannel: null,
@@ -137,9 +138,9 @@ module.exports = {
                 player: null,
                 suscription: null
             };
-            globalqueue.set(message.guild.id, queue_build);
+            globalqueue.set(guilddata.getGuildID(), queue_build);
         }
-        const queue = globalqueue.get(guild.ID);
+        const queue = globalqueue.get(guilddata.getGuildID());
         switch (slashcommand.commandName){
             case 'play':
                 play.execute(slashcommand, queue, ['play', options.getString('search')]);

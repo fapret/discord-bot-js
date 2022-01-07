@@ -2,7 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const stream = require('stream');
 const config = require('../config.json');
+const { timeParser, Mutex } = require('./microlib.js');
 
+/*
 storageMode = config.Storage['mode'];
 cacheMode = config.Storage['cache'];
 if(storageMode == undefined){
@@ -11,35 +13,11 @@ if(storageMode == undefined){
 if(cacheMode == undefined){
     cacheMode = 'file';
 }
-
-/* Parser de fechas */
-const timeParser = function(date){
-    day = (date.getDay() < 10 ? '0' : '') + date.getDay();
-    month = (date.getMonth() < 10 ? '0' : '') + date.getMonth();
-    hour = (date.getHours() < 10 ? '0' : '') + date.getHours();
-    minute = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
-    second = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
-    return day + "/" + month + ' ' + hour + ':' + minute + ':' + second;
-}
+*/
 
 /* Path donde se guarda la data si esta en modo file */
 const dataPath = './data/';
 
-/* tipo de objeto mutex */
-class Mutex {
-    constructor() {
-        this._locking = Promise.resolve();
-    }
-    lock() {
-        let unlockNext;
-        let willLock = new Promise(resolve => unlockNext = () => {      
-            resolve();
-        });
-        let willUnlock = this._locking.then(() => unlockNext);
-        this._locking = this._locking.then(() => willLock);
-        return willUnlock;
-    }
-}
 //const mutexData = new Mutex();
 
 /* GuildDataManager */
@@ -120,8 +98,10 @@ function DataInterface (guildID, plugin){
 }
 
 let dataManager = {
-    read: (dirPath) => {
+    read: (dirPath, storageMode) => {
         //const unlock = await mutexData.lock();
+        if (storageMode == undefined)
+            storageMode = 'file';
         switch (storageMode) {
             case 'file':
                 var dirPathParts = dirPath.split(':');
@@ -159,7 +139,7 @@ let dataManager = {
                                             prefix: config['default-prefix'],
                                             operatorRole: '00000000000000000',
                                             DisabledPlugins: ['welcome','newworld'],
-                                            Aliases: ['t!']
+                                            Aliases: ['!f']
                                         }
                                         try {
                                             fs.writeFileSync(currentPath + '/' + 'properties.json', JSON.stringify(newguild, null, 4));
@@ -174,7 +154,11 @@ let dataManager = {
                                     }
                                 }
                                 getdata = JSON.parse(getdata);
-                                return getdata[dirPathParts[2]];
+                                if(dirPathParts[2]) {
+                                    return getdata[dirPathParts[2]];
+                                } else {
+                                    return getdata;
+                                }                                    
                             default:
                                 break;
                         }
@@ -204,8 +188,10 @@ let dataManager = {
         }
         //unlock();
     },
-    write: (dirPath, value) => {
+    write: (dirPath, value, storageMode) => {
         //const unlock = await mutexData.lock();
+        if (storageMode == undefined)
+            storageMode = 'file';
         switch (storageMode) {
             case 'file':
                 var dirPathParts = dirPath.split(':');
@@ -243,7 +229,7 @@ let dataManager = {
                                             prefix: config['default-prefix'],
                                             operatorRole: '00000000000000000',
                                             DisabledPlugins: ['welcome','newworld'],
-                                            Aliases: ['t!']
+                                            Aliases: ['f!']
                                         }
                                         try {
                                             fs.writeFileSync(currentPath + '/' + 'properties.json', JSON.stringify(newguild, null, 4));
@@ -297,8 +283,10 @@ let dataManager = {
         }
         //unlock();
     },
-    erase: (dirPath) => {
+    erase: (dirPath, storageMode) => {
         //const unlock = await mutexData.lock();
+        if (storageMode == undefined)
+            storageMode = 'file';
         switch (storageMode) {
             case 'file':
                 
@@ -318,7 +306,7 @@ let dataManager = {
                 throw 'storage-type-invalid';
         }
     },
-    writeStream: (dirPath) => {
+    writeStream: (dirPath, mode) => {
 
     }
 }

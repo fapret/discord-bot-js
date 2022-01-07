@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const config = require('./config.json');
 const { DataInterface } = require('./modules/datamanager.js');
+const { timeParser } = require('./modules/microlib.js');
 
 /* Interfaz de lectura de consola */
 const readline = require('readline');
@@ -12,19 +13,9 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-/* Parser de fechas */
-const timeParser = function(date){
-    day = (date.getDay() < 10 ? '0' : '') + date.getDay();
-    month = (date.getMonth() < 10 ? '0' : '') + date.getMonth();
-    hour = (date.getHours() < 10 ? '0' : '') + date.getHours();
-    minute = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
-    second = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
-    return day + "/" + month + ' ' + hour + ':' + minute + ':' + second;
-}
-
 /* Clientes Discord */
 const DiscordClients = new Map;
-DiscordClients.set("main", new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_INTEGRATIONS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES] }));
+DiscordClients.set("main", new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_INTEGRATIONS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS], partials: ['MESSAGE', 'REACTION'] }));
 const mainClient = DiscordClients.get("main");
 
 /* Carga los modulos */
@@ -57,38 +48,9 @@ console.log('--------------------');
 
 /* Obtiene la informacion de la guild que se le pasa como parametro, si no existe la crea */
 const getguild = function(guild){
-    var getguilddata;
-    if (!fs.existsSync('./guilds/')) {
-        fs.mkdirSync("./guilds/");
-        d = new Date();
-        console.log('[' + timeParser(d) + '] ' + config.Messages['created-guilds-directory']);
-    }
-    try {
-        getguilddata = fs.readFileSync('./guilds/' + guild + '.json');
-    } catch (error){
-        if (error.code === 'ENOENT') {
-            d = new Date();
-            console.log('[' + timeParser(d) + '] ' + config.Messages['guild-not-registered']+ ' ' + guild);
-            let newguild = {
-                ID: guild,
-                prefix: config['default-prefix'],
-                operatorRole: '00000000000000000',
-                DisabledPlugins: ['welcome','newworld'],
-                Aliases: ['t!']
-            }
-            try {
-                fs.writeFileSync('./guilds/' + guild + '.json', JSON.stringify(newguild, null, 4));
-                getguilddata = fs.readFileSync('./guilds/' + guild + '.json');
-            } catch (err){
-                console.log(err);
-                return undefined;
-            }
-        } else {
-            console.log(error);
-            return undefined;
-        }
-    }
-    return getguilddata;
+    dataManager = new DataInterface(guild);
+    guilddata = dataManager.GuildDataManager;
+    return guilddata.getProperty();
 };
 
 /* Funcion para registrar y/o actualizar comandos en una guild en especifico */
@@ -100,18 +62,37 @@ const flushSlashCommands = async function(guildId){
     } else {
         return;
     }
+    /*
     var getguilddata = getguild(guildId);
     if (getguilddata == undefined){
         return;
     };
     var guilddata = JSON.parse(getguilddata);
+    */
+    dataManager = new DataInterface(guildId);
+    guilddata = dataManager.GuildDataManager;
+    let DisabledPlugins = guilddata.getProperty('DisabledPlugins');
     try{
         commandstodelete = await commands.fetch();
         commandstodelete.forEach(async cmd => {
-            await commands.delete(cmd);
+            try{
+                await commands.delete(cmd);
+            }catch{
+                console.log('error on command delete');
+            }
         });
         mainClient.plugins.forEach(key => {
+            /*
             if(!guilddata.DisabledPlugins.includes(key.name)){
+                if(key.slashCommands != undefined && key.slashCommands != null){
+                    key.slashCommands.forEach(command => {
+                        command.name = command.name.toLowerCase();
+                        commands.create(command);
+                    })
+                }
+            }
+            */
+            if(!DisabledPlugins.includes(key.name)){
                 if(key.slashCommands != undefined && key.slashCommands != null){
                     key.slashCommands.forEach(command => {
                         command.name = command.name.toLowerCase();
@@ -129,7 +110,15 @@ const flushSlashCommands = async function(guildId){
 }
 
 /* comandos */
-mainClient.on('messageCreate', message => {
+mainClient.on('messageCreate', async message =>{
+    if (message.partial) {
+		try {
+			await message.fetch();
+		} catch (error) {
+			console.error('Error al obtener el mensaje:', error);
+			return;
+		}
+    }
     if(message.author.bot){return};
     if((message.guild == undefined) || (message.guild == null)){return};
     const guild = message.guild.id;
@@ -196,16 +185,12 @@ mainClient.on('voiceStateUpdate', (oldstate, newstate) => {
 /* Se ejecuta cuando alguien se une a la guild */
 mainClient.on('guildMemberAdd', member => {
     const guild = member.guild.id;
-    var getguilddata = getguild(guild);
-    if (getguilddata == undefined){
-        return;
-    };
-    var guilddata = JSON.parse(getguilddata);
-
+    dataManager = new DataInterface(guild);
+    guilddata = dataManager.GuildDataManager;
     mainClient.plugins.forEach(plugin => {
-        if(!guilddata.DisabledPlugins.includes(plugin.name)){
+        if(!guilddata.getProperty('DisabledPlugins').includes(plugin.name)){
             if(typeof plugin.OnMemberJoin === 'function'){
-                plugin.OnMemberJoin(guilddata, member);
+                plugin.OnMemberJoin(new DataInterface(guild, plugin.name), member);
             }
         }
     });
@@ -215,22 +200,64 @@ mainClient.on('guildMemberAdd', member => {
 mainClient.on('interactionCreate', async (interaction) => {
     if((interaction.guild == undefined) || (interaction.guild == null)){return};
     const guild = interaction.guild.id;
-    var getguilddata = getguild(guild);
-    if (getguilddata == undefined){
-        return;
-    };
-    var guilddata = JSON.parse(getguilddata);
-
+    dataManager = new DataInterface(guild);
+    guilddata = dataManager.GuildDataManager;
     mainClient.plugins.forEach(plugin => {
-        if(!guilddata.DisabledPlugins.includes(plugin.name)){
+        if(!guilddata.getProperty('DisabledPlugins').includes(plugin.name)){
             if(interaction.isButton()){
                 if (typeof plugin.onButtonClick === 'function'){
-                    plugin.onButtonClick(guilddata, interaction);
+                    plugin.onButtonClick(new DataInterface(guild, plugin.name), interaction);
                 }
             } else if(interaction.isCommand()){
                 if (typeof plugin.onSlashCommand === 'function'){
-                    plugin.onSlashCommand(guilddata, interaction);
+                    plugin.onSlashCommand(new DataInterface(guild, plugin.name), interaction);
                 }
+            }
+        }
+    });
+});
+
+//cuando un usuario reacciona a un mensaje
+mainClient.on('messageReactionAdd', async (reaction, user) => {
+    if (reaction.partial) {
+		try {
+			await reaction.fetch();
+		} catch (error) {
+			console.error('Error al obtener la reaccion:', error);
+			return;
+		}
+    }
+    if((reaction == undefined) || (user == null) || user.bot){return};
+    const guild = reaction.message.guildid;
+    dataManager = new DataInterface(guild);
+    guilddata = dataManager.GuildDataManager;
+    mainClient.plugins.forEach(plugin => {
+        if(!guilddata.getProperty('DisabledPlugins').includes(plugin.name)){
+            if (typeof plugin.onReactionAdd === 'function'){
+                plugin.onReactionAdd(new DataInterface(guild, plugin.name), reaction, user);
+            }
+        }
+    });
+});
+
+//cuando un usuario quita la reaccion de un mensaje
+mainClient.on('messageReactionRemove', async (reaction, user) => {
+    if (reaction.partial) {
+		try {
+			await reaction.fetch();
+		} catch (error) {
+			console.error('Error al obtener la reaccion:', error);
+			return;
+		}
+    }
+    if((reaction == undefined) || (user == null) || user.bot){return};
+    const guild = reaction.message.guildid;
+    dataManager = new DataInterface(guild);
+    guilddata = dataManager.GuildDataManager;
+    mainClient.plugins.forEach(plugin => {
+        if(!guilddata.getProperty('DisabledPlugins').includes(plugin.name)){
+            if (typeof plugin.onReactionRemove === 'function'){
+                plugin.onReactionRemove(new DataInterface(guild, plugin.name), reaction, user);
             }
         }
     });
