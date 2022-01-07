@@ -9,17 +9,20 @@ module.exports = {
             {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'messageid', description: 'Mensaje a reaccionar', required: true},  
             {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'emoji', description: 'Emoji a reaccionar', required: true},
             {type: Discord.Constants.ApplicationCommandOptionTypes.ROLE, name: 'rol', description: 'Rol a reaccionar', required: true},
-            {type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN, name: 'removeifreactionremoved', description: 'Remover rol si se retira la reaccion.', required: false}
+            {type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN, name: 'removeifreactionremoved', description: 'Remover rol si se retira la reaccion.', required: false},
+            {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'title', description: 'Cambiar titulo del mensaje de reacciones (opcional, valido solo para mensajes del bot)', required: false}
         ]},
-        {name: 'createreactionrolemessage', description: 'Crea un mensaje para ser usado como reaction role'}
+        {name: 'createreactionrolemessage', description: 'Crea un mensaje para ser usado como reaction role', options: [
+            {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'title', description: 'Titulo del mensaje a reaccionar.', required: false}
+        ]}
     ],
     async onSlashCommand(dataManager, slashcommand){
         const {options} = slashcommand;
         pluginManager = dataManager.PluginDataManager;
         switch (slashcommand.commandName) {
             case 'addreactionroletomessage':
-                let tempuser = await reaction.message.guild.members.fetch(user.id);
-                if(!tempuser.roles.cache.has(dataManager.GuildDataManager.getProperty('operatorRole')) && reaction.message.guild.fetchOwner().id != user.id){
+                let tempuser = await slashcommand.channel.guild.members.fetch(slashcommand.member.id);
+                if((!tempuser.roles.cache.has(dataManager.GuildDataManager.getProperty('operatorRole'))) && !(await slashcommand.guild.fetchOwner() == slashcommand.member.id)){
                     slashcommand.reply({ content: 'No tienes el rol de operador para poder usar este comando', ephemeral: true });
                     return;
                 }
@@ -61,7 +64,15 @@ module.exports = {
                         }
                     }
                     let embed = new Discord.MessageEmbed().setFooter("FapretBot");
-                    embed.setTitle('Reaction Roles');
+                    if(options.getString('title')){
+                        embed.setTitle(options.getString('title'));
+                    } else {
+                        if(message.embeds[0].title){
+                            embed.setTitle(message.embeds[0].title)
+                        } else {
+                            embed.setTitle('Reaction Roles');
+                        }
+                    }
                     var description = 'ROLES: \n';
                     for (const key in reactionMessageData.reactions) {
                         console.log(key);
@@ -78,13 +89,17 @@ module.exports = {
                 }
                 break;
             case 'createreactionrolemessage':
-                let tempuser2 = await reaction.message.guild.members.fetch(user.id);
-                if(!tempuser2.roles.cache.has(dataManager.GuildDataManager.getProperty('operatorRole')) && reaction.message.guild.fetchOwner().id != user.id){
+                let tempuser2 = await slashcommand.channel.guild.members.fetch(slashcommand.member.id);
+                if(!tempuser2.roles.cache.has(dataManager.GuildDataManager.getProperty('operatorRole')) && !(await slashcommand.guild.fetchOwner() == slashcommand.member.id)){
                     slashcommand.reply({ content: 'No tienes el rol de operador para poder usar este comando', ephemeral: true });
                     return;
                 }
                 let message2 = new Discord.MessageEmbed().setFooter("FapretBot");
-                message2.setTitle('Reaction Roles');
+                if(options.getString('title')){
+                    message2.setTitle(options.getString('title'));
+                } else {
+                    message2.setTitle('Reaction Roles');
+                }
                 message2.setDescription('ROLES:');
                 slashcommand.channel.send({embeds: [message2]});
                 slashcommand.reply({ content: 'Mensaje de reaction role creado', ephemeral: true });
