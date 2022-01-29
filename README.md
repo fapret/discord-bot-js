@@ -7,12 +7,12 @@
  -Nodejs v16  
  Todas las demas dependencias son instaladas con npm i / npm ci  
 
- Algunos modulos necesitan algunas dependencias en especifico.    
- Para el modulo de Musica:  
+ Algunos plugins necesitan algunas dependencias en especifico.    
+ Para el plugin de Musica:  
  -FFmpeg
 
 # Proceso de instalacion (Ubuntu)
- Ejemplo de proceso de instalacion en una instalacion limpia de Ubuntu 21.04 con todos los modulos incluidos.  
+ Ejemplo de proceso de instalacion en una instalacion limpia de Ubuntu 21.04 con todos los modulos y plugins incluidos.  
 
  Primero es necesario instalar Nodejs v16
  ```sh
@@ -21,12 +21,12 @@ sudo apt update
 sudo apt-get install -y nodejs
  ```
 
- Luego instalamos la dependencias del modulo de musica < music > **(opcional)**
+ Luego instalamos la dependencias del plugin de musica < music > **(opcional)**
  ```sh
 sudo apt-get install -y ffmpeg
  ```
 
- Luego instalamos las dependencias del modulo de bienvenida < welcome > y de diversion < fun > **(opcional)**
+ Luego instalamos las dependencias del plugin de bienvenida < welcome > y de diversion < fun > **(opcional)**
  ```sh
 sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
  ```
