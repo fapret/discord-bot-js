@@ -44,7 +44,7 @@ module.exports = {
         welcomeModule = pluginManager.readData(dataManager.GuildDataManager.getGuildID());
         if(!welcomeModule){
             welcomeModule = {
-                imageUrl: __dirname + "/minecraft.png",
+                imageUrl: __dirname + "/default.png",
                 imagesize: {
                     x: "1400",
                     y: "600"

@@ -16,8 +16,12 @@
         "plugin-load-started": "Carga de plugins iniciada",
         "loading-slashcommands": "Carga de comandos slash iniciada",
         "plugins-loaded": "Plugins cargados:",
+        "created-data-directory": "Creado directorio data",
         "created-cache-directory": "Creado directorio cache",
         "created-guilds-directory": "Creado directorio guilds",
+        "created-namespace-storage": "Creado storage del namespace: ",
+        "guilddata-not-registered": "directorio data de la guild no existe: ",
+        "created-plugindatapath-directory": "Creado directorio data del plugin: ",
         "flushplugins-doesnt-refresh-slashcommands": "ADVERTENCIA> Recargar los plugins no recarga los slashcommands, utilice flushAllSlashCommands para hacerlo",
         "console-help": [
             "- help : Este mensaje",

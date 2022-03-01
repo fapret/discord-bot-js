@@ -143,9 +143,9 @@ mainClient.on('messageCreate', async message =>{
         }
     } else {
         mainClient.plugins.forEach(plugin => {
-            if(!guilddata.DisabledPlugins.includes(plugin.name)){
+            if(!guilddata.getProperty('DisabledPlugins').includes(plugin.name)){
                 if(typeof plugin.onAllMessage === 'function'){
-                    plugin.onMessage(message, new DataInterface(guild, plugin.name));
+                    plugin.onAllMessage(message, new DataInterface(guild, plugin.name));
                 }
             }
         });
