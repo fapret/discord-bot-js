@@ -12,7 +12,7 @@ Un programa que no contiene ningun derivado del Software, pero esta diseñado pa
 EL SOFTWARE SE PROPORCIONA "COMO ESTA", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O IMPLÍCITA, INCLUYENDO PERO NO LIMITADO A GARANTÍAS DE COMERCIALIZACIÓN, IDONEIDAD PARA UN PROPÓSITO PARTICULAR E INCUMPLIMIENTO. EN NINGÚN CASO LOS AUTORES O PROPIETARIOS DE LOS DERECHOS DE AUTOR SERÁN RESPONSABLES DE NINGUNA RECLAMACIÓN, DAÑOS U OTRAS RESPONSABILIDADES, YA SEA EN UNA ACCIÓN DE CONTRATO, AGRAVIO O CUALQUIER OTRO MOTIVO, DERIVADAS DE, FUERA DE O EN CONEXIÓN CON EL SOFTWARE O SU USO U OTRO TIPO DE ACCIONES EN EL SOFTWARE.
 */
 
-const ytdl = require('ytdl-core');
+const ytdl = require('play-dl');
 const ytSearch = require('yt-search'); //TODO: Cambiarlo por otra libreria, ya que esta no es async
 const config = require('./config.json');
 const {
@@ -114,7 +114,8 @@ const playmusic = async function(queue, song){
         queue.player = null;
         return;
     }
-    const stream = createAudioResource(ytdl(song.url, {filter: 'audioonly'}));
+    let resource = await ytdl.stream(song.url, {discordPlayerCompatibility: true});
+    const stream = createAudioResource(resource.stream);
     if(!queue.suscription){
         queue.suscription = queue.conection.subscribe(queue.player);
         queue.player.play(stream);

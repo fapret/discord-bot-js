@@ -43,6 +43,12 @@ module.exports = {
     //El campo author es opcional, pero se recomienda colocarlo, define el autor del plugin
     author: 'Pon tu nombre aqui',
 
+    //Version del plugin (solo puede contener letras minusculas, espacio, punto y digitos del 0 al 9) (opcional)
+    //En caso de tener caracteres no permitidos como letras mayusculas, se ignorara el parametro
+    //su unica utilidad es para saber que version del plugin se esta ejecutando.
+    //se imprime en la consola cuando se carga el plugin
+    version: 'Pon la version aqui',
+
     //Aqui se coloca un array con la informacion de cada slashcommand a ser utilizado por el plugin
     //es opcional
     slashCommands: [

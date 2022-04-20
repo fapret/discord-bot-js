@@ -64,6 +64,7 @@ module.exports = {
     name: 'apps',
     description: 'modulo de apps',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
+    version: '2.2.0.7e6203571',
     async onMessage(message) {
         const voiceChannel = message.member.voice.channel;
         if(!voiceChannel) {

@@ -32,7 +32,7 @@ const DiscordClients = new Map;
 DiscordClients.set("main", new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_INTEGRATIONS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS], partials: ['MESSAGE', 'REACTION'] }));
 const mainClient = DiscordClients.get("main");
 
-/* Carga los modulos */
+/* Carga los plugins */
 d = new Date();
 console.log('[' + timeParser(d) + '] ' + config.Messages['plugin-load-started']);
 mainClient.plugins = new Discord.Collection();
@@ -56,9 +56,15 @@ getPlugins('./plugins');
 d = new Date();
 console.log('[' + timeParser(d) + '] ' + config.Messages['plugins-loaded']);
 mainClient.plugins.forEach(key =>{
-    console.log('- ' + key.name);
+    let isversionformatted = undefined;
+    if(key.version){
+        isversionformatted = /^[a-z0-9_\p{.} ]+$/.test(key.version);
+    }
+    if(isversionformatted){
+            console.log('- ' + key.name + ' (' + key.version + ')');
+    } else
+        console.log('- ' + key.name);
 });
-console.log('--------------------');
 
 /* Obtiene la informacion de la guild que se le pasa como parametro, si no existe la crea */
 const getguild = function(guild){

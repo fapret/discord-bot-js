@@ -18,6 +18,7 @@ module.exports = {
     name: 'reactionroles',
     description: 'modulo de reactionroles',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
+    version: '2.2.0.7e6203571',
     slashCommands : [
        {name: 'addreactionroletomessage', description: 'Agrega a un mensaje una reaccion que brinda un rol, si es un mensaje tipo reaction role, lo edita.', options: [
             {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'messageid', description: 'Mensaje a reaccionar', required: true},  

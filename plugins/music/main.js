@@ -40,6 +40,7 @@ module.exports = {
     name: 'music',
     description: 'modulo de musica',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
+    version: '2.2.0.7e6229552',
     slashCommands : [
         {name: 'play', description: 'Reproduce una cancion o una playlist', options: [{type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'search', description: 'Nombre o url de la cancion', required: true}]},
         {name: 'stop', description: 'Para el reproductor de musica', options: []},

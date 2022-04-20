@@ -38,6 +38,7 @@ module.exports = {
     name: 'custommsg',
     description: 'modulo de mensajes customizados',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
+    version: '2.2.0.7e6203571',
     async onAllMessage(message, dataManager){
         try{
             lowercasemessage = message.content.toLowerCase();

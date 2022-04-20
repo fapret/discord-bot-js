@@ -39,6 +39,7 @@ module.exports = {
     name: 'welcome',
     description: 'modulo de bienvenida customizada',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
+    version: '2.2.0.7e6203571',
     async onMemberJoin(dataManager, member){
         pluginManager = dataManager.PluginDataManager;
         welcomeModule = pluginManager.readData(dataManager.GuildDataManager.getGuildID());

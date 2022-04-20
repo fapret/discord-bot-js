@@ -20,6 +20,7 @@ module.exports = {
     name: 'fun',
     description: 'modulo de diversion',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
+    version: '2.2.0.7e6203571',
     async onMessage(message, dataManager, args){
         switch (args[0]){
             case 'avatar':
