@@ -38,7 +38,13 @@ module.exports = {
     description: 'modulo de diversion',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
     async execute(message, dataManager, args){
-        var member = message.mentions.users.first();
+        const {options} = message;
+        var member;
+        if(!options){
+            member = message.mentions.users.first(); //Se puede obtener de args //TODO
+        } else {
+            member = options.getUser('user');
+        }
         pluginDataManager = dataManager.PluginDataManager;
         animations = pluginDataManager.readData('animations');
         if(animations == undefined){
@@ -46,20 +52,24 @@ module.exports = {
             animations = pluginDataManager.readData('animations');
         }
         const animationsAmount = Object.keys(animations.animation).length;
+        if(animationsAmount == 0) return;
         var imageIndex = Math.floor(Math.random() * (animationsAmount) + 1) - 1;
         var opt = false;
+        if(options && !args){
+            args = [undefined, options.getUser('user'), options.getString('id'), options.getString('texto')];
+        }
         if(args.length > 3){
             try{
                 //const imageIndexCheck = parseInt(args[2].replace("#",""));
                 var index = 0;
-                for(; (index < animationsAmount) && !opt; index++){
+                for(; (index < animationsAmount) && !opt && args[2] != undefined; index++){
                     if(animations.animation[index].ID == args[2].replace("#","")){
                         imageIndex = index;
                         opt = true;
                     }
                 }
                 if(!opt){
-                    message.channel.send("No se encontro la imagen " + args[2] + "\n procediendo aleatoriamente...");
+                    imageIndex = Math.floor(Math.random() * (animationsAmount) + 1) - 1;
                 }
             } catch (err) {
                 console.log(err);
@@ -70,14 +80,24 @@ module.exports = {
         const selectedImage = animations.animation[imageIndex];
         var messageToSend = selectedImage.message;
         if ((member == undefined) || member == message.author){
-            member = message.author;
             messageToSend = selectedImage.selfMessage;
+            if(option){
+                member = message.member.user;
+            } else {
+                member = message.member;
+            }
         }
         if(opt){
             messageToSend = args.slice(3, args.length).join(' ');
         }
-        messageToSend = internalParser(messageToSend, member, message.author);
-        const authorAvatarURL = message.author.displayAvatarURL({ format: 'png', size: 1024});
+        let authorAvatarURL;
+        if(!options){ //es garantizado en mensajes
+            messageToSend = internalParser(messageToSend, member, message.author);
+            authorAvatarURL = message.author.displayAvatarURL({ format: 'png', size: 1024});
+        } else { //es garantizado en slashcommands 
+            messageToSend = internalParser(messageToSend, member, message.member.user);
+            authorAvatarURL = message.member.user.displayAvatarURL({ format: 'png', size: 1024});
+        }
         const authorAvatar = await loadImage(authorAvatarURL);
         const memberAvatarURL = member.displayAvatarURL({ format: 'png', size: 1024});
         const memberAvatar = await loadImage(memberAvatarURL);
@@ -144,7 +164,11 @@ module.exports = {
         	const attach = new Discord.MessageAttachment('./cache/' + message.id + '.gif', `animatedhug.gif`);
         	embeed.setDescription(messageToSend);
         	embeed.setImage(`attachment://animatedhug.gif`);
-        	await message.channel.send({embeds: [embeed], files: [attach]});
+            if(message.editReply){
+                await message.editReply({embeds: [embeed], files: [attach]});
+            } else {
+                await message.reply({embeds: [embeed], files: [attach]});
+            }
         	fs.unlink('./cache/' + message.id + '.gif', (err => {if(err) console.log(err)}));
         });
     }

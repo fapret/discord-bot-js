@@ -28,6 +28,7 @@ const rl = readline.createInterface({
 });
 
 /* Clientes Discord */
+//Pensado para futuras implementaciones que existan multiples bots
 const DiscordClients = new Map;
 DiscordClients.set("main", new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_INTEGRATIONS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS], partials: ['MESSAGE', 'REACTION'] }));
 const mainClient = DiscordClients.get("main");
@@ -90,16 +91,22 @@ const flushSlashCommands = async function(guildId){
         commandstodelete.forEach(async cmd => {
             try{
                 await commands.delete(cmd);
-            }catch{
-                console.log('error on command delete');
+            }catch(err){
+                console.log('error on command delete: ' + cmd.name);
+                console.log(err);
             }
         });
         mainClient.plugins.forEach(key => {
             if(!DisabledPlugins.includes(key.name)){
                 if(key.slashCommands != undefined && key.slashCommands != null){
-                    key.slashCommands.forEach(command => {
+                    key.slashCommands.forEach(async command => {
                         command.name = command.name.toLowerCase();
-                        commands.create(command);
+                        try{
+                            await commands.create(command);
+                        }catch(err){
+                            console.log('error on command creation: ' + command.name);
+                            console.log(err);
+                        }
                     })
                 }
             }
@@ -213,6 +220,10 @@ mainClient.on('interactionCreate', async (interaction) => {
             } else if(interaction.isCommand()){
                 if (typeof plugin.onSlashCommand === 'function'){
                     plugin.onSlashCommand(new DataInterface(guild, plugin.name), interaction);
+                }
+            } else if(interaction.isSelectMenu()){
+                if (typeof plugin.onSelectMenu === 'function'){
+                    plugin.onSelectMenu(new DataInterface(guild, plugin.name), interaction);
                 }
             }
         }

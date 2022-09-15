@@ -103,6 +103,11 @@ module.exports = {
     //es opcional
     async onSlashCommand(dataManager, slashcommand){},
 
+    //funcion a ser ejecutada cuando un usuario ejecuta un selectMenu
+    //recibe dos objetos, el dataManager (ver dataManager en la wiki de fapretBot) y un objeto interaction de tipo command (https://discord.js.org/#/docs/discord.js/stable/class/CommandInteraction)
+    //es opcional
+    async onSelectMenu(dataManager, selectMenu){},
+
     //funcion a ser ejecutada cuando un usuario presiona un boton de un mensaje del bot
     //recibe dos objetos, el dataManager (ver dataManager en la wiki de fapretBot) y un objeto interaction de tipo button (https://discord.js.org/#/docs/discord.js/stable/class/ButtonInteraction)
     //es opcional
@@ -118,10 +123,12 @@ module.exports = {
     //es opcional
     async onReactionRemove(dataManager, reaction, user){},
 
+    //@DEPRECATED
     //funcion a ser ejecutada cuando un usuario envia un mensaje que inicia por <bot prefix>!<plugin.name> recibe 3 objetos
     //message es un objeto message (https://discord.js.org/#/docs/discord.js/stable/class/Message), el dataManager (ver wiki de fapretBot), y args es el texto que iria despues de <bot prefix>!<plugin.name>, por ejemplo
     //si el prefix fuera f y el plugin example y el usuario escribiese f!example hola, args seria ["hola"]
     //es opcional
+    //No es recomendable su uso para la ejecucion de comandos! Ver > https://support-dev.discord.com/hc/en-us/articles/6025578854295-Why-We-Moved-to-Slash-Commands
     async onMessage(message, dataManager, args){},
 
     //funcion a ser ejecutada cuando un usuario envia un mensaje que NO inicia por <bot prefix>!<plugin.name>

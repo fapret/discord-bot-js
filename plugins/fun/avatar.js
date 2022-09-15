@@ -20,10 +20,14 @@ module.exports = {
     description: 'modulo de diversion',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
     async execute(message){
+        const {options} = message;
         const img = new createCanvas(1024, 1024);
         const context = img.getContext('2d');
-        var member = message.mentions.users.first();
+        var member = message.mentions?.users.first();
         if (member == undefined){
+            if(options){
+                member = options.getUser('user');
+            } else
             member = message.author;
         }
         const memberAvatarURL = member.displayAvatarURL({ format: 'png', size: 1024});
@@ -35,6 +39,11 @@ module.exports = {
         embeed.setURL(memberAvatarURL);
         embeed.setDescription(`[URL Avatar](${memberAvatarURL}) | ID: ${member.id}`);
         embeed.setAuthor(`${member.tag}`, memberAvatarURL);
-        message.channel.send({embeds: [embeed], files: [attach]});
+        if(message.editReply){
+            message.editReply({embeds: [embeed], files: [attach]});
+        }
+        else {
+            message.reply({embeds: [embeed], files: [attach]});
+        }
     }
 }

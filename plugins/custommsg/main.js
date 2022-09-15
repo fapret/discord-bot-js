@@ -38,7 +38,7 @@ module.exports = {
     name: 'custommsg',
     description: 'modulo de mensajes customizados',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    version: '2.2.0.7e6203571',
+    version: '2.2.0.7e6814d',
     async onAllMessage(message, dataManager){
         try{
             lowercasemessage = message.content.toLowerCase();
@@ -49,7 +49,7 @@ module.exports = {
                 pluginManager.writeData(dataManager.GuildDataManager.getGuildID(), CustomMessages);
             }
             CustomMessages.forEach(element => {
-                if(element.Channel == message.channel.id){
+                if(element.Channel == message.channel.id || element.Channel.toLowerCase() == "any" || element.Channel == "*"){
                     element.Messages.forEach(async (custommessage) => {
                         custommessage.Keywords.forEach(async (keyword) => {
                             if(((custommessage.WildCard == true) && (lowercasemessage.includes(keyword.toLowerCase()))) || lowercasemessage.startsWith(keyword.toLowerCase())){

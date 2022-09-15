@@ -17,6 +17,7 @@ registerFont(__dirname + '/DoHyeon-Regular.ttf', { family: 'Do-Hyeon'});
 registerFont(__dirname + '/Bebas-Regular.ttf', { family: 'Bebas'});
 const Discord = require('discord.js');
 
+/* Funcion para parsear textos en base a informacion de un miembro */
 function internalParser(text, member){
     text = text.replace('${tag}', member.user.tag);
     text = text.replace('${memberCount}', member.guild.memberCount);
@@ -40,10 +41,12 @@ module.exports = {
     description: 'modulo de bienvenida customizada',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
     version: '2.2.0.7e6203571',
+    //Se ejecuta al unirse un miembro a la guild, generando la imagen y enviandola al system channel
     async onMemberJoin(dataManager, member){
         pluginManager = dataManager.PluginDataManager;
         welcomeModule = pluginManager.readData(dataManager.GuildDataManager.getGuildID());
         if(!welcomeModule){
+            /* Datos default del plugin */
             welcomeModule = {
                 imageUrl: __dirname + "/default.png",
                 imagesize: {

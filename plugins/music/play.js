@@ -33,19 +33,31 @@ module.exports = {
     async execute(message, queue, args){
         const voiceChannel = message.member.voice.channel;
         if(!voiceChannel) {
-            message.reply(config.Messages['must-be-on-voice-channel']);
+            if(message.editReply)
+                message.editReply(config.Messages['must-be-on-voice-channel']);
+            else
+                message.reply(config.Messages['must-be-on-voice-channel']);
             return;
         }
         if(!voiceChannel.permissionsFor(message.client.user).has('CONNECT') || !voiceChannel.permissionsFor(message.client.user).has('SPEAK')){
-            message.reply(config.Messages['bot-not-allowed-in-your-channel']);
+            if(message.editReply)
+                message.editReply(config.Messages['bot-not-allowed-in-your-channel']);
+            else
+                message.reply(config.Messages['bot-not-allowed-in-your-channel']);
             return;
         }
         if((queue.voiceChannel != null) && (voiceChannel.id != queue.voiceChannel.id)){
-            message.reply(config.Messages['bot-is-busy']);
+            if(message.editReply)
+                message.editReply(config.Messages['bot-is-busy']);
+            else
+                message.reply(config.Messages['bot-is-busy']);
             return;
         }
         if(args.length == 1){
-            message.reply(config.Messages['must-specify-song']);
+            if(message.editReply)
+                message.editReply(config.Messages['must-specify-song']);
+            else
+                message.reply(config.Messages['must-specify-song']);
             return;
         }
         const videobusqueda = async (query) => {
@@ -85,13 +97,19 @@ module.exports = {
         args.shift();
         var videolist = await videobusqueda(args.join(' '));
         if(videolist == null || (videolist[0] == null && videolist[1] == null)){
-            message.reply(config.Messages['video-not-found']);
+            if(message.editReply)
+                message.editReply(config.Messages['video-not-found']);
+            else
+                message.reply(config.Messages['video-not-found']);
             return;
         }
         var video = videolist[0];
         await playVideo(video, true, queue, voiceChannel, message);
         if(videolist[1] != null){
-            message.reply(config.Messages['playlist-added-to-queue'] + videolist[1].title);
+            if(message.editReply)
+                message.editReply(config.Messages['playlist-added-to-queue'] + videolist[1].title);
+            else
+                message.reply(config.Messages['playlist-added-to-queue'] + videolist[1].title);
             for(video of videolist[1].videos){
                 await playVideo(video, false, queue, voiceChannel, message);
             }
@@ -176,6 +194,10 @@ const playVideo = async function(video, sayAddedToQueue, queue, voiceChannel, me
         if(queue.songs.length == 0){
             queue.songs.push(song);
             try{
+                if(message.editReply)
+                    message.editReply(config.Messages['start-music']);
+                else
+                    message.reply(config.Messages['start-music']);
                 playmusic(queue, queue.songs[0]);
             } catch (err){
                 console.log(err);
@@ -183,7 +205,10 @@ const playVideo = async function(video, sayAddedToQueue, queue, voiceChannel, me
         } else {
             queue.songs.push(song);
             if(sayAddedToQueue){
-                message.reply(config.Messages['song-added-to-queue'][0] + song.title + config.Messages['song-added-to-queue'][1]);
+                if(message.editReply)
+                    message.editReply(config.Messages['song-added-to-queue'][0] + song.title + config.Messages['song-added-to-queue'][1]);
+                else
+                    message.reply(config.Messages['song-added-to-queue'][0] + song.title + config.Messages['song-added-to-queue'][1]);
             }
         }
     }

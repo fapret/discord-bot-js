@@ -15,12 +15,17 @@ EL SOFTWARE SE PROPORCIONA "COMO ESTA", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
 const avatar = require('./avatar.js');
 const hug = require('./hug.js');
 const config = require('./config.json');
+const Discord = require('discord.js');
 
 module.exports = {
     name: 'fun',
     description: 'modulo de diversion',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    version: '2.2.0.7e6203571',
+    version: '2.2.0.7e6814d',
+    slashCommands : [
+        {name: 'avatar', description: 'Obten el avatar de un usuario', options: [{type: Discord.Constants.ApplicationCommandOptionTypes.USER, name: 'user', description: 'Usuario a obtener avatar', required: true}]},
+        {name: 'hug', description: 'Abraza a un usuario', options: [{type: Discord.Constants.ApplicationCommandOptionTypes.USER, name: 'user', description: 'Usuario a abrazar', required: false},{type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'id', description: 'id de imagen', required: false},{type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'texto', description: 'texto de imagen', required: false}]}
+    ],
     async onMessage(message, dataManager, args){
         switch (args[0]){
             case 'avatar':
@@ -31,6 +36,21 @@ module.exports = {
                 break;
             default:
                 message.reply(config.Messages['no-action']);
+                break;
+        }
+    },
+    async onSlashCommand(dataManager, slashcommand){
+        const {options} = slashcommand;
+        switch (slashcommand.commandName){
+            case 'avatar':
+                await slashcommand.deferReply();
+                avatar.execute(slashcommand);
+                break;
+            case 'hug':
+                await slashcommand.deferReply();
+                hug.execute(slashcommand, dataManager);
+                break;
+            default:
                 break;
         }
     }

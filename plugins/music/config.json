@@ -5,6 +5,7 @@
     "Messages": {
         "no-action": "Debes especificar una accion valida",
         "stop-music": "Deteniendo la reproduccion",
+        "start-music": "Iniciando la reproduccion",
         "must-specify-song": "Debes especificar una cancion",
         "must-be-on-voice-channel": "debes estar en un canal de voz para usar este comando",
         "bot-not-allowed-in-your-channel": "No tienes permiso de usar el bot en el canal de audio en el que te encuentras",
