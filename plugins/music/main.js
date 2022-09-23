@@ -12,6 +12,13 @@ Un programa que no contiene ningun derivado del Software, pero esta diseñado pa
 EL SOFTWARE SE PROPORCIONA "COMO ESTA", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O IMPLÍCITA, INCLUYENDO PERO NO LIMITADO A GARANTÍAS DE COMERCIALIZACIÓN, IDONEIDAD PARA UN PROPÓSITO PARTICULAR E INCUMPLIMIENTO. EN NINGÚN CASO LOS AUTORES O PROPIETARIOS DE LOS DERECHOS DE AUTOR SERÁN RESPONSABLES DE NINGUNA RECLAMACIÓN, DAÑOS U OTRAS RESPONSABILIDADES, YA SEA EN UNA ACCIÓN DE CONTRATO, AGRAVIO O CUALQUIER OTRO MOTIVO, DERIVADAS DE, FUERA DE O EN CONEXIÓN CON EL SOFTWARE O SU USO U OTRO TIPO DE ACCIONES EN EL SOFTWARE.
 */
 
+/*
+ESTE PLUGIN ESTA OBSOLETO, NO USAR PARA PRODUCCION
+ESTA PROGRAMADO PARA SER USADO EN POCOS SERVIDORES
+USANDOLO EN MUCHOS SERVIDORES CAUSARA LAG EN EL BOT
+--EL PLUGIN NO RECIBE SOPORTE--
+*/
+
 const play = require('./play.js');
 const stop = require('./stop.js');
 const forceskip = require('./forceskip.js');
@@ -163,21 +170,29 @@ module.exports = {
                 break;
             case 'stop':
                 await slashcommand.deferReply();
-                stop.execute(slashcommand, queue, guild);
+                stop.execute(slashcommand, queue, dataManager);
                 break;
             case 'forceskip':
+                await slashcommand.deferReply();
+                forceskip.execute(slashcommand, queue, dataManager);
                 break;
             case 'skipindex':
                 break;
             case 'skip':
+                await slashcommand.deferReply();
+                skip.execute(slashcommand, queue);
                 break;
             case 'queue':
                 await slashcommand.deferReply();
                 queuejs.execute(slashcommand, queue);
                 break;
             case 'pause':
+                await slashcommand.deferReply();
+                pause.execute(slashcommand, queue);
                 break;
             case 'resume':
+                await slashcommand.deferReply();
+                resume.execute(slashcommand, queue);
                 break;
             case 'shuffle':
                 await slashcommand.deferReply();

@@ -141,7 +141,7 @@ let dataManager = {
                                             ID: dirPathParts[0],
                                             prefix: config['default-prefix'],
                                             operatorRole: '00000000000000000',
-                                            DisabledPlugins: ['welcome','newworld','template','apps'],
+                                            DisabledPlugins: ['welcome','newworld','template','apps','music'],
                                             Aliases: ['!f']
                                         }
                                         try {
