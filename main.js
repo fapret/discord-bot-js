@@ -119,6 +119,40 @@ const flushSlashCommands = async function(guildId){
     }
 }
 
+/* Funcion para registrar y/o actualizar comandos globales */
+const flushGlobalSlashCommands = async function(){
+    let commands = mainClient.application.commands;
+    try{
+        commandstodelete = await commands.fetch();
+        commandstodelete.forEach(async cmd => {
+            try{
+                await commands.delete(cmd);
+            }catch(err){
+                console.log('error on command delete: ' + cmd.name);
+                console.log(err);
+            }
+        });
+        mainClient.plugins.forEach(key => {
+                if(key.globalSlashCommands != undefined && key.globalSlashCommands != null){
+                    key.globalSlashCommands.forEach(async command => {
+                        command.name = command.name.toLowerCase();
+                        try{
+                            await commands.create(command);
+                        }catch(err){
+                            console.log('error on command creation: ' + command.name);
+                            console.log(err);
+                        }
+                    })
+                }
+        });
+        d = new Date();
+        console.log('[' + timeParser(d) + '] ' + config.Messages['globalslashCommands-loaded']);
+    } catch {
+        d = new Date();
+        console.log('[' + timeParser(d) + '] ' + config.Messages['error-on-globalslashcommand-flush']);
+    }
+}
+
 /* comandos */
 mainClient.on('messageCreate', async message =>{
     if (message.partial) {
@@ -276,6 +310,18 @@ mainClient.on('messageReactionRemove', async (reaction, user) => {
     });
 });
 
+/* Se ejecuta cuando el bot entra a una guild */
+mainClient.on('guildCreate', guild => {
+    flushSlashCommands(guild.id);
+});
+
+/* Se ejecuta cuando el bot sale de una guild */
+mainClient.on('guildDelete', guild => {
+    d = new Date();
+    console.log('[' + timeParser(d) + '] ' + config.Messages['bot-left-guild'] + guild.id);
+    //TODO: erase guild data
+});
+
 /* Se ejecuta cuando el bot ya esta activo */
 mainClient.on('ready', () => {
     d = new Date();
@@ -285,6 +331,7 @@ mainClient.on('ready', () => {
     console.log('[' + timeParser(d) + '] ' + config.Messages['activity-setted'] + config.activity.value + ', type: ' + config.activity.type);
     d = new Date();
     console.log('[' + timeParser(d) + '] ' + config.Messages['loading-slashcommands']);
+    flushGlobalSlashCommands();
     mainClient.guilds.cache.forEach(guild => {
         flushSlashCommands(guild.id);
     });
@@ -344,6 +391,7 @@ rl.on('line', (input) => {
             cmdflushplugins();
             break;
         case 'flushallslashcommands':
+            flushGlobalSlashCommands();
             mainClient.guilds.cache.forEach(guild => {
                 flushSlashCommands(guild.id);
             });

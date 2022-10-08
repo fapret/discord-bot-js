@@ -3,7 +3,7 @@
     "secondary-bot-tokens": [],
     "default-prefix": "fapret!",
     "activity": {
-        "value": "a fapret hacer cositas",
+        "value": "Discord",
         "type": "WATCHING"
     },
     "Messages": {
@@ -30,6 +30,8 @@
             "- flushAllSlashCommands : Borra todos los slashcommands y luego crea los slashcommands configurados"
         ],
         "slashCommands-loaded": "Cargados comandos slash para la guild >> ",
-        "guild-has-no-permission-for-slashCommands": "La guild no tiene el permiso de modificar o crear comandos slash >> "
+        "guild-has-no-permission-for-slashCommands": "La guild no tiene el permiso de modificar o crear comandos slash >> ",
+        "error-on-globalslashcommand-flush": "Error al refrescar los slashcommands globales",
+        "bot-left-guild": "El bot se fue de la guild: "
     }
 }

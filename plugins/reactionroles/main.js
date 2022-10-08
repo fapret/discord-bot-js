@@ -18,8 +18,8 @@ module.exports = {
     name: 'reactionroles',
     description: 'modulo de reactionroles',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    version: '2.2.0.7e6203571',
-    slashCommands : [
+    version: '2.2.1.7e69054b9',
+    globalSlashCommands : [
        {name: 'addreactionroletomessage', description: 'Agrega a un mensaje una reaccion que brinda un rol, si es un mensaje tipo reaction role, lo edita.', options: [
             {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'messageid', description: 'Mensaje a reaccionar', required: true},  
             {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'emoji', description: 'Emoji a reaccionar', required: true},
@@ -30,7 +30,7 @@ module.exports = {
         {name: 'createreactionrolemessage', description: 'Crea un mensaje para ser usado como reaction role', options: [
             {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'title', description: 'Titulo del mensaje a reaccionar.', required: false}
         ]}
-    ],
+    ],//TODO hacer que sean subcomandos
     async onSlashCommand(dataManager, slashcommand){
         const {options} = slashcommand;
         pluginManager = dataManager.PluginDataManager;

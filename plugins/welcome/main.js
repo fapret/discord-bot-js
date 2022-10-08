@@ -41,6 +41,16 @@ module.exports = {
     description: 'modulo de bienvenida customizada',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
     version: '2.2.0.7e6203571',
+    globalSlashCommands: [
+        {name: 'welcome', description: 'Maneja el sistema de welcome', options: [
+            {type: Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND, name: 'settextmessage', description: 'Setea el mensaje de bienvenida', options: [
+                {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'text', description: 'Texto del mensaje de bienvenida', required: true}
+            ]},
+            {type: Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND, name: 'enableimage', description: 'Activa o desactiva las imagenes de bienvenida', options: [
+                {type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN, name: 'useimage', description: 'Activar o desactivar imagenes de bienvenida', required: true}
+            ]}
+        ]}
+    ],
     //Se ejecuta al unirse un miembro a la guild, generando la imagen y enviandola al system channel
     async onMemberJoin(dataManager, member){
         pluginManager = dataManager.PluginDataManager;
@@ -48,6 +58,7 @@ module.exports = {
         if(!welcomeModule){
             /* Datos default del plugin */
             welcomeModule = {
+                useImage: true,
                 imageUrl: __dirname + "/default.png",
                 imagesize: {
                     x: "1400",
@@ -75,52 +86,142 @@ module.exports = {
         if(welcomeModule.channel == null){
             return;
         };
-        const img = new createCanvas(parseInt(welcomeModule.imagesize.x), parseInt(welcomeModule.imagesize.y));
-        const context = img.getContext('2d');
-        const background = await loadImage(welcomeModule.imageUrl);
-        context.drawImage(background, 0, 0, img.width, img.height);
-        context.strokeStyle = welcomeModule.strokeColor;
-        context.strokeRect(0, 0, img.width, img.height);
-        context.save();
-        context.fillStyle = welcomeModule.avatar.borderColor;
-        context.beginPath();
-        context.arc(parseInt(welcomeModule.avatar.x), parseInt(welcomeModule.avatar.y), parseInt(welcomeModule.avatar.radius) + parseInt(welcomeModule.avatar.border), 0, Math.PI * 2, true);
-        context.closePath();
-        context.fill();
-        context.beginPath();
-        context.arc(parseInt(welcomeModule.avatar.x), parseInt(welcomeModule.avatar.y), parseInt(welcomeModule.avatar.radius), 0, Math.PI * 2, true);
-        context.closePath();
-        context.clip();
-        const memberAvatar = await loadImage(member.user.displayAvatarURL({ format: 'png', size: 1024}));
-        context.drawImage(memberAvatar, parseInt(welcomeModule.avatar.x) - parseInt(welcomeModule.avatar.radius), parseInt(welcomeModule.avatar.y) - parseInt(welcomeModule.avatar.radius), parseInt(welcomeModule.avatar.radius) * 2, parseInt(welcomeModule.avatar.radius) * 2);
-        context.restore();
-        welcomeModule.texts.forEach(element => {
-            context.fillStyle = element.color;
-            if(element.hasOwnProperty('align')){
-                context.textAlign = element.align;
-            };
-            var text = internalParser(element.text, member);
-            context.font = `${element.size}px ${element.font}`;
-            while ((context.measureText(text).width >= img.width - parseInt(element.x)) || (context.measureText(text).height >= img.height - parseInt(element.y))){
-                context.font = `${element.size -= 1}px ${element.font}`;
-            };
-            context.fillText(text, parseInt(element.x), parseInt(element.y));
-            context.textAlign = "start";
-        });
-
-        const message = new Discord.MessageEmbed().setFooter("FapretBot");
-        if(welcomeModule.title != ""){
-            message.setTitle(welcomeModule.title);
-        }
-        if(welcomeModule.description != ""){
-            message.setDescription(internalParser(welcomeModule.description, member));
-        }
-        const attach = new Discord.MessageAttachment(img.toBuffer(), `${member.user.id}.png`);
-        message.setImage(`attachment://${member.user.id}.png`);
-        channel = member.guild.channels.resolve(welcomeModule.channel);
+        let channel = member.guild.channels.resolve(welcomeModule.channel);
         if(welcomeModule.message != ""){
             await channel.send(internalParser(welcomeModule.message, member));
         };
-        channel.send({embeds: [message], files: [attach]});
+        if(welcomeModule.useImage){
+            const img = new createCanvas(parseInt(welcomeModule.imagesize.x), parseInt(welcomeModule.imagesize.y));
+            const context = img.getContext('2d');
+            const background = await loadImage(welcomeModule.imageUrl);
+            context.drawImage(background, 0, 0, img.width, img.height);
+            context.strokeStyle = welcomeModule.strokeColor;
+            context.strokeRect(0, 0, img.width, img.height);
+            context.save();
+            context.fillStyle = welcomeModule.avatar.borderColor;
+            context.beginPath();
+            context.arc(parseInt(welcomeModule.avatar.x), parseInt(welcomeModule.avatar.y), parseInt(welcomeModule.avatar.radius) + parseInt(welcomeModule.avatar.border), 0, Math.PI * 2, true);
+            context.closePath();
+            context.fill();
+            context.beginPath();
+            context.arc(parseInt(welcomeModule.avatar.x), parseInt(welcomeModule.avatar.y), parseInt(welcomeModule.avatar.radius), 0, Math.PI * 2, true);
+            context.closePath();
+            context.clip();
+            const memberAvatar = await loadImage(member.user.displayAvatarURL({ format: 'png', size: 1024}));
+            context.drawImage(memberAvatar, parseInt(welcomeModule.avatar.x) - parseInt(welcomeModule.avatar.radius), parseInt(welcomeModule.avatar.y) - parseInt(welcomeModule.avatar.radius), parseInt(welcomeModule.avatar.radius) * 2, parseInt(welcomeModule.avatar.radius) * 2);
+            context.restore();
+            welcomeModule.texts.forEach(element => {
+                context.fillStyle = element.color;
+                if(element.hasOwnProperty('align')){
+                    context.textAlign = element.align;
+                };
+                var text = internalParser(element.text, member);
+                context.font = `${element.size}px ${element.font}`;
+                while ((context.measureText(text).width >= img.width - parseInt(element.x)) || (context.measureText(text).height >= img.height - parseInt(element.y))){
+                    context.font = `${element.size -= 1}px ${element.font}`;
+                };
+                context.fillText(text, parseInt(element.x), parseInt(element.y));
+                context.textAlign = "start";
+            });
+    
+            const message = new Discord.MessageEmbed().setFooter("FapretBot");
+            if(welcomeModule.title != ""){
+                message.setTitle(welcomeModule.title);
+            }
+            if(welcomeModule.description != ""){
+                message.setDescription(internalParser(welcomeModule.description, member));
+            }
+            const attach = new Discord.MessageAttachment(img.toBuffer(), `${member.user.id}.png`);
+            message.setImage(`attachment://${member.user.id}.png`);
+            channel.send({embeds: [message], files: [attach]});
+        }
+    },
+    async onSlashCommand(dataManager, slashcommand){
+        const {options} = slashcommand;
+        if (slashcommand.commandName == 'welcome'){
+            await slashcommand.deferReply({ ephemeral: true });
+            let tempuser2 = await slashcommand.channel.guild.members.fetch(slashcommand.member.id);
+            if(!tempuser2.roles.cache.has(dataManager.GuildDataManager.getProperty('operatorRole')) && !(await slashcommand.guild.fetchOwner() == slashcommand.member.id)){
+                slashcommand.editReply({ content: 'No tienes el rol de operador para poder usar este comando'});
+                return;
+            }
+            try{
+                switch (options.getSubcommand()){
+                    case 'settextmessage':
+                        pluginManager = dataManager.PluginDataManager;
+                        welcomeModule = pluginManager.readData(dataManager.GuildDataManager.getGuildID());
+                        if(!welcomeModule){
+                            /* Datos default del plugin */
+                            welcomeModule = {
+                                useImage: true,
+                                imageUrl: __dirname + "/default.png",
+                                imagesize: {
+                                    x: "1400",
+                                    y: "600"
+                                },
+                                strokeColor: "#00A9D3",
+                                channel: getchannel(member),
+                                avatar: {
+                                    x: "250",
+                                    y: "300",
+                                    radius: "150",
+                                    border: "5",
+                                    borderColor: "#FFFFFF"
+                                },
+                                texts: [
+                                    {text: "Bienvenid@ ${tag}", size: 80, x: "430", y: "300", font: "Do-Hyeon", color: "#00A9D3"},
+                                    {text: "Miembro ${memberCount}", size: 60, x: "570", y: "400", font: "sans-serif", color: "#00A9D3"}
+                                ],
+                                title: "",
+                                description: "",
+                                message: ""
+                            };
+                        }
+                        welcomeModule.message = options.getString('text');
+                        pluginManager.writeData(dataManager.GuildDataManager.getGuildID(), welcomeModule);
+                        slashcommand.editReply({ content: 'Texto de plugin de bienvenido setteado'});
+                        break;
+                    case 'enableimage':
+                        pluginManager = dataManager.PluginDataManager;
+                        welcomeModule = pluginManager.readData(dataManager.GuildDataManager.getGuildID());
+                        if(!welcomeModule){
+                            /* Datos default del plugin */
+                            welcomeModule = {
+                                useImage: true,
+                                imageUrl: __dirname + "/default.png",
+                                imagesize: {
+                                    x: "1400",
+                                    y: "600"
+                                },
+                                strokeColor: "#00A9D3",
+                                channel: getchannel(member),
+                                avatar: {
+                                    x: "250",
+                                    y: "300",
+                                    radius: "150",
+                                    border: "5",
+                                    borderColor: "#FFFFFF"
+                                },
+                                texts: [
+                                    {text: "Bienvenid@ ${tag}", size: 80, x: "430", y: "300", font: "Do-Hyeon", color: "#00A9D3"},
+                                    {text: "Miembro ${memberCount}", size: 60, x: "570", y: "400", font: "sans-serif", color: "#00A9D3"}
+                                ],
+                                title: "",
+                                description: "",
+                                message: ""
+                            };
+                        }
+                        welcomeModule.useImage = options.getBoolean('useimage');
+                        pluginManager.writeData(dataManager.GuildDataManager.getGuildID(), welcomeModule);
+                        slashcommand.editReply({ content: 'Seteado uso de imagen de bienvenida'});
+                        break;
+                    default:
+                        break;
+                }
+            } catch (err){
+                slashcommand.editReply({ content: 'Un error inesperado ha ocurrido, contacta al soporte'});
+                console.log(err);//TODO manejo de logs
+            }
+        }
     }
 }

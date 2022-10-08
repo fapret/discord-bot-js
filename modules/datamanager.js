@@ -246,7 +246,8 @@ let dataManager = {
                                         return undefined;
                                     }
                                 }
-                                getdata.dirPathParts[2] = value;
+                                getdata = JSON.parse(getdata);
+                                getdata[dirPathParts[2]] = value;
                                 try {
                                     fs.writeFileSync(currentPath + '/' + 'properties.json', JSON.stringify(getdata, null, 4));
                                     getdata = fs.readFileSync(currentPath + '/' + 'properties.json');

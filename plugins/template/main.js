@@ -51,6 +51,7 @@ module.exports = {
 
     //Aqui se coloca un array con la informacion de cada slashcommand a ser utilizado por el plugin
     //es opcional
+    globalSlashCommands: [],
     slashCommands: [
         /*El formato de cada slash command es el siguiente:
         {name: 'example', description: 'Example description', options: []}
