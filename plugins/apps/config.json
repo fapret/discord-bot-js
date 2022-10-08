@@ -1,0 +1,29 @@
+{
+    "Embeed": {
+        "title": "Apps",
+        "Description": "Cliquea el boton de la aplicacion de discord que quieres iniciar en el canal: <#${voiceChannelID}>",
+        "color" : "#00A9D3",
+        "Error": "Error no se pudo generar ninguna App"
+    },
+    "Messages": {
+        "must-be-on-voice-channel": "debes estar en un canal de voz para usar este comando"
+    },
+    "Apps": [
+        {
+            "Name": "Youtube Together",
+            "Emoji": "▶",
+            "ID": "880218394199220334"
+        },
+        {
+            "Name": "Poker",
+            "Emoji": "♠",
+            "ID": "755827207812677713"
+        },
+        {
+            "Name": "Ajedrez",
+            "Emoji": "♟",
+            "ID": "832012774040141894"
+        }
+    ],
+    "Token": ""
+}

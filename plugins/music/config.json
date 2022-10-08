@@ -1,0 +1,85 @@
+{
+    "Embeed": {
+        "color" : "#00A9D3"
+    },
+    "Messages": {
+        "no-action": "Debes especificar una accion valida",
+        "stop-music": "Deteniendo la reproduccion",
+        "start-music": "Iniciando la reproduccion",
+        "must-specify-song": "Debes especificar una cancion",
+        "must-be-on-voice-channel": "debes estar en un canal de voz para usar este comando",
+        "bot-not-allowed-in-your-channel": "No tienes permiso de usar el bot en el canal de audio en el que te encuentras",
+        "error-at-connect": "Error al conectar",
+        "video-not-found": "Lo siento no encontre ningun video",
+        "song-added-to-queue": [
+            "se agrego la cancion '",
+            "' a la cola"
+        ],
+        "now-playing": "Ahora reproduciendo: ",
+        "skip-forced": "Se salto la cancion actual forzosamente",
+        "song-skipped": "Se salto la cancion actual",
+        "votes-to-skip": "Votos para saltar la cancion actual: ",
+        "no-songs-to-skip": "No hay canciones para saltar",
+        "only-operators-can-forceskip": "solo los operadores pueden forzar el salto de cancion",
+        "only-operators-can-stop": "solo los operadores pueden detener el bot",
+        "only-operators-can-skipindex": "solo los operadores pueden saltar canciones determinadas de la cola",
+        "skip-vote-sent": "Has votado por saltar la cancion",
+        "no-songs-on-queue": "No hay canciones en la cola",
+        "already-skip-voted": "Ya votaste para saltar la cancion",
+        "playlist-added-to-queue": "Lista de reproduccion añadida a la cola: ",
+        "bot-is-busy": "El bot esta ocupado (probablemente esta en otro canal reproduciendo musica)",
+        "songs-list": "Cola de canciones",
+        "must-specify-index": "Debes especificar un lugar en la cola",
+        "queue-song-skipped": "Se salto la cancion que estaba en la cola: ",
+        "help-title": "Comandos del modulo de musica (music)",
+        "playing-nothing": "No se esta reproduciendo nada",
+        "cant-pause": "No es posible pausar el reproductor de musica, dado a que no esta reproduciendo nada.",
+        "paused": "Se pauso la cancion actual.",
+        "resumed": "Se resumio la cancion actual.",
+        "cant-unpause": "No es posible resumir el reproductor de musica, dado a que no hay ninguna cancion pausada.",
+        "shuffled-correctly": "Se mezclo la lista de reproduccion de forma correcta",
+        "help-description": "Estos son los comandos del modulo de musica, y que hacen, recuerda los comandos de este modulo se utilizan de la forma <bot-prefix>music <command> [args]",
+        "help-commands": [
+            {
+                "title": "help",
+                "description": "Muestra este mensaje con los comandos de musica"
+            },
+            {
+                "title": "play <args>",
+                "description": "Reproduce la cancion <args> en el canal que te encuentras"
+            },
+            {
+                "title": "stop",
+                "description": "Detiene el bot (solo operadores del bot)"
+            },
+            {
+                "title": "skip",
+                "description": "Vota para saltar la cancion actual"
+            },
+            {
+                "title": "skipindex <int>",
+                "description": "Vota para saltar la cancion que se encuentra en la cola en la posicion <int>"
+            },
+            {
+                "title": "forceskip",
+                "description": "Fuerza saltarse la cancion actual (solo operadores del bot)"
+            },
+            {
+                "title": "queue",
+                "description": "Muestra las canciones en la cola y el nombre de la cancion que se esta reproduciendo"
+            },
+            {
+                "title": "shuffle",
+                "description": "Mezcla las canciones en la lista de reproducción"
+            },
+            {
+                "title": "pause",
+                "description": "Pausa el reproductor de musica"
+            },
+            {
+                "title": "resume",
+                "description": "Resume el reproductor de musica"
+            }
+        ]
+    }
+}

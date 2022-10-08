@@ -1,6 +1,6 @@
 {
   "name": "fapretbot",
-  "version": "2.1.0",
+  "version": "2.2.1",
   "description": "Discord bot made by fapret",
   "main": "main.js",
   "scripts": {
@@ -16,6 +16,6 @@
     "gifencoder": "^2.0.1",
     "libsodium-wrappers": "^0.7.9",
     "yt-search": "^2.10.1",
-    "ytdl-core": "^4.9.1"
+    "play-dl": "^1.9.2"
   }
 }
