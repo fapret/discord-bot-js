@@ -24,18 +24,61 @@ const dataPath = './data/';
 //const mutexData = new Mutex();
 
 /* GuildDataManager */
-function GuildDataManager (guildID){
-    this.ID = guildID;
-    this.getGuildID = () => {return this.ID}
-    this.getProperty = (property) => {
-        return dataManager.read(`guildData:${this.ID}/properties/${property}`);
+/**
+ * @param {string|number} guildID
+ */
+function GuildDataManager (guildID = undefined){
+    if(guildID){
+        this.ID = guildID;
+        /**
+         * 
+         * @param {string|number} property 
+         * @returns {string|number|Object}
+         */
+        this.getProperty = (property) => {
+            return dataManager.read(`guildData:${this.ID}/properties/${property}`);
+        }
+        /**
+         * 
+         * @param {string|number} property 
+         * @param {*} value 
+         */
+        this.setProperty = (property, value) => {
+            dataManager.write(`guildData:${this.ID}/properties/${property}`, value);
+        }
     }
-    this.setProperty = (property, value) => {
-        dataManager.write(`guildData:${this.ID}/properties/${property}`, value);
+    /**
+    * @returns {string|number}
+    */
+    this.getGuildID = () => {return this.ID}
+    /**
+    * @param {string} guildID
+    */
+    this.changeGuildContext = (guildID) => {
+        this.ID = guildID;
+        /**
+         * 
+         * @param {string|number} property 
+         * @returns {string|number|Object}
+         */
+        this.getProperty = (property) => {
+            return dataManager.read(`guildData:${this.ID}/properties/${property}`);
+        }
+        /**
+         * 
+         * @param {string|number} property 
+         * @param {*} value 
+         */
+        this.setProperty = (property, value) => {
+            dataManager.write(`guildData:${this.ID}/properties/${property}`, value);
+        }
     }
 }
 
 /* PluginDataManager */
+/**
+ * @param {string} plugin
+ */
 function PluginDataManager (plugin){
     this.pluginName = plugin;
     this.readData = (dirPath) => {
@@ -50,6 +93,9 @@ function PluginDataManager (plugin){
 }
 
 /* CacheDataManager */
+/**
+ * @param {string} namespace
+ */
 function CacheDataManager (namespace){
     this.namespace = namespace;
     this.readData = (dirPath) => {
@@ -70,6 +116,9 @@ function CacheDataManager (namespace){
 }
 
 /* Acceso directo al manager de data */
+/**
+ * @param {string} namespace
+ */
 function DirectDataManager (namespace){
     switch (namespace.toLowerCase()){
         case 'cache':
@@ -94,17 +143,27 @@ function DirectDataManager (namespace){
 }
 
 /* Interfaz expuesta para acceder a la data */
-function DataInterface (guildID, plugin){
-    this.PluginDataManager = new PluginDataManager(plugin);
-    this.GuildDataManager = new GuildDataManager(guildID);
-    this.CacheDataManager = new CacheDataManager(plugin);
+/**
+ * @param {string} guildID
+ * @param {string} plugin
+ */
+function DataInterface (guildID = undefined, plugin = undefined){
+    if(plugin != undefined){
+        this.PluginDataManager = new PluginDataManager(plugin);
+        this.CacheDataManager = new CacheDataManager(plugin);
+    }
+    if(guildID != undefined)
+        this.GuildDataManager = new GuildDataManager(guildID);
 }
 
 let dataManager = {
-    read: (dirPath, storageMode) => {
+    /**
+    * @param {string} dirPath
+    * @param {string} storageMode
+    * @returns {string|number|Buffer}
+    */
+    read: (dirPath, storageMode = 'file') => {
         //const unlock = await mutexData.lock();
-        if (storageMode == undefined)
-            storageMode = 'file';
         switch (storageMode) {
             case 'file':
                 var dirPathParts = dirPath.split(':');
@@ -191,10 +250,14 @@ let dataManager = {
         }
         //unlock();
     },
-    write: (dirPath, value, storageMode) => {
+    /**
+    * @param {string} dirPath
+    * @param {string} storageMode
+    * @param {string|number|Buffer|TypedArray|DataView} value
+    * @returns {void}
+    */
+    write: (dirPath, value, storageMode = 'file') => {
         //const unlock = await mutexData.lock();
-        if (storageMode == undefined)
-            storageMode = 'file';
         switch (storageMode) {
             case 'file':
                 var dirPathParts = dirPath.split(':');
@@ -231,7 +294,7 @@ let dataManager = {
                                             ID: dirPathParts[0],
                                             prefix: config['default-prefix'],
                                             operatorRole: '00000000000000000',
-                                            DisabledPlugins: ['welcome','newworld','template','apps'],
+                                            DisabledPlugins: ['welcome','template','apps'],
                                             Aliases: ['f!']
                                         }
                                         try {
@@ -287,10 +350,13 @@ let dataManager = {
         }
         //unlock();
     },
-    erase: (dirPath, storageMode) => {
+    /**
+    * @param {string} dirPath
+    * @param {string} storageMode
+    * @returns {void}
+    */
+    erase: (dirPath, storageMode = 'file') => {
         //const unlock = await mutexData.lock();
-        if (storageMode == undefined)
-            storageMode = 'file';
         switch (storageMode) {
             case 'file':
                 
@@ -300,6 +366,11 @@ let dataManager = {
         }
         //unlock();
     },
+    /**
+    * @param {string} dirPath
+    * @param {string} mode
+    * @returns {fs.ReadStream}
+    */
     readStream: (dirPath, mode) => {
         switch (mode) {
             case 'file':
@@ -310,6 +381,11 @@ let dataManager = {
                 throw 'storage-type-invalid';
         }
     },
+    /**
+    * @param {string} dirPath
+    * @param {string} mode
+    * @returns {fs.WriteStream}
+    */
     writeStream: (dirPath, mode) => {
 
     }

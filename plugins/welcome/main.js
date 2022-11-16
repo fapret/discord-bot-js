@@ -40,14 +40,15 @@ module.exports = {
     name: 'welcome',
     description: 'modulo de bienvenida customizada',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    version: '2.2.0.7e6203571',
+    version: '2.3.0.7e6a15565',
+    category: 'moderation',
     globalSlashCommands: [
         {name: 'welcome', description: 'Maneja el sistema de welcome', options: [
-            {type: Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND, name: 'settextmessage', description: 'Setea el mensaje de bienvenida', options: [
-                {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'text', description: 'Texto del mensaje de bienvenida', required: true}
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'settextmessage', description: 'Setea el mensaje de bienvenida', options: [
+                {type: Discord.ApplicationCommandOptionType.String, name: 'text', description: 'Texto del mensaje de bienvenida', required: true}
             ]},
-            {type: Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND, name: 'enableimage', description: 'Activa o desactiva las imagenes de bienvenida', options: [
-                {type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN, name: 'useimage', description: 'Activar o desactivar imagenes de bienvenida', required: true}
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'enableimage', description: 'Activa o desactiva las imagenes de bienvenida', options: [
+                {type: Discord.ApplicationCommandOptionType.Boolean, name: 'useimage', description: 'Activar o desactivar imagenes de bienvenida', required: true}
             ]}
         ]}
     ],
@@ -124,14 +125,14 @@ module.exports = {
                 context.textAlign = "start";
             });
     
-            const message = new Discord.MessageEmbed().setFooter("FapretBot");
+            const message = new Discord.EmbedBuilder().setFooter({text: "FapretBot"});
             if(welcomeModule.title != ""){
                 message.setTitle(welcomeModule.title);
             }
             if(welcomeModule.description != ""){
                 message.setDescription(internalParser(welcomeModule.description, member));
             }
-            const attach = new Discord.MessageAttachment(img.toBuffer(), `${member.user.id}.png`);
+            const attach = new Discord.AttachmentBuilder(img.toBuffer(), {name: `${member.user.id}.png`});
             message.setImage(`attachment://${member.user.id}.png`);
             channel.send({embeds: [message], files: [attach]});
         }

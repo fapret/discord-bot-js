@@ -23,7 +23,7 @@
 # Proceso de instalacion (Ubuntu)
  Ejemplo de proceso de instalacion en una instalacion limpia de Ubuntu 21.04 con todos los modulos y plugins incluidos.  
 
- Primero es necesario instalar Nodejs v16
+ Primero es necesario instalar Nodejs v16 (o una version superior)
  ```sh
 curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 sudo apt update

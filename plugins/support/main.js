@@ -14,121 +14,52 @@ EL SOFTWARE SE PROPORCIONA "COMO ESTA", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
 
 //Es necesario importar discord para los tipos de datos de discord
 const Discord = require('discord.js');
+const { ButtonStyle, PermissionsBitField, ChannelType } = require('discord.js');
 
-async function fn_createembeed(dataManager, slashcommand) {
-    const {options} = slashcommand;
-    let tempuser2 = await slashcommand.channel.guild.members.fetch(slashcommand.member.id);
-    if(!tempuser2.roles.cache.has(dataManager.GuildDataManager.getProperty('operatorRole')) && !(await slashcommand.guild.fetchOwner() == slashcommand.member.id)){
-        slashcommand.editReply({ content: 'No tienes el rol de operador para poder usar este comando'});
-        return;
-    }
-    let message2 = new Discord.MessageEmbed().setFooter("FapretBot");
-    if(options.getString('title')){
-        message2.setTitle(options.getString('title'));
-    } else {
-        message2.setTitle('Support');
-    }
-    message2.setDescription(options.getString('text'));
-    let row = new Discord.MessageActionRow();
-    let button = new Discord.MessageButton();
-    button.setStyle('PRIMARY');
-    button.setLabel('Crear Ticket');
-    button.setCustomId('supportbtn');
-    button.setEmoji('📩');
-    row.addComponents([button]);
-    slashcommand.channel.send({embeds: [message2], components: [row]});
-    slashcommand.editReply({ content: 'Mensaje de soporte creado'});
-}
-
-async function fn_deleteembeed(dataManager, slashcommand) {
-    const {options} = slashcommand;
-    let tempuser2 = await slashcommand.channel.guild.members.fetch(slashcommand.member.id);
-    if(!tempuser2.roles.cache.has(dataManager.GuildDataManager.getProperty('operatorRole')) && !(await slashcommand.guild.fetchOwner() == slashcommand.member.id)){
-        slashcommand.editReply({ content: 'No tienes el rol de operador para poder usar este comando'});
-        return;
-    }
-}
-
-async function fn_editembeed(dataManager, slashcommand) {
-    const {options} = slashcommand;
-    let tempuser2 = await slashcommand.channel.guild.members.fetch(slashcommand.member.id);
-    if(!tempuser2.roles.cache.has(dataManager.GuildDataManager.getProperty('operatorRole')) && !(await slashcommand.guild.fetchOwner() == slashcommand.member.id)){
-        slashcommand.editReply({ content: 'No tienes el rol de operador para poder usar este comando'});
-        return;
-    }
-}
-
-async function fn_addoption(dataManager, slashcommand) {
-    pluginManager = dataManager.PluginDataManager;
-    const {options} = slashcommand;
-    let tempuser2 = await slashcommand.channel.guild.members.fetch(slashcommand.member.id);
-    if(!tempuser2.roles.cache.has(dataManager.GuildDataManager.getProperty('operatorRole')) && !(await slashcommand.guild.fetchOwner() == slashcommand.member.id)){
-        slashcommand.editReply({ content: 'No tienes el rol de operador para poder usar este comando'});
-        return;
-    }
-    let message = await slashcommand.channel.messages.fetch(options.getString('id'));
-    let category = options.getString('category');
-    if(message){
-        let supportMessageData = pluginManager.readData(options.getString('id'));
-        if (supportMessageData){
-            if(supportMessageData.optionsAmount < 25){
-                try{
-                    supportMessageData.optionsAmount++;
-                    supportMessageData.options.push({id: supportMessageData.optionsAmount, modrole: options.getRole('modrole').toString(), text: options.getString('text').toString(), category: category});
-                    pluginManager.writeData(options.getString('id'), supportMessageData);
-                    slashcommand.editReply({ content: 'Opcion agregada correctamente'});
-                } catch(err) {
-                    slashcommand.editReply(err.toString());
-                    return;
-                }
-            } else {
-                slashcommand.editReply({ content: 'Ya se alcanzo el maximo de opciones disponibles, no es posible agregar mas opciones'});
-                return;
-            }
-        } else {
-            try{
-                supportMessageData = {
-                    optionsAmount: 1,
-                    ticketsAmount: 0,
-                    options: [{id: 1, modrole: options.getRole('modrole').toString(), text: options.getString('text').toString(), category: category}],
-                    tickets: []
-                }
-                pluginManager.writeData(options.getString('id'), supportMessageData);
-                slashcommand.editReply({ content: 'Opcion agregada correctamente'});
-            } catch(err) {
-                slashcommand.editReply(err.toString());
-                return;
-            }
-        }
-    } else {
-        slashcommand.editReply({ content: 'No se encontro el mensaje a agregar la opcion :c'});
-        return;
-    }
-}
+const {fn_createembeed} = require('./fn_createembeed.js');
+const {fn_deleteembeed} = require('./fn_deleteembeed.js');
+const {fn_editembeed} = require('./fn_editembeed.js');
+const {fn_addoption} = require('./fn_addoption.js');
+const {fn_closeticket} = require('./fn_closeticket.js');
+const {fn_savetranscript} = require('./fn_savetranscript.js');
+const {fn_lockticket} = require('./fn_lockticket.js');
+const {fn_settranscriptchannel} = require('./fn_settranscriptchannel.js');
+const {fn_opentickettouser} = require('./fn_opentickettouser.js');
+const {fn_calculatetime} = require('./fn_calculatetime.js');
 
 module.exports = {
     name: 'support',
     description: 'Sistema de tickets de soporte',
     author: 'fapret',
-    version: '2.2.0.7e6814d',
-    slashCommands: [
-        {name: 'support', description: 'Maneja el sistema de soporte', options: [
-            {type: Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND, name: 'createembeed', description: 'Crea un mensaje de soporte', options: [
-                {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'text', description: 'Texto del mensaje de soporte', required: true},
-                {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'title', description: 'Titulo del mensaje de soporte'}
+    version: '2.3.0.7e6a15565',
+    category: 'moderation',
+    globalSlashCommands: [
+        {name: 'support', description: 'Maneja el sistema de soporte', dm_permission: false, options: [
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'createembeed', description: 'Crea un mensaje de soporte', options: [
+                {type: Discord.ApplicationCommandOptionType.String, name: 'text', description: 'Texto del mensaje de soporte', required: true},
+                {type: Discord.ApplicationCommandOptionType.String, name: 'title', description: 'Titulo del mensaje de soporte'}
             ]},
-            {type: Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND, name: 'deleteembeed', description: 'Elimina un mensaje de soporte', options: [
-                {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'id', description: 'Id del mensaje de soporte a eliminar', required: true}
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'deleteembeed', description: 'Elimina un mensaje de soporte', options: [
+                {type: Discord.ApplicationCommandOptionType.String, name: 'id', description: 'Id del mensaje de soporte a eliminar', required: true}
             ]},
-            {type: Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND, name: 'editembeed', description: 'Edita un mensaje de soporte', options: [
-                {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'id', description: 'Id del mensaje a editar', required: true},
-                {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'text', description: 'Texto del mensaje de soporte', required: true}
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'editembeed', description: 'Edita un mensaje de soporte', options: [
+                {type: Discord.ApplicationCommandOptionType.String, name: 'id', description: 'Id del mensaje a editar', required: true},
+                {type: Discord.ApplicationCommandOptionType.String, name: 'text', description: 'Texto del mensaje de soporte', required: true}
             ]},
-            {type: Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND, name: 'addoption', description: 'Agrega una opcion a un mensaje de soporte', options: [
-                {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'id', description: 'Id del mensaje a agregarle la opcion', required: true},
-                {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'text', description: 'Texto de la opcion', required: true},
-                {type: Discord.Constants.ApplicationCommandOptionTypes.ROLE, name: 'modrole', description: 'Rol de staff soporte', required: true},
-                {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'category', description: 'Categoria donde se crearan los tickets'}
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'addoption', description: 'Agrega una opcion a un mensaje de soporte', options: [
+                {type: Discord.ApplicationCommandOptionType.String, name: 'id', description: 'Id del mensaje a agregarle la opcion', required: true},
+                {type: Discord.ApplicationCommandOptionType.String, name: 'text', description: 'Texto de la opcion(Topico)', required: true},
+                {type: Discord.ApplicationCommandOptionType.Role, name: 'modrole', description: 'Rol de staff soporte', required: true},
+                {type: Discord.ApplicationCommandOptionType.Channel, name: 'category', channel_types: ['4'], description: 'Categoria donde se crearan los tickets'},
+                {type: Discord.ApplicationCommandOptionType.String, name: 'waittime', description: 'Tiempo de gracia entre tickets creados por el usuario'}
+            ]},
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'settranscriptchannel', description: 'Setea el canal de transcripciones', options: [
+                {type: Discord.ApplicationCommandOptionType.Channel, name: 'canal', channel_types: ['0'], description: 'Canal en el que se guardaran las transcripciones', required: true}
+            ]},
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'opentickettouser', description: 'Abre un ticket a un usuario', options: [
+                {type: Discord.ApplicationCommandOptionType.User, name: 'user', description: 'Usuario al que abrirle el ticket', required: true},
+                {type: Discord.ApplicationCommandOptionType.Channel, name: 'category', channel_types: ['4'], description: 'Categoria donde se crearan los tickets'},
+                {type: Discord.ApplicationCommandOptionType.Role, name: 'modrole', description: 'Rol de staff soporte aparte de ti'}
             ]}
         ]}
     ],
@@ -136,19 +67,29 @@ module.exports = {
     async onSlashCommand(dataManager, slashcommand){
         const {options} = slashcommand;
         if (slashcommand.commandName == 'support'){
-            await slashcommand.deferReply({ ephemeral: true });
            switch (options.getSubcommand()){
             case 'createembeed':
-                fn_createembeed(dataManager, slashcommand);
+                await slashcommand.deferReply({ ephemeral: true });
+                fn_createembeed(dataManager, slashcommand); //TODO cambiar por modal
                 break;
             case 'deleteembeed':
-                fn_deleteembeed(dataManager, slashcommand);
+                await slashcommand.deferReply({ ephemeral: true });
+                fn_deleteembeed(dataManager, slashcommand); //TODO
                 break;
             case 'editembeed':
+                await slashcommand.deferReply({ ephemeral: true });
                 fn_editembeed(dataManager, slashcommand);
                 break;
             case 'addoption':
+                await slashcommand.deferReply({ ephemeral: true });
                 fn_addoption(dataManager, slashcommand);
+                break;
+            case 'settranscriptchannel':
+                await slashcommand.deferReply({ ephemeral: true });
+                fn_settranscriptchannel(dataManager, slashcommand);
+                break;
+            case 'opentickettouser':
+                fn_opentickettouser(dataManager, slashcommand);
                 break;
             default:
                 break;
@@ -158,37 +99,67 @@ module.exports = {
 
     async onSelectMenu(dataManager, selectMenu){
         if (selectMenu.customId.startsWith('support')) {
-            pluginManager = dataManager.PluginDataManager;
+            let pluginManager = dataManager.PluginDataManager;
             const everyone = selectMenu.guild.roles.everyone;
-            let supportMessageData = pluginManager.readData(pluginManager.readData(selectMenu.customId));
+            let supportID = selectMenu.message.reference.messageId;
+            let supportMessageData = pluginManager.readData(supportID);
             let optionindex = selectMenu.values[0];
-            let category = supportMessageData.options[optionindex-1].category;
+            let aux = fn_calculatetime(dataManager, selectMenu, supportID, supportMessageData, optionindex);
+            if(aux == undefined){
+                return;
+            }
+            supportMessageData = aux;
+            let category = supportMessageData.options[optionindex]?.category;
             let channelmanager = selectMenu.guild.channels;
-            let rolemanager = selectMenu.guild.roles;
             supportMessageData.ticketsAmount++;
-            let role = await rolemanager.create({name: 'ticket-' + supportMessageData.ticketsAmount});
-            let channel = await channelmanager.create('ticket-' + supportMessageData.ticketsAmount, { reason: 'Created ticket', permissionOverwrites: [
+            let channel = await channelmanager.create({name: 'ticket-' + supportMessageData.ticketsAmount, type: ChannelType.GuildText, reason: 'Created ticket', topic: supportMessageData.options[optionindex].text, permissionOverwrites: [
                 {
-                    id: everyone,
-                    deny: ['VIEW_CHANNEL'],
+                    id: everyone.id,
+                    deny: [PermissionsBitField.Flags.ViewChannel]
                 },
                 {
-                    id: supportMessageData.options[optionindex-1].modrole.slice(3, -1),
-                    allow: ['VIEW_CHANNEL'],
+                    id: supportMessageData.options[optionindex].modrole,
+                    allow: [PermissionsBitField.Flags.ViewChannel]
                 },
                 {
-                    id: role.id,
-                    allow: ['VIEW_CHANNEL'],
+                    id: selectMenu.member.id,
+                    allow: [PermissionsBitField.Flags.ViewChannel]
                 }
             ]});
              if(category){
-                channel.setParent(category);
+                channel.setParent(category, { lockPermissions: false });
+                //TODO create category if more than 50 tickets
             }
-            supportMessageData.tickets.push({channel: channel.id, category: category, role: role.id, author: selectMenu.member.id, modrole: supportMessageData.options[optionindex-1].modrole});
-            pluginManager.writeData(pluginManager.readData(selectMenu.customId), supportMessageData);
+            pluginManager.writeData(supportID, supportMessageData);
+            let ticketinfo = {index: optionindex, supportID: supportID, author: selectMenu.member.id, modrole: supportMessageData.options[optionindex].modrole, topic: supportMessageData.options[optionindex].text, category: category};
+            console.log(channel.id);
+            pluginManager.writeData('ticket/' + channel.id, ticketinfo);
+
+            //Embeed creation
+            let embeed = new Discord.EmbedBuilder().setFooter({text: "FapretBot"});
+            embeed.setTitle('Support');
+            embeed.setDescription('Reason: ** ' + supportMessageData.options[optionindex].text + ` **\n<@${selectMenu.member.id}> El soporte te atendera pronto.`);
+            let row = new Discord.ActionRowBuilder();
+            let button1 = new Discord.ButtonBuilder();
+            button1.setStyle(ButtonStyle.Danger);
+            button1.setLabel('Finalizar ticket');
+            button1.setCustomId('supportclose');
+            button1.setEmoji('📩');
+            let button2 = new Discord.ButtonBuilder();
+            button2.setStyle(ButtonStyle.Secondary);
+            button2.setLabel('Crear transcripcion');
+            button2.setCustomId('supporttranscript');
+            button2.setEmoji('💾');
+            let button3 = new Discord.ButtonBuilder();
+            button3.setStyle(ButtonStyle.Primary);
+            button3.setLabel('Lock ticket');
+            button3.setCustomId('supportlock');
+            button3.setEmoji('🔒');
+            row.addComponents([button3, button2, button1]);
+            channel.send({embeds: [embeed], components: [row]});
+
             try{
                 user = await selectMenu.guild.members.fetch(selectMenu.member.id);
-                user.roles.add(role.id).catch(async error => {let localchannel = await user.createDM(); localchannel.send('parece que el rango del bot esta por debajo del rol al que se te deberia asignar por reaccionar un mensaje, por favor dile a un administrador de `' + reaction.message.guild.name + '` de dicha situacion para que la solucione.')});
                 selectMenu.reply({ content: 'Ticket Creado! <#'+channel.id+'>', ephemeral: true });
             } catch(err) {
                 console.log(err);
@@ -197,61 +168,172 @@ module.exports = {
     },
 
     async onButtonClick(dataManager, button){
-        if(button.customId == 'supportbtn'){
-            const everyone = button.guild.roles.everyone;
-            pluginManager = dataManager.PluginDataManager;
-            let supportMessageData = pluginManager.readData(button.message.id);
-            if(supportMessageData){
-                if(supportMessageData.optionsAmount == 1){
-                    //Crear ticket
-                    let category = supportMessageData.options[0].category;
-                    let channelmanager = button.guild.channels;
-                    supportMessageData.ticketsAmount++;
-                    let rolemanager = button.guild.roles;
-                    let role = await rolemanager.create({name: 'ticket-' + supportMessageData.ticketsAmount});
-                    let channel = await channelmanager.create('ticket-' + supportMessageData.ticketsAmount, { reason: 'Created ticket', permissionOverwrites: [
-                        {
-                            id: everyone.id,
-                            deny: ['VIEW_CHANNEL'],
-                        },
-                        {
-                            id: supportMessageData.options[0].modrole.slice(3, -1),
-                            allow: ['VIEW_CHANNEL'],
-                        },
-                        {
-                            id: role.id,
-                            allow: ['VIEW_CHANNEL'],
+        switch (button.customId) {
+            case 'supportbtn':
+                await button.deferReply({ephemeral: true});
+                const everyone = button.guild.roles.everyone;
+                let pluginManager = dataManager.PluginDataManager;
+                let supportMessageData = pluginManager.readData(button.message.id);
+                if(supportMessageData){
+                    if(supportMessageData.optionsAmount == 1){
+                        //Crear ticket
+                        let aux = fn_calculatetime(dataManager, button, button.message.id, supportMessageData, 0);
+                        if(aux == undefined){
+                            return;
                         }
-                     ]});
-                    if(category){
-                        channel.setParent(category);
-                    }
-                    supportMessageData.tickets.push({channel: channel.id, category: category, role: role.id, author: button.member.id, modrole: supportMessageData.options[0].modrole});
-                    pluginManager.writeData(button.message.id, supportMessageData);
-                    try{
-                        user = await button.guild.members.fetch(button.member.id);
-                        user.roles.add(role.id).catch(async error => {let localchannel = await user.createDM(); localchannel.send('parece que el rango del bot esta por debajo del rol al que se te deberia asignar por reaccionar un mensaje, por favor dile a un administrador de `' + reaction.message.guild.name + '` de dicha situacion para que la solucione.')});
-                        button.reply({ content: 'Ticket Creado! <#'+channel.id+'>', ephemeral: true });
-                    } catch(err) {
-                        console.log(err);
+                        supportMessageData = aux;
+                        let category = supportMessageData.options[0].category;
+                        let channelmanager = button.guild.channels;
+                        supportMessageData.ticketsAmount++;
+                        let channel = await channelmanager.create({name: 'ticket-' + supportMessageData.ticketsAmount, type: ChannelType.GuildText, reason: 'Created ticket', topic: supportMessageData.options[0].text, permissionOverwrites: [
+                            {
+                                id: everyone.id,
+                                deny: [PermissionsBitField.Flags.ViewChannel]
+                            },
+                            {
+                                id: supportMessageData.options[0].modrole,
+                                allow: [PermissionsBitField.Flags.ViewChannel]
+                            },
+                            {
+                                id: button.member.id,
+                                allow: [PermissionsBitField.Flags.ViewChannel]
+                            }
+                         ]});
+                        if(category){
+                            channel.setParent(category, { lockPermissions: false });
+                            //TODO create category if more than 50 tickets
+                        }
+                        pluginManager.writeData(button.message.id, supportMessageData);
+                        let ticketinfo = {index: 1, supportID: button.message.id, author: button.member.id, modrole: supportMessageData.options[0].modrole, topic: supportMessageData.options[0].text, category: category};
+                        pluginManager.writeData('ticket/' + channel.id, ticketinfo);
+
+                        //Embeed creation
+                        let embeed = new Discord.EmbedBuilder().setFooter({text: "FapretBot"});
+                        embeed.setTitle('Support');
+                        embeed.setDescription('Reason: ** ' + supportMessageData.options[0].text + ` **\n<@${button.member.id}> El soporte te atendera pronto.`);
+                        let row = new Discord.ActionRowBuilder();
+                        let button1 = new Discord.ButtonBuilder();
+                        button1.setStyle(ButtonStyle.Danger);
+                        button1.setLabel('Finalizar ticket');
+                        button1.setCustomId('supportclose');
+                        button1.setEmoji('📩');
+                        let button2 = new Discord.ButtonBuilder();
+                        button2.setStyle(ButtonStyle.Secondary);
+                        button2.setLabel('Crear transcripcion');
+                        button2.setCustomId('supporttranscript');
+                        button2.setEmoji('💾');
+                        let button3 = new Discord.ButtonBuilder();
+                        button3.setStyle(ButtonStyle.Primary);
+                        button3.setLabel('Lock ticket');
+                        button3.setCustomId('supportlock');
+                        button3.setEmoji('🔒');
+                        row.addComponents([button3, button2, button1]);
+                        channel.send({embeds: [embeed], components: [row]});
+
+                        button.editReply({ content: 'Ticket Creado! <#'+channel.id+'>'});
+                    } else {
+                        let row = new Discord.ActionRowBuilder();
+                        let selectBuilder = new Discord.SelectMenuBuilder();
+                        selectBuilder.setCustomId('support');
+                        selectBuilder.setPlaceholder('Selecciona una categoria de soporte');
+                        for (let index = 0; index < supportMessageData.optionsAmount; index++) {
+                           let option = supportMessageData.options[index];
+                            selectBuilder.addOptions({label: option.text, value: index.toString()});
+                        }
+                        row.addComponents([selectBuilder]);
+                        button.editReply({ content: 'Elige que categoria de soporte solicitas', components: [row]});
                     }
                 } else {
-                    let row = new Discord.MessageActionRow();
-                    let selectBuilder = new Discord.MessageSelectMenu();
-                    selectBuilder.setCustomId('support' + button.id);
-                    selectBuilder.setPlaceholder('Selecciona una categoria de soporte');
-                    for (let index = 0; index < supportMessageData.optionsAmount; index++) {
-                       let option = supportMessageData.options[index];
-                        selectBuilder.addOptions({label: option.text, value: index.toString()});
-                    }
-                    row.addComponents([selectBuilder]);
-                    pluginManager.writeData('support' + button.id, button.message.id);
-                    button.reply({ content: 'Elige que categoria de soporte solicitas', components: [row], ephemeral: true });
+                    button.editReply({ content: 'No hay opciones de soporte configuradas, contacta un administrador'});
+                    return;
                 }
-            } else {
-                button.reply({ content: 'No hay opciones de soporte configuradas, contacta un administrador', ephemeral: true });
+                break;
+            case 'supporttranscript':
+                await button.deferReply();
+                fn_savetranscript(dataManager, button);
+                break;
+            case 'supportlock':
+                await button.deferReply();
+                fn_lockticket(dataManager, button);
+                break;
+            case 'supportclose':
+                await button.deferReply();
+                fn_closeticket(dataManager, button);
+                break;
+            default:
+                break;
+        }
+    },
+
+    async onModal(dataManager, modal){
+        if (modal.customId.startsWith('support')){
+            await modal.deferReply({ephemeral: true});
+            let tempuser2 = await modal.channel.guild.members.fetch(modal.member.id);
+            if(!tempuser2.roles.cache.has(dataManager.GuildDataManager.getProperty('operatorRole')) && !(await modal.guild.fetchOwner() == modal.member.id)){
+                modal.editReply({ content: 'No tienes el rol de operador para poder usar este modal'});
                 return;
             }
+            let pluginManager = dataManager.PluginDataManager;
+            const everyone = modal.guild.roles.everyone;
+            let supportMessageData = pluginManager.readData('cache/' + modal.customId.substring(7));
+            supportMessageData.topic = modal.fields.getTextInputValue('topic');
+            let channelmanager = modal.guild.channels;
+            let channel = await channelmanager.create({name: 'ticket-' + supportMessageData.authorName, type: ChannelType.GuildText, reason: 'Created ticket', topic: supportMessageData.topic, permissionOverwrites: [
+                {
+                    id: everyone.id,
+                    deny: [PermissionsBitField.Flags.ViewChannel]
+                },
+                {
+                    id: supportMessageData.modrole,
+                    allow: [PermissionsBitField.Flags.ViewChannel]
+                },
+                {
+                    id: modal.member.id,
+                    allow: [PermissionsBitField.Flags.ViewChannel]
+                },
+                {
+                    id: supportMessageData.author,
+                    allow: [PermissionsBitField.Flags.ViewChannel]
+                }
+            ]});
+            if(supportMessageData.category){
+                channel.setParent(supportMessageData.category, { lockPermissions: false });
+                //TODO create category if more than 50 tickets
+            }
+            pluginManager.writeData('ticket/' + channel.id, supportMessageData);
+            //Embeed creation
+            let embeed = new Discord.EmbedBuilder().setFooter({text: "FapretBot"});
+            embeed.setTitle('Support');
+            embeed.setDescription('Reason: ** ' + supportMessageData.topic + ` **\n<@${supportMessageData.author}> El soporte te atendera pronto.`);
+            let row = new Discord.ActionRowBuilder();
+            let button1 = new Discord.ButtonBuilder();
+            button1.setStyle(ButtonStyle.Danger);
+            button1.setLabel('Finalizar ticket');
+            button1.setCustomId('supportclose');
+            button1.setEmoji('📩');
+            let button2 = new Discord.ButtonBuilder();
+            button2.setStyle(ButtonStyle.Secondary);
+            button2.setLabel('Crear transcripcion');
+            button2.setCustomId('supporttranscript');
+            button2.setEmoji('💾');
+            let button3 = new Discord.ButtonBuilder();
+            button3.setStyle(ButtonStyle.Primary);
+            button3.setLabel('Lock ticket');
+            button3.setCustomId('supportlock');
+            button3.setEmoji('🔒');
+            row.addComponents([button3, button2, button1]);
+            channel.send({embeds: [embeed], components: [row]});
+
+            modal.editReply({ content: 'Ticket Creado! <#'+channel.id+'>'});
+            //pluginManager.eraseData('cache/' + modal.customId.substring(7)); //TODO
+
+            let tempuser3 = await modal.channel.guild.members.fetch(supportMessageData.author);
+            let localchannel = await tempuser3.createDM();
+            localchannel.send(
+                {embeds: [new Discord.EmbedBuilder().setFooter({text: "FapretBot"})
+                .setTitle('Support')
+                .setDescription(`<@${modal.member.id}> te ha abierto un ticket en ${modal.guild.name}:<#${channel.id}>! Con el topico: ${supportMessageData.topic}`)]}
+            );
         }
     }
 }

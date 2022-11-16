@@ -13,9 +13,13 @@ EL SOFTWARE SE PROPORCIONA "COMO ESTA", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
 */
 
 /* Parser de fechas */
+/**
+ * @param {Date} date
+ * @returns {string}
+ */
 const timeParser = function(date){
     day = (date.getDate() < 10 ? '0' : '') + date.getDate();
-    month = (date.getMonth() < 10 ? '0' : '') + date.getMonth();
+    month = (date.getMonth() < 9 ? '0' : '') + date.getMonth() + 1;
     hour = (date.getHours() < 10 ? '0' : '') + date.getHours();
     minute = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
     second = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();

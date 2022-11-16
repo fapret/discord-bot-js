@@ -13,7 +13,7 @@ EL SOFTWARE SE PROPORCIONA "COMO ESTA", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
 */
 
 const Discord = require('discord.js');
-const {Intents} = require('discord.js');
+const {GatewayIntentBits, Partials} = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const config = require('./config.json');
@@ -30,7 +30,7 @@ const rl = readline.createInterface({
 /* Clientes Discord */
 //Pensado para futuras implementaciones que existan multiples bots
 const DiscordClients = new Map;
-DiscordClients.set("main", new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_INTEGRATIONS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS], partials: ['MESSAGE', 'REACTION'] }));
+DiscordClients.set("main", new Discord.Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildIntegrations, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildMessageReactions], partials: [Partials.Message, Partials.Reaction] }));
 const mainClient = DiscordClients.get("main");
 
 /* Carga los plugins */
@@ -47,7 +47,10 @@ const getPlugins = function(dirPath, arrayOfPlugins){
         } else if(file == 'main.js'){
             arrayOfPlugins.push(path.join(__dirname, dirPath, '/', file));
             const plugin = require(dirPath + '/' + file);
-            mainClient.plugins.set(plugin.name, plugin);
+            if(plugin.name)
+                mainClient.plugins.set(plugin.name, plugin);
+            else
+                delete require.cache[require.resolve(dirPath + '/' + file)];
         }
     });
 
@@ -75,7 +78,7 @@ const getguild = function(guild){
 };
 
 /* Funcion para registrar y/o actualizar comandos en una guild en especifico */
-const flushSlashCommands = async function(guildId){
+const flushSlashCommands = async function(guildId, reCreateIfExists = true){
     let commands;
     const guild = mainClient.guilds.cache.get(guildId);
     if(guild){
@@ -86,25 +89,31 @@ const flushSlashCommands = async function(guildId){
     dataManager = new DataInterface(guildId);
     guilddata = dataManager.GuildDataManager;
     let DisabledPlugins = guilddata.getProperty('DisabledPlugins');
+    let commandstodelete;
+    commandstodelete = await commands.fetch();
     try{
-        commandstodelete = await commands.fetch();
-        commandstodelete.forEach(async cmd => {
-            try{
-                await commands.delete(cmd);
-            }catch(err){
-                console.log('error on command delete: ' + cmd.name);
-                console.log(err);
-            }
-        });
+        if(reCreateIfExists){
+            commandstodelete.forEach(async cmd => {
+                try{
+                    await commands.delete(cmd);
+                }catch(err){
+                    d = new Date();
+                    console.log('[' + timeParser(d) + '] ' + 'error on command delete: ' + cmd.name);
+                    console.log(err);
+                }
+            });
+        }
         mainClient.plugins.forEach(key => {
             if(!DisabledPlugins.includes(key.name)){
                 if(key.slashCommands != undefined && key.slashCommands != null){
                     key.slashCommands.forEach(async command => {
                         command.name = command.name.toLowerCase();
                         try{
-                            await commands.create(command);
+                            if(reCreateIfExists || !commandstodelete.find(localcommand => localcommand.name === command.name))
+                                await commands.create(command);
                         }catch(err){
-                            console.log('error on command creation: ' + command.name);
+                            d = new Date();
+                            console.log('[' + timeParser(d) + '] ' + 'error on command creation: ' + command.name);
                             console.log(err);
                         }
                     })
@@ -120,26 +129,32 @@ const flushSlashCommands = async function(guildId){
 }
 
 /* Funcion para registrar y/o actualizar comandos globales */
-const flushGlobalSlashCommands = async function(){
+const flushGlobalSlashCommands = async function(reCreateIfExists = true){
     let commands = mainClient.application.commands;
     try{
+        let commandstodelete;
         commandstodelete = await commands.fetch();
-        commandstodelete.forEach(async cmd => {
-            try{
-                await commands.delete(cmd);
-            }catch(err){
-                console.log('error on command delete: ' + cmd.name);
-                console.log(err);
-            }
-        });
+        if(reCreateIfExists){
+            commandstodelete.forEach(async cmd => {
+                try{
+                    await commands.delete(cmd);
+                }catch(err){
+                    d = new Date();
+                    console.log('[' + timeParser(d) + '] ' + 'error on command delete: ' + cmd.name);
+                    console.log(err);
+                }
+            });
+        }
         mainClient.plugins.forEach(key => {
                 if(key.globalSlashCommands != undefined && key.globalSlashCommands != null){
                     key.globalSlashCommands.forEach(async command => {
                         command.name = command.name.toLowerCase();
                         try{
-                            await commands.create(command);
+                            if(reCreateIfExists || !commandstodelete.find(localcommand => localcommand.name === command.name))
+                                await commands.create(command);
                         }catch(err){
-                            console.log('error on command creation: ' + command.name);
+                            d = new Date();
+                            console.log('[' + timeParser(d) + '] ' + 'error on command creation: ' + command.name);
                             console.log(err);
                         }
                     })
@@ -153,7 +168,7 @@ const flushGlobalSlashCommands = async function(){
     }
 }
 
-/* comandos */
+/* Se ejecuta al reciir un mensaje */
 mainClient.on('messageCreate', async message =>{
     if (message.partial) {
 		try {
@@ -164,7 +179,7 @@ mainClient.on('messageCreate', async message =>{
 		}
     }
     if(message.author.bot){return};
-    if((message.guild == undefined) || (message.guild == null)){return};
+    if((message.guild == undefined) || (message.guild == null)){return};//Evita recibir mensajes por DM
     const guild = message.guild.id;
     dataManager = new DataInterface(guild);
     guilddata = dataManager.GuildDataManager;
@@ -199,8 +214,14 @@ mainClient.on('messageCreate', async message =>{
     }
 });
 
+/* Se ejecuta al eliminarse un mensaje */
+mainClient.on('messageDelete', async message => {
+    if(message.author.bot){return};
+    if((message.guild == undefined) || (message.guild == null)){return};//Evita recibir mensajes por DM
+}); //TODO
+
 /* Acciones cuando un usuario hace algo en un canal de voz */
-mainClient.on('voiceStateUpdate', (oldstate, newstate) => {
+mainClient.on('voiceStateUpdate', async (oldstate, newstate) => {
     if(oldstate.guild.id != newstate.guild.id){
         d = new Date();
         console.log('[' + timeParser(d) + '] error >> ' + 'newstate tiene diferente guild que oldstate, REVISAR CODIGO');
@@ -226,7 +247,7 @@ mainClient.on('voiceStateUpdate', (oldstate, newstate) => {
 });
 
 /* Se ejecuta cuando alguien se une a la guild */
-mainClient.on('guildMemberAdd', member => {
+mainClient.on('guildMemberAdd', async member => {
     const guild = member.guild.id;
     dataManager = new DataInterface(guild);
     guilddata = dataManager.GuildDataManager;
@@ -243,8 +264,8 @@ mainClient.on('guildMemberAdd', member => {
 mainClient.on('interactionCreate', async (interaction) => {
     if((interaction.guild == undefined) || (interaction.guild == null)){return};
     const guild = interaction.guild.id;
-    dataManager = new DataInterface(guild);
-    guilddata = dataManager.GuildDataManager;
+    let dataManager = new DataInterface(guild);
+    let guilddata = dataManager.GuildDataManager;
     mainClient.plugins.forEach(plugin => {
         if(!guilddata.getProperty('DisabledPlugins').includes(plugin.name)){
             if(interaction.isButton()){
@@ -258,6 +279,10 @@ mainClient.on('interactionCreate', async (interaction) => {
             } else if(interaction.isSelectMenu()){
                 if (typeof plugin.onSelectMenu === 'function'){
                     plugin.onSelectMenu(new DataInterface(guild, plugin.name), interaction);
+                }
+            } else if(interaction.isModalSubmit()){
+                if (typeof plugin.onModal === 'function'){
+                    plugin.onModal(new DataInterface(guild, plugin.name), interaction);
                 }
             }
         }
@@ -275,9 +300,9 @@ mainClient.on('messageReactionAdd', async (reaction, user) => {
 		}
     }
     if((reaction == undefined) || (user == null) || user.bot){return};
-    const guild = reaction.message.guildid;
-    dataManager = new DataInterface(guild);
-    guilddata = dataManager.GuildDataManager;
+    let guild = reaction.message.guild.id;
+    let dataManager = new DataInterface(guild, undefined);
+    let guilddata = dataManager.GuildDataManager;
     mainClient.plugins.forEach(plugin => {
         if(!guilddata.getProperty('DisabledPlugins').includes(plugin.name)){
             if (typeof plugin.onReactionAdd === 'function'){
@@ -298,9 +323,9 @@ mainClient.on('messageReactionRemove', async (reaction, user) => {
 		}
     }
     if((reaction == undefined) || (user == null) || user.bot){return};
-    const guild = reaction.message.guildid;
-    dataManager = new DataInterface(guild);
-    guilddata = dataManager.GuildDataManager;
+    const guild = reaction.message.guild.id;
+    let dataManager = new DataInterface(guild, undefined);
+    let guilddata = dataManager.GuildDataManager;
     mainClient.plugins.forEach(plugin => {
         if(!guilddata.getProperty('DisabledPlugins').includes(plugin.name)){
             if (typeof plugin.onReactionRemove === 'function'){
@@ -311,12 +336,12 @@ mainClient.on('messageReactionRemove', async (reaction, user) => {
 });
 
 /* Se ejecuta cuando el bot entra a una guild */
-mainClient.on('guildCreate', guild => {
+mainClient.on('guildCreate', async guild => {
     flushSlashCommands(guild.id);
 });
 
 /* Se ejecuta cuando el bot sale de una guild */
-mainClient.on('guildDelete', guild => {
+mainClient.on('guildDelete', async guild => {
     d = new Date();
     console.log('[' + timeParser(d) + '] ' + config.Messages['bot-left-guild'] + guild.id);
     //TODO: erase guild data
@@ -331,16 +356,19 @@ mainClient.on('ready', () => {
     console.log('[' + timeParser(d) + '] ' + config.Messages['activity-setted'] + config.activity.value + ', type: ' + config.activity.type);
     d = new Date();
     console.log('[' + timeParser(d) + '] ' + config.Messages['loading-slashcommands']);
-    flushGlobalSlashCommands();
+    flushGlobalSlashCommands(false);
     mainClient.guilds.cache.forEach(guild => {
-        flushSlashCommands(guild.id);
+        flushSlashCommands(guild.id, false);
     });
+    d = new Date();
+    console.log('[' + timeParser(d) + '] ' + config.Messages['starting-webserver']);
+    require('./webserver.js')(mainClient);
 });
 
 /* Inicia sesion con los bots */
 mainClient.login(config['bot-token']);
 
-/* Comando de consola flushplugins */
+/* Comando de consola flushplugins (beta) */
 const cmdflushplugins = function(){
     d = new Date();
     console.log('[' + timeParser(d) + '] ' + config.Messages['plugin-load-started']);
@@ -383,7 +411,9 @@ rl.on('line', (input) => {
             console.log('--------------------');
             break;
         case 'updateactivity':
-            mainClient.user.setActivity(config.activity.value, { type: config.activity.type });
+            let getdata = fs.readFileSync('./config.json');
+            getdata = JSON.parse(getdata);
+            mainClient.user.setActivity(getdata.activity.value, { type: getdata.activity.type });
             d = new Date();
             console.log('[' + timeParser(d) + '] ' + config.Messages['activity-setted'] + config.activity.value + ', type: ' + config.activity.type);    
             break;
@@ -392,6 +422,14 @@ rl.on('line', (input) => {
             break;
         case 'flushallslashcommands':
             flushGlobalSlashCommands();
+            mainClient.guilds.cache.forEach(guild => {
+                flushSlashCommands(guild.id);
+            });
+            break;
+        case 'flushglobalslashcommands':
+            flushGlobalSlashCommands();
+            break;
+        case 'flushslashcommands':
             mainClient.guilds.cache.forEach(guild => {
                 flushSlashCommands(guild.id);
             });

@@ -54,24 +54,25 @@ module.exports = {
     globalSlashCommands: [],
     slashCommands: [
         /*El formato de cada slash command es el siguiente:
-        {name: 'example', description: 'Example description', options: []}
+        {name: 'example', description: 'Example description', options: [], dm_permission: false}
         El campo name de cada slash command equivale al comando en si, en este caso es /example, este campo es obligatorio
         El campo description define la descripcion del slashcommand, este campo es opcional
         El campo options define las opciones del slash command, se presenta como un array de opciones
-        
+        El campo dm_permission define si se puede usar en mensajes directos al bot
+
         Cada opcion se escribe de la siguiente forma dentro de un objeto {}:
-        ejemplo: {type:Discord.Constants.ApplicationCommandOptionTypes.USER, name: 'usuario', description: ''}
+        ejemplo: {type:Discord.ApplicationCommandOptionType.User, name: 'usuario', description: ''}
         -type es un tipo de dato de discord (ES OBLIGATORIO), los tipos disponibles son:
-            -Discord.Constants.ApplicationCommandOptionTypes.STRING
-            -Discord.Constants.ApplicationCommandOptionTypes.INTEGER
-            -Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
-            -Discord.Constants.ApplicationCommandOptionTypes.USER
-            -Discord.Constants.ApplicationCommandOptionTypes.CHANNEL
-            -Discord.Constants.ApplicationCommandOptionTypes.ROLE
-            -Discord.Constants.ApplicationCommandOptionTypes.NUMBER
-            -Discord.Constants.ApplicationCommandOptionTypes.MENTIONABLE
-            -Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND
-            -Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND_GROUP
+            -Discord.ApplicationCommandOptionType.String
+            -Discord.ApplicationCommandOptionType.Integer
+            -Discord.ApplicationCommandOptionType.Boolean
+            -Discord.ApplicationCommandOptionType.User
+            -Discord.ApplicationCommandOptionType.Channel
+            -Discord.ApplicationCommandOptionType.Role
+            -Discord.ApplicationCommandOptionType.NUMBER
+            -Discord.ApplicationCommandOptionType.MENTIONABLE
+            -Discord.ApplicationCommandOptionType.Subcommand
+            -Discord.ApplicationCommandOptionType.SubcommandGroup
         -name es el nombre de la variable de la opcion (ES OBLIGATORIO)
         -description es la descripcion de la opcion (ES OBLIGATORIO)
         -required es un booleano que define si es obligatorio que el usuario ingrese la opcion

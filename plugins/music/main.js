@@ -47,12 +47,13 @@ module.exports = {
     name: 'music',
     description: 'modulo de musica',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    version: '2.2.0.7e6814d',
+    version: '2.3.0.7e6a15565',
+    category: 'entertainment',
     slashCommands : [
-        {name: 'play', description: 'Reproduce una cancion o una playlist', options: [{type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'search', description: 'Nombre o url de la cancion', required: true}]},
-        {name: 'stop', description: 'Para el reproductor de musica', options: []},
-        {name: 'shuffle', description: 'Mezcla las canciones en la lista de reproduccion', options: []},
-        {name: 'queue', description: 'Muestra las canciones en la lista de reproduccion y la cancion que se esta reproduciendo', options: []}
+        {name: 'play', description: 'Reproduce una cancion o una playlist', dm_permission: false, options: [{type: Discord.ApplicationCommandOptionType.String, name: 'search', description: 'Nombre o url de la cancion', required: true}]},
+        {name: 'stop', description: 'Para el reproductor de musica', dm_permission: false, options: []},
+        {name: 'shuffle', description: 'Mezcla las canciones en la lista de reproduccion', dm_permission: false, options: []},
+        {name: 'queue', description: 'Muestra las canciones en la lista de reproduccion y la cancion que se esta reproduciendo', dm_permission: false, options: []}
     ],
     async onMessage(message, dataManager, args){
         if(!globalqueue.has(dataManager.GuildDataManager.getGuildID())){

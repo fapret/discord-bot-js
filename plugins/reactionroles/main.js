@@ -18,17 +18,17 @@ module.exports = {
     name: 'reactionroles',
     description: 'modulo de reactionroles',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    version: '2.2.1.7e69054b9',
+    version: '2.3.0.7e6a15565',
     globalSlashCommands : [
-       {name: 'addreactionroletomessage', description: 'Agrega a un mensaje una reaccion que brinda un rol, si es un mensaje tipo reaction role, lo edita.', options: [
-            {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'messageid', description: 'Mensaje a reaccionar', required: true},  
-            {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'emoji', description: 'Emoji a reaccionar', required: true},
-            {type: Discord.Constants.ApplicationCommandOptionTypes.ROLE, name: 'rol', description: 'Rol a reaccionar', required: true},
-            {type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN, name: 'removeifreactionremoved', description: 'Remover rol si se retira la reaccion.', required: false},
-            {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'title', description: 'Cambiar titulo del mensaje de reacciones (opcional, valido solo para mensajes del bot)', required: false}
+       {name: 'addreactionroletomessage', description: 'Agrega a un mensaje una reaccion que brinda un rol, si es un mensaje tipo reaction role, lo edita.', dm_permission: false, options: [
+            {type: Discord.ApplicationCommandOptionType.String, name: 'messageid', description: 'Mensaje a reaccionar', required: true},  
+            {type: Discord.ApplicationCommandOptionType.String, name: 'emoji', description: 'Emoji a reaccionar', required: true},
+            {type: Discord.ApplicationCommandOptionType.Role, name: 'rol', description: 'Rol a reaccionar', required: true},
+            {type: Discord.ApplicationCommandOptionType.Boolean, name: 'removeifreactionremoved', description: 'Remover rol si se retira la reaccion.', required: false},
+            {type: Discord.ApplicationCommandOptionType.String, name: 'title', description: 'Cambiar titulo del mensaje de reacciones (opcional, valido solo para mensajes del bot)', required: false}
         ]},
-        {name: 'createreactionrolemessage', description: 'Crea un mensaje para ser usado como reaction role', options: [
-            {type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'title', description: 'Titulo del mensaje a reaccionar.', required: false}
+        {name: 'createreactionrolemessage', description: 'Crea un mensaje para ser usado como reaction role', dm_permission: false, options: [
+            {type: Discord.ApplicationCommandOptionType.String, name: 'title', description: 'Titulo del mensaje a reaccionar.', required: false}
         ]}
     ],//TODO hacer que sean subcomandos
     async onSlashCommand(dataManager, slashcommand){
@@ -78,7 +78,7 @@ module.exports = {
                             return;
                         }
                     }
-                    let embed = new Discord.MessageEmbed().setFooter("FapretBot");
+                    let embed = new Discord.EmbedBuilder().setFooter({text: "FapretBot"});
                     if(options.getString('title')){
                         embed.setTitle(options.getString('title'));
                     } else {
@@ -109,7 +109,7 @@ module.exports = {
                     slashcommand.reply({ content: 'No tienes el rol de operador para poder usar este comando', ephemeral: true });
                     return;
                 }
-                let message2 = new Discord.MessageEmbed().setFooter("FapretBot");
+                let message2 = new Discord.EmbedBuilder().setFooter({text: "FapretBot"});
                 if(options.getString('title')){
                     message2.setTitle(options.getString('title'));
                 } else {

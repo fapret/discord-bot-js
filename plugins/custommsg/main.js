@@ -15,6 +15,14 @@ EL SOFTWARE SE PROPORCIONA "COMO ESTA", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
 const Discord = require('discord.js');
 const fs = require('fs');
 
+/* Funcion para parsear textos en base a informacion de un miembro */
+function internalParser(text, member){
+    text = text.replace('${tag}', member.tag);
+    text = text.replace('${userid}', member.id);
+    text = text.replace('${username}', member.username);
+    return text;
+}
+
 class Mutex {
     constructor() {
         this._locking = Promise.resolve();
@@ -38,7 +46,7 @@ module.exports = {
     name: 'custommsg',
     description: 'modulo de mensajes customizados',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    version: '2.2.0.7e6814d',
+    version: '2.3.0.7e6a15565',
     async onAllMessage(message, dataManager){
         try{
             lowercasemessage = message.content.toLowerCase();
@@ -73,7 +81,7 @@ module.exports = {
                                     unlockMsg();
                                 }
                                 if(custommessage.hasOwnProperty('Embeed')){
-                                    const embeedmessage = new Discord.MessageEmbed().setFooter("Fapretbot");
+                                    const embeedmessage = new Discord.EmbedBuilder().setFooter({text: "FapretBot"});
                                     if(custommessage.Embeed.hasOwnProperty('Title')){
                                         embeedmessage.setTitle(custommessage.Embeed.Title);
                                     }
@@ -84,20 +92,18 @@ module.exports = {
                                         embeedmessage.setColor(custommessage.Embeed.color);
                                     }
                                     if(custommessage.Embeed.hasOwnProperty('Fields')){
-                                        custommessage.Embeed.Fields.forEach(field => {
-                                            embeedmessage.addField(field.name, field.value, field.inline);
-                                        });
+                                        embeedmessage.addFields(custommessage.Embeed.Fields);
                                     }
                                     message.reply({embeds: [embeedmessage]});
                                 }
                                 if(custommessage.hasOwnProperty('Message')){
-                                    message.Reply(custommessage.Message);
+                                    message.reply(internalParser(custommessage.Message, message.author));
                                 }
                                 if(custommessage.hasOwnProperty('RandomComponent')){
                                     const componentAmount = Object.keys(custommessage.RandomComponent).length;
                                     var componentIndex = Math.floor(Math.random() * (componentAmount) + 1) - 1;
                                     if(custommessage.RandomComponent[componentIndex].hasOwnProperty('Embeed')){
-                                        const embeedmessageComponent = new Discord.MessageEmbed().setFooter("Fapretbot");
+                                        const embeedmessageComponent = new Discord.EmbedBuilder().setFooter({text: "FapretBot"});
                                         if(custommessage.RandomComponent[componentIndex].Embeed.hasOwnProperty('Title')){
                                             embeedmessageComponent.setTitle(custommessage.RandomComponent[componentIndex].Embeed.Title);
                                         }
@@ -108,14 +114,12 @@ module.exports = {
                                             embeedmessageComponent.setColor(custommessage.RandomComponent[componentIndex].Embeed.color);
                                         }
                                         if(custommessage.RandomComponent[componentIndex].Embeed.hasOwnProperty('Fields')){
-                                            custommessage.RandomComponent[componentIndex].Embeed.Fields.forEach(field => {
-                                                embeedmessageComponent.addField(field.name, field.value, field.inline);
-                                            });
+                                            embeedmessage.addFields(custommessage.RandomComponent[componentIndex].Embeed.Fields);
                                         }
                                         message.reply({embeds: [embeedmessageComponent]});
                                     }
                                     if(custommessage.RandomComponent[componentIndex].hasOwnProperty('Message')){
-                                        message.reply(custommessage.RandomComponent[componentIndex].Message);
+                                        message.reply(internalParser(custommessage.RandomComponent[componentIndex].Message), message.author);
                                     }
                                 }
                             };

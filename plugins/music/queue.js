@@ -43,7 +43,7 @@ module.exports = {
         if(songAmount <= 0){
             songs = config.Messages['no-songs-on-queue'];
         }
-        const embeed = new Discord.MessageEmbed()
+        const embeed = new Discord.EmbedBuilder()
         .setColor(config.Embeed.color)
         .setTitle(config.Messages['songs-list'])
         .setDescription(songs)

@@ -21,10 +21,23 @@ module.exports = {
     name: 'fun',
     description: 'modulo de diversion',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
-    version: '2.2.0.7e6814d',
-    slashCommands : [
-        {name: 'avatar', description: 'Obten el avatar de un usuario', options: [{type: Discord.Constants.ApplicationCommandOptionTypes.USER, name: 'user', description: 'Usuario a obtener avatar', required: true}]},
-        {name: 'hug', description: 'Abraza a un usuario', options: [{type: Discord.Constants.ApplicationCommandOptionTypes.USER, name: 'user', description: 'Usuario a abrazar', required: false},{type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'id', description: 'id de imagen', required: false},{type: Discord.Constants.ApplicationCommandOptionTypes.STRING, name: 'texto', description: 'texto de imagen', required: false}]}
+    version: '2.3.0.7e6a15565',
+    category: 'entertainment',
+    globalSlashCommands: [
+        {name: 'fun', description: 'Comandos divertidos', dm_permission: false, options: [
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'dice', description: 'Tira los dados', options: [
+                {type: Discord.ApplicationCommandOptionType.Integer, name: 'val_min', description: 'Valor minimo', required: false},
+                {type: Discord.ApplicationCommandOptionType.Integer, name: 'val_max', description: 'Valor maximo', required: false}
+            ]},
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'avatar', description: 'Obten el avatar de un usuario', dm_permission: false, options: [
+                {type: Discord.ApplicationCommandOptionType.User, name: 'user', description: 'Usuario a obtener avatar', required: true}
+            ]},
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'hug', description: 'Abraza a un usuario', dm_permission: false, options: [
+                {type: Discord.ApplicationCommandOptionType.User, name: 'user', description: 'Usuario a abrazar', required: false},
+                {type: Discord.ApplicationCommandOptionType.String, name: 'id', description: 'id de imagen', required: false},
+                {type: Discord.ApplicationCommandOptionType.String, name: 'texto', description: 'texto de imagen', required: false}
+            ]}
+        ]}
     ],
     async onMessage(message, dataManager, args){
         switch (args[0]){
@@ -41,17 +54,19 @@ module.exports = {
     },
     async onSlashCommand(dataManager, slashcommand){
         const {options} = slashcommand;
-        switch (slashcommand.commandName){
-            case 'avatar':
-                await slashcommand.deferReply();
-                avatar.execute(slashcommand);
-                break;
-            case 'hug':
-                await slashcommand.deferReply();
-                hug.execute(slashcommand, dataManager);
-                break;
-            default:
-                break;
+        if (slashcommand.commandName == 'fun'){
+            switch (options.getSubcommand()){
+                case 'avatar':
+                    await slashcommand.deferReply();
+                    avatar.execute(slashcommand);
+                    break;
+                case 'hug':
+                    await slashcommand.deferReply();
+                    hug.execute(slashcommand, dataManager);
+                    break;
+                default:
+                    break;
+        }
         }
     }
 }

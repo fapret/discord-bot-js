@@ -1,5 +1,7 @@
 {
     "bot-token": "",
+    "client_id": "",
+    "client_secret": "",
     "secondary-bot-tokens": [],
     "default-prefix": "fapret!",
     "activity": {
@@ -26,12 +28,16 @@
         "console-help": [
             "- help : Este mensaje",
             "- updateActivity : Actualiza la actividad con la que se encuentra en config.json",
-            "- flushPlugins : Carga nuevos plugins y vuelve a cargar los ya cargados",
-            "- flushAllSlashCommands : Borra todos los slashcommands y luego crea los slashcommands configurados"
+            "- flushPlugins : (beta) Carga nuevos plugins y vuelve a cargar los ya cargados",
+            "- flushAllSlashCommands : Borra todos los slashcommands y luego crea los slashcommands configurados",
+            "- flushSlashCommands : Borra todos los slashcommands de guild y luego crea los slashcommands configurados",
+            "- flushGlobalSlashCommands : Borra todos los slashcommands globales y luego crea los slashcommands configurados"
         ],
         "slashCommands-loaded": "Cargados comandos slash para la guild >> ",
+        "globalslashCommands-loaded": "Cargados comandos slash globales",
         "guild-has-no-permission-for-slashCommands": "La guild no tiene el permiso de modificar o crear comandos slash >> ",
         "error-on-globalslashcommand-flush": "Error al refrescar los slashcommands globales",
-        "bot-left-guild": "El bot se fue de la guild: "
+        "bot-left-guild": "El bot se fue de la guild: ",
+        "starting-webserver": "Iniciando el servidor web..."
     }
 }

@@ -19,14 +19,16 @@ module.exports = {
     description: 'modulo de musica',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
     async execute(message, guild){
-        const embeed = new Discord.MessageEmbed()
+        const embeed = new Discord.EmbedBuilder()
         .setColor(config.Embeed.color)
         .setTitle(config.Messages['help-title'])
         .setDescription(config.Messages['help-description'])
-        .setFooter("Fapretbot");
+        .setFooter({text: "FapretBot"});
+        let Fields = [];
         config.Messages['help-commands'].forEach(element => {
-            embeed.addField(element.title, element.description);
+            Fields.push({name: element.title, value: element.description});
         });
+        embeed.addFields(Fields);
         message.channel.send({embeds: [embeed]});
     }
 }
