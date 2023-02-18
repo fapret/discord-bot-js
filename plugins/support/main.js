@@ -28,42 +28,6 @@ const {fn_opentickettouser} = require('./fn_opentickettouser.js');
 const {fn_calculatetime} = require('./fn_calculatetime.js');
 
 module.exports = {
-    name: 'support',
-    description: 'Sistema de tickets de soporte',
-    author: 'fapret',
-    version: '2.3.0.7e6a15565',
-    category: 'moderation',
-    globalSlashCommands: [
-        {name: 'support', description: 'Maneja el sistema de soporte', dm_permission: false, options: [
-            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'createembeed', description: 'Crea un mensaje de soporte', options: [
-                {type: Discord.ApplicationCommandOptionType.String, name: 'text', description: 'Texto del mensaje de soporte', required: true},
-                {type: Discord.ApplicationCommandOptionType.String, name: 'title', description: 'Titulo del mensaje de soporte'}
-            ]},
-            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'deleteembeed', description: 'Elimina un mensaje de soporte', options: [
-                {type: Discord.ApplicationCommandOptionType.String, name: 'id', description: 'Id del mensaje de soporte a eliminar', required: true}
-            ]},
-            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'editembeed', description: 'Edita un mensaje de soporte', options: [
-                {type: Discord.ApplicationCommandOptionType.String, name: 'id', description: 'Id del mensaje a editar', required: true},
-                {type: Discord.ApplicationCommandOptionType.String, name: 'text', description: 'Texto del mensaje de soporte', required: true}
-            ]},
-            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'addoption', description: 'Agrega una opcion a un mensaje de soporte', options: [
-                {type: Discord.ApplicationCommandOptionType.String, name: 'id', description: 'Id del mensaje a agregarle la opcion', required: true},
-                {type: Discord.ApplicationCommandOptionType.String, name: 'text', description: 'Texto de la opcion(Topico)', required: true},
-                {type: Discord.ApplicationCommandOptionType.Role, name: 'modrole', description: 'Rol de staff soporte', required: true},
-                {type: Discord.ApplicationCommandOptionType.Channel, name: 'category', channel_types: ['4'], description: 'Categoria donde se crearan los tickets'},
-                {type: Discord.ApplicationCommandOptionType.String, name: 'waittime', description: 'Tiempo de gracia entre tickets creados por el usuario'}
-            ]},
-            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'settranscriptchannel', description: 'Setea el canal de transcripciones', options: [
-                {type: Discord.ApplicationCommandOptionType.Channel, name: 'canal', channel_types: ['0'], description: 'Canal en el que se guardaran las transcripciones', required: true}
-            ]},
-            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'opentickettouser', description: 'Abre un ticket a un usuario', options: [
-                {type: Discord.ApplicationCommandOptionType.User, name: 'user', description: 'Usuario al que abrirle el ticket', required: true},
-                {type: Discord.ApplicationCommandOptionType.Channel, name: 'category', channel_types: ['4'], description: 'Categoria donde se crearan los tickets'},
-                {type: Discord.ApplicationCommandOptionType.Role, name: 'modrole', description: 'Rol de staff soporte aparte de ti'}
-            ]}
-        ]}
-    ],
-
     async onSlashCommand(dataManager, slashcommand){
         const {options} = slashcommand;
         if (slashcommand.commandName == 'support'){

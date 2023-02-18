@@ -1,0 +1,21 @@
+@media (prefers-color-scheme: dark) {
+  .guilds-index{
+    color: white;
+    background-color: #303030;
+  }
+  .guild-login-invite{
+    border-color: darkgray;
+  }
+  .guild-login-invite:hover{
+    background-color: lightgray;
+  }
+  .guild-login-invite:hover .guild-text{
+    color: black;
+  }
+  .guild-text{
+     color: darkgray;
+  }
+  .guild-item:hover{
+    background-color: #252525;
+  }
+}

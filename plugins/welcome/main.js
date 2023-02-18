@@ -36,52 +36,18 @@ function getchannel(member){
     }
 }
 
+const defaultConf = require('./default.json');
+
 module.exports = {
-    name: 'welcome',
-    description: 'modulo de bienvenida customizada',
-    author: 'fapret (Santiago Nicolas Diaz Conde)',
-    version: '2.3.0.7e6a15565',
-    category: 'moderation',
-    globalSlashCommands: [
-        {name: 'welcome', description: 'Maneja el sistema de welcome', options: [
-            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'settextmessage', description: 'Setea el mensaje de bienvenida', options: [
-                {type: Discord.ApplicationCommandOptionType.String, name: 'text', description: 'Texto del mensaje de bienvenida', required: true}
-            ]},
-            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'enableimage', description: 'Activa o desactiva las imagenes de bienvenida', options: [
-                {type: Discord.ApplicationCommandOptionType.Boolean, name: 'useimage', description: 'Activar o desactivar imagenes de bienvenida', required: true}
-            ]}
-        ]}
-    ],
     //Se ejecuta al unirse un miembro a la guild, generando la imagen y enviandola al system channel
     async onMemberJoin(dataManager, member){
         pluginManager = dataManager.PluginDataManager;
-        welcomeModule = pluginManager.readData(dataManager.GuildDataManager.getGuildID());
+        let welcomeModule = pluginManager.readData(dataManager.GuildDataManager.getGuildID());
         if(!welcomeModule){
             /* Datos default del plugin */
-            welcomeModule = {
-                useImage: true,
-                imageUrl: __dirname + "/default.png",
-                imagesize: {
-                    x: "1400",
-                    y: "600"
-                },
-                strokeColor: "#00A9D3",
-                channel: getchannel(member),
-                avatar: {
-                    x: "250",
-                    y: "300",
-                    radius: "150",
-                    border: "5",
-                    borderColor: "#FFFFFF"
-                },
-                texts: [
-                    {text: "Bienvenid@ ${tag}", size: 80, x: "430", y: "300", font: "Do-Hyeon", color: "#00A9D3"},
-                    {text: "Miembro ${memberCount}", size: 60, x: "570", y: "400", font: "sans-serif", color: "#00A9D3"}
-                ],
-                title: "",
-                description: "",
-                message: ""
-            };
+            welcomeModule = defaultConf;
+            welcomeModule.channel = getchannel(member);
+            welcomeModule.imageUrl = __dirname + "/default.png";
             pluginManager.writeData(dataManager.GuildDataManager.getGuildID(), welcomeModule);
         }
         if(welcomeModule.channel == null){
@@ -108,7 +74,7 @@ module.exports = {
             context.arc(parseInt(welcomeModule.avatar.x), parseInt(welcomeModule.avatar.y), parseInt(welcomeModule.avatar.radius), 0, Math.PI * 2, true);
             context.closePath();
             context.clip();
-            const memberAvatar = await loadImage(member.user.displayAvatarURL({ format: 'png', size: 1024}));
+            const memberAvatar = await loadImage(member.user.displayAvatarURL({ extension: 'png', size: 1024}));
             context.drawImage(memberAvatar, parseInt(welcomeModule.avatar.x) - parseInt(welcomeModule.avatar.radius), parseInt(welcomeModule.avatar.y) - parseInt(welcomeModule.avatar.radius), parseInt(welcomeModule.avatar.radius) * 2, parseInt(welcomeModule.avatar.radius) * 2);
             context.restore();
             welcomeModule.texts.forEach(element => {
@@ -138,6 +104,7 @@ module.exports = {
         }
     },
     async onSlashCommand(dataManager, slashcommand){
+        let welcomeModule;
         const {options} = slashcommand;
         if (slashcommand.commandName == 'welcome'){
             await slashcommand.deferReply({ ephemeral: true });

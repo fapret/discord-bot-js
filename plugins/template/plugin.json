@@ -1,0 +1,19 @@
+{
+    "name": "template",
+    "description": "plugin description",
+    "version": "plugin version",
+    "author": "plugin author",
+    "category": "",
+    "license": "plugin licence",
+    "main": "main.js",
+    "slashcommands": "slashcommands.json",
+    "globalslashcommands": "globalslashcommands.json",
+    "plugin-dependencies": {
+
+    },
+    "dependencies": {
+
+    },
+    "languages": {
+    }
+}

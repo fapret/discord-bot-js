@@ -29,10 +29,10 @@ module.exports = {
                 {type: Discord.ApplicationCommandOptionType.Integer, name: 'val_min', description: 'Valor minimo', required: false},
                 {type: Discord.ApplicationCommandOptionType.Integer, name: 'val_max', description: 'Valor maximo', required: false}
             ]},
-            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'avatar', description: 'Obten el avatar de un usuario', dm_permission: false, options: [
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'avatar', description: 'Obten el avatar de un usuario', options: [
                 {type: Discord.ApplicationCommandOptionType.User, name: 'user', description: 'Usuario a obtener avatar', required: true}
             ]},
-            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'hug', description: 'Abraza a un usuario', dm_permission: false, options: [
+            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'hug', description: 'Abraza a un usuario', options: [
                 {type: Discord.ApplicationCommandOptionType.User, name: 'user', description: 'Usuario a abrazar', required: false},
                 {type: Discord.ApplicationCommandOptionType.String, name: 'id', description: 'id de imagen', required: false},
                 {type: Discord.ApplicationCommandOptionType.String, name: 'texto', description: 'texto de imagen', required: false}

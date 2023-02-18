@@ -43,15 +43,11 @@ const MutexCreator = new Mutex();
 const lockedMessages = new Map();
 
 module.exports = {
-    name: 'custommsg',
-    description: 'modulo de mensajes customizados',
-    author: 'fapret (Santiago Nicolas Diaz Conde)',
-    version: '2.3.0.7e6a15565',
     async onAllMessage(message, dataManager){
         try{
-            lowercasemessage = message.content.toLowerCase();
-            pluginManager = dataManager.PluginDataManager;
-            CustomMessages = pluginManager.readData(dataManager.GuildDataManager.getGuildID());
+            let lowercasemessage = message.content.toLowerCase();
+            let pluginManager = dataManager.PluginDataManager;
+            let CustomMessages = pluginManager.readData(dataManager.GuildDataManager.getGuildID());
             if(CustomMessages == undefined){
                 CustomMessages = [];
                 pluginManager.writeData(dataManager.GuildDataManager.getGuildID(), CustomMessages);
@@ -62,7 +58,7 @@ module.exports = {
                         custommessage.Keywords.forEach(async (keyword) => {
                             if(((custommessage.WildCard == true) && (lowercasemessage.includes(keyword.toLowerCase()))) || lowercasemessage.startsWith(keyword.toLowerCase())){
                                 if(custommessage.hasOwnProperty('RemainingUses')){
-                                    msgMutex = await lockedMessages.get(message.channel.id + '.' + element.Messages.indexOf(custommessage));
+                                    let msgMutex = await lockedMessages.get(message.channel.id + '.' + element.Messages.indexOf(custommessage));
                                     if(msgMutex == undefined){
                                         const unlock = await MutexCreator.lock();
                                         if(lockedMessages.get(message.channel.id + '.' + element.Messages.indexOf(custommessage)) == undefined){

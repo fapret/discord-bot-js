@@ -30,7 +30,7 @@ module.exports = {
             } else
             member = message.author;
         }
-        const memberAvatarURL = member.displayAvatarURL({ format: 'png', size: 1024});
+        const memberAvatarURL = member.displayAvatarURL({ extension: 'png', size: 1024});
         const memberAvatar = await loadImage(memberAvatarURL);
         context.drawImage(memberAvatar, 0, 0, 1024, 1024);
         const embeed = new Discord.EmbedBuilder().setFooter({text: "FapretBot"});
@@ -38,8 +38,8 @@ module.exports = {
         embeed.setImage(`attachment://${member.id}.png`);
         embeed.setURL(memberAvatarURL);
         embeed.setDescription(`[URL Avatar](${memberAvatarURL}) | ID: ${member.id}`);
-        embeed.setAuthor(`${member.tag}`, memberAvatarURL);
-        if(message.editReply){
+        embeed.setAuthor({name: member.tag, iconURL: memberAvatarURL});
+        if(typeof message.editReply === 'function'){
             message.editReply({embeds: [embeed], files: [attach]});
         }
         else {

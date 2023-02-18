@@ -33,22 +33,6 @@ este, sino un programa para enlazar con este.
 const Discord = require('discord.js');
 
 module.exports = {
-    //El campo name es OBLIGATORIO, este define el nombre del plugin al momento de ser cargado, 
-    //no puede poseer espacios, ni caracteres especiales
-    name: 'template',
-
-    //El campo description es opcional, este define la descripcion del plugin
-    description: 'Descripcion de mi plugin',
-
-    //El campo author es opcional, pero se recomienda colocarlo, define el autor del plugin
-    author: 'Pon tu nombre aqui',
-
-    //Version del plugin (solo puede contener letras minusculas, espacio, punto y digitos del 0 al 9) (opcional)
-    //En caso de tener caracteres no permitidos como letras mayusculas, se ignorara el parametro
-    //su unica utilidad es para saber que version del plugin se esta ejecutando.
-    //se imprime en la consola cuando se carga el plugin
-    version: 'Pon la version aqui',
-
     //Aqui se coloca un array con la informacion de cada slashcommand a ser utilizado por el plugin
     //es opcional
     globalSlashCommands: [],
@@ -70,7 +54,7 @@ module.exports = {
             -Discord.ApplicationCommandOptionType.Channel
             -Discord.ApplicationCommandOptionType.Role
             -Discord.ApplicationCommandOptionType.NUMBER
-            -Discord.ApplicationCommandOptionType.MENTIONABLE
+            -Discord.ApplicationCommandOptionType.Mentionable
             -Discord.ApplicationCommandOptionType.Subcommand
             -Discord.ApplicationCommandOptionType.SubcommandGroup
         -name es el nombre de la variable de la opcion (ES OBLIGATORIO)
@@ -89,41 +73,41 @@ module.exports = {
     ],
 
     //funcion a ser ejecutada cuando un miembro se une a un servidor en el que esta presente el bot
-    //recibe dos objetos, el dataManager (ver dataManager en la wiki de fapretBot) y un objeto member (https://discord.js.org/#/docs/main/stable/class/GuildMember)
+    //recibe dos objetos, la API (ver pluginAPI en la wiki de fapretBot) y un objeto member (https://discord.js.org/#/docs/main/stable/class/GuildMember)
     //es opcional
-    async onMemberJoin(dataManager, member){},
+    async onMemberJoin(API, member){},
 
     //funcion a ser ejecutada cuando un miembro cambia su estado en un canal de voz
     //por ejemplo cuando se une a un canal de voz, o sale de este
-    //recibe 3 objetos, el dataManager (ver dataManager en la wiki de fapretBot), el anterior estado de voz y el nuevo estado de voz
+    //recibe 3 objetos, la API (ver pluginAPI en la wiki de fapretBot), el anterior estado de voz y el nuevo estado de voz
     //objeto estado de voz: https://discord.js.org/#/docs/main/stable/class/VoiceState
     //es opcional
-    async voiceStateUpdate(dataManager, oldstate, newstate){},
+    async voiceStateUpdate(API, oldstate, newstate){},
 
     //funcion a ser ejecutada cuando un usuario ejecuta un slashcommand
-    //recibe dos objetos, el dataManager (ver dataManager en la wiki de fapretBot) y un objeto interaction de tipo command (https://discord.js.org/#/docs/discord.js/stable/class/CommandInteraction)
+    //recibe dos objetos, la API (ver pluginAPI en la wiki de fapretBot) y un objeto interaction de tipo command (https://discord.js.org/#/docs/discord.js/stable/class/CommandInteraction)
     //es opcional
-    async onSlashCommand(dataManager, slashcommand){},
+    async onSlashCommand(API, slashcommand){},
 
     //funcion a ser ejecutada cuando un usuario ejecuta un selectMenu
-    //recibe dos objetos, el dataManager (ver dataManager en la wiki de fapretBot) y un objeto interaction de tipo command (https://discord.js.org/#/docs/discord.js/stable/class/CommandInteraction)
+    //recibe dos objetos, la API (ver pluginAPI en la wiki de fapretBot) y un objeto interaction de tipo command (https://discord.js.org/#/docs/discord.js/stable/class/CommandInteraction)
     //es opcional
-    async onSelectMenu(dataManager, selectMenu){},
+    async onSelectMenu(API, selectMenu){},
 
     //funcion a ser ejecutada cuando un usuario presiona un boton de un mensaje del bot
-    //recibe dos objetos, el dataManager (ver dataManager en la wiki de fapretBot) y un objeto interaction de tipo button (https://discord.js.org/#/docs/discord.js/stable/class/ButtonInteraction)
+    //recibe dos objetos, la API (ver pluginAPI en la wiki de fapretBot) y un objeto interaction de tipo button (https://discord.js.org/#/docs/discord.js/stable/class/ButtonInteraction)
     //es opcional
-    async onButtonClick(dataManager, button){},
+    async onButtonClick(API, button){},
 
     //funcion a ser ejecutada cuando un usuario reacciona a un mensaje
-    //recibe tres objetos, el dataManager (ver dataManager en la wiki de fapretBot), un objeto reaction (https://discord.js.org/#/docs/discord.js/stable/class/MessageReaction), y un objeto user simple
+    //recibe tres objetos, la API (ver pluginAPI en la wiki de fapretBot), un objeto reaction (https://discord.js.org/#/docs/discord.js/stable/class/MessageReaction), y un objeto user simple
     //es opcional
-    async onReactionAdd(dataManager, reaction, user){},
+    async onReactionAdd(API, reaction, user){},
 
     //funcion a ser ejecutada cuando un usuario quita la reaccion de un mensaje
-    //recibe tres objetos, el dataManager (ver dataManager en la wiki de fapretBot), un objeto reaction (https://discord.js.org/#/docs/discord.js/stable/class/MessageReaction), y un objeto user simple
+    //recibe tres objetos, la API (ver pluginAPI en la wiki de fapretBot), un objeto reaction (https://discord.js.org/#/docs/discord.js/stable/class/MessageReaction), y un objeto user simple
     //es opcional
-    async onReactionRemove(dataManager, reaction, user){},
+    async onReactionRemove(API, reaction, user){},
 
     //@DEPRECATED
     //funcion a ser ejecutada cuando un usuario envia un mensaje que inicia por <bot prefix>!<plugin.name> recibe 3 objetos
@@ -131,10 +115,10 @@ module.exports = {
     //si el prefix fuera f y el plugin example y el usuario escribiese f!example hola, args seria ["hola"]
     //es opcional
     //No es recomendable su uso para la ejecucion de comandos! Ver > https://support-dev.discord.com/hc/en-us/articles/6025578854295-Why-We-Moved-to-Slash-Commands
-    async onMessage(message, dataManager, args){},
+    async onMessage(message, API, args){},
 
     //funcion a ser ejecutada cuando un usuario envia un mensaje que NO inicia por <bot prefix>!<plugin.name>
     //message es un objeto message (https://discord.js.org/#/docs/discord.js/stable/class/Message) y el dataManager (ver wiki de fapretBot)
     //es opcional
-    async onAllMessage(message, dataManager){}
+    async onAllMessage(message, API){}
 }

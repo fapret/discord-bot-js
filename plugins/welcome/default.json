@@ -1,0 +1,19 @@
+{
+    "useImage": true,
+    "imagesize": {
+        "x": "1400",
+        "y": "600"
+    },
+    "strokeColor": "#00A9D3",
+    "avatar": {
+        "x": "250",
+        "y": "300",
+        "radius": "150",
+        "border": "5",
+        "borderColor": "#FFFFFF"
+    },
+    "texts": [
+        {"text": "Bienvenid@ ${tag}", "size": 80, "x": "430", "y": "300", "font": "Do-Hyeon", "color": "#00A9D3"},
+        {"text": "Miembro ${memberCount}", "size": 60, "x": "570", "y": "400", "font": "sans-serif", "color": "#00A9D3"}
+    ]
+}

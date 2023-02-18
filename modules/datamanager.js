@@ -17,6 +17,11 @@ const path = require('path');
 const stream = require('stream');
 const config = require('../config.json');
 const { timeParser, Mutex } = require('./microlib.js');
+const { GlobalLangManager } = require('./langmanager.js');
+require('dotenv').config();
+
+//Lee los mensajes en el idioma establecido
+const messages = GlobalLangManager.read(process.env.LANG);
 
 /* Path donde se guarda la data si esta en modo file */
 const dataPath = './data/';
@@ -163,6 +168,10 @@ let dataManager = {
     * @returns {string|number|Buffer}
     */
     read: (dirPath, storageMode = 'file') => {
+        let getdata;
+        let namespace;
+        let currentPath;
+        let d;
         //const unlock = await mutexData.lock();
         switch (storageMode) {
             case 'file':
@@ -173,12 +182,12 @@ let dataManager = {
                 if (!fs.existsSync(dataPath)) {
                     fs.mkdirSync(dataPath);
                     d = new Date();
-                    console.log('[' + timeParser(d) + '] ' + config.Messages['created-data-directory']);
+                    console.log('[' + timeParser(d) + '] ' + messages['created-data-directory']);
                 }
                 if (!fs.existsSync(dataPath + namespace)) {
                     fs.mkdirSync(dataPath + namespace);
                     d = new Date();
-                    console.log('[' + timeParser(d) + '] ' + config.Messages['created-namespace-storage'] + namespace);
+                    console.log('[' + timeParser(d) + '] ' + messages['created-namespace-storage'] + namespace);
                 }
                 switch (namespace) {
                     case 'guilddata':
@@ -186,7 +195,7 @@ let dataManager = {
                         if (!fs.existsSync(currentPath)) {
                             fs.mkdirSync(currentPath);
                             d = new Date();
-                            console.log('[' + timeParser(d) + '] ' + config.Messages['created-guild-storage'] + dirPathParts[0]);
+                            console.log('[' + timeParser(d) + '] ' + messages['created-guild-storage'] + dirPathParts[0]);
                         }
                         switch (dirPathParts[1]) {
                             case 'properties':
@@ -195,10 +204,11 @@ let dataManager = {
                                 } catch (error){
                                     if (error.code === 'ENOENT') {
                                         d = new Date();
-                                        console.log('[' + timeParser(d) + '] ' + config.Messages['guilddata-not-registered']+ ' ' + dirPathParts[0]);
+                                        console.log('[' + timeParser(d) + '] ' + messages['guilddata-not-registered']+ ' ' + dirPathParts[0]);
                                         let newguild = {
                                             ID: dirPathParts[0],
                                             prefix: config['default-prefix'],
+                                            language: 'es-ES',
                                             operatorRole: '00000000000000000',
                                             DisabledPlugins: ['welcome','newworld','template','apps','music'],
                                             Aliases: ['!f']
@@ -257,6 +267,10 @@ let dataManager = {
     * @returns {void}
     */
     write: (dirPath, value, storageMode = 'file') => {
+        let getdata;
+        let namespace;
+        let currentPath;
+        let d;
         //const unlock = await mutexData.lock();
         switch (storageMode) {
             case 'file':
@@ -267,12 +281,12 @@ let dataManager = {
                 if (!fs.existsSync(dataPath)) {
                     fs.mkdirSync(dataPath);
                     d = new Date();
-                    console.log('[' + timeParser(d) + '] ' + config.Messages['created-data-directory']);
+                    console.log('[' + timeParser(d) + '] ' + messages['created-data-directory']);
                 }
                 if (!fs.existsSync(dataPath + namespace)) {
                     fs.mkdirSync(dataPath + namespace);
                     d = new Date();
-                    console.log('[' + timeParser(d) + '] ' + config.Messages['created-namespace-storage'] + namespace);
+                    console.log('[' + timeParser(d) + '] ' + messages['created-namespace-storage'] + namespace);
                 }
                 switch (namespace) {
                     case 'guilddata':
@@ -280,7 +294,7 @@ let dataManager = {
                         if (!fs.existsSync(currentPath)) {
                             fs.mkdirSync(currentPath);
                             d = new Date();
-                            console.log('[' + timeParser(d) + '] ' + config.Messages['created-guild-storage'] + dirPathParts[0]);
+                            console.log('[' + timeParser(d) + '] ' + messages['created-guild-storage'] + dirPathParts[0]);
                         }
                         switch (dirPathParts[1]) {
                             case 'properties':
@@ -289,7 +303,7 @@ let dataManager = {
                                 } catch (error){
                                     if (error.code === 'ENOENT') {
                                         d = new Date();
-                                        console.log('[' + timeParser(d) + '] ' + config.Messages['guilddata-not-registered']+ ' ' + dirPathParts[0]);
+                                        console.log('[' + timeParser(d) + '] ' + messages['guilddata-not-registered']+ ' ' + dirPathParts[0]);
                                         let newguild = {
                                             ID: dirPathParts[0],
                                             prefix: config['default-prefix'],
@@ -328,7 +342,7 @@ let dataManager = {
                             if (!fs.existsSync(currentPath)) {
                                 fs.mkdirSync(currentPath);
                                 d = new Date();
-                                console.log('[' + timeParser(d) + '] ' + config.Messages['created-plugindatapath-directory'] + currentPath);
+                                console.log('[' + timeParser(d) + '] ' + messages['created-plugindatapath-directory'] + currentPath);
                             }
                             currentPath = currentPath + '/' + dirPathParts[index+1];
                         }

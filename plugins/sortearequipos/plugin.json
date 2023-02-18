@@ -1,0 +1,15 @@
+{
+    "name": "sortearequipos",
+    "description": "Sortea los jugadores que ingresen al sorteo entre diferentes equipos",
+    "version": "2.3.0.7e70103df",
+    "author": "fapret (Santiago Nicolas Diaz Conde)",
+    "category": "entertainment",
+    "license": "Rights Reserved",
+    "main": "main.js",
+    "globalSlashCommands": "globalslashcommands.json",
+    "dependencies": [
+    ],
+    "languages": {
+        "es-ES": "lang/es.json"
+    }
+}

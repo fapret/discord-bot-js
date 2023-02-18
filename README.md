@@ -1,3 +1,5 @@
+[👉English version](https://git.fapret.com/fapret/discord-bot-js/-/blob/main/README_en.md)
+
 # Fapret Discord Bot
  Fapret Discord Bot es el bot de discord programado por fapret, posee multiples funcionalidades como musica, acciones, etc.
 # Licencia
@@ -45,7 +47,7 @@ sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-de
 npm install
  ```
 
- El bot necesita que se coloque un token de discord, esto se puede realizar editando el archivo config.json  
+ El bot necesita que se coloque un token de discord, esto se puede realizar editando el archivo .env  
  Una vez colocado el token del bot de discord puedes iniciar el bot con el siguiente comando (estando en la raiz del bot):
   ```sh
 node .

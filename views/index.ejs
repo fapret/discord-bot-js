@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/base-dark.css">
+  <% if(user){ %>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/dashboard-dark.css">
+  <% } %>
+  <script src="/js/functions.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Teko&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/favicon32x32.png" sizes="32x32">
+  <title>FapretBot</title>
+</head>
+
+<body>
+<% if(user){ %>
+    <%- include('index/logged.ejs') %>
+<% } else { %>
+    <%- include('index/notlogged.ejs') %>
+<% } %>
+
+<div class="main" id="main">
+    <% if(user){ %>
+        <%- include('index/loggedmain.ejs') %>
+    <% } else { %>
+        <%- include('index/notloggedmain.ejs') %>
+    <% } %>
+</div>
+<p style="text-align: center; margin-top: auto; margin-bottom: 0;">Copyright 2022 - Santiago Nicolas Diaz Conde - Fapret.com</p>
+</body>
+<script src="/js/base_logged.js"></script>
+<% if(user){ %>
+    <script src="/js/get_guilds.js"></script>
+<% } %>

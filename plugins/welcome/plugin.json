@@ -1,0 +1,18 @@
+{
+    "name": "welcome",
+    "description": "modulo de bienvenida customizada",
+    "version": "2.3.0.7e70103df",
+    "author": "fapret (Santiago Nicolas Diaz Conde)",
+    "category": "moderation",
+    "license": "Rights Reserved",
+    "main": "main.js",
+    "globalSlashCommands": "globalslashcommands.json",
+    "dependencies": [
+        "canvas"
+    ],
+    "languages": {
+        "es-ES": "lang/es.json",
+        "en-US": "lang/en.json",
+        "en-GB": "lang/en.json"
+    }
+}

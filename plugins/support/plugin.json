@@ -1,0 +1,10 @@
+{
+    "name": "support",
+    "description": "Sistema de tickets de soporte",
+    "version": "2.3.0.7e6a15565",
+    "author": "fapret (Santiago Nicolas Diaz Conde)",
+    "category": "moderation",
+    "license": "Rights Reserved",
+    "main": "main.js",
+    "globalslashcommands": "globalslashcommands.json"
+}

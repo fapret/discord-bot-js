@@ -1,0 +1,39 @@
+<div class="left-nav" id="leftnav">
+
+    <div class="left-nav-div">
+        <a class="left-nav-a" href="/guild/<%= guild.id %>">
+          <button id="button" class="levtnav-button">
+            <img class="" src="/img/home.svg">
+            </img>
+          </button>
+          <p>INICIO</p>
+        </a>
+      </div>
+
+    <% var category; %>
+    <% plugins.forEach(plugin => { %>
+        <% if(plugin.category != category) { %>
+            <% category = plugin.category %>
+            <div class="left-nav-cat">
+                <p> <%= plugin.category %> </p>
+            </div>
+        <% } %>
+        <div class="left-nav-div">
+            <a class="left-nav-a" href="/guild/<%= guild.id %>/<%= plugin.name %>">
+                <button id="button" class="levtnav-button">
+                    <% if(plugin.webimage) { %>
+                    <img class="" src="<%= plugin.webimage %>">
+                    </img>
+                    <% } else { %>
+                    <img class="" src="/img/config.svg">
+                    </img>
+                    <% } %>
+                </button>
+                <p><%= plugin.name %></p>
+            </a>
+        </div>
+    <% }) %>
+
+    <p style="text-align: center; margin-top: auto; margin-bottom: 0;min-width: 20rem;">Copyright 2022 Santiago Nicolas Diaz Conde Fapret.com</p>
+    <script src="/js/leftnav.js"></script>
+</div>

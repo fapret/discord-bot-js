@@ -1,0 +1,49 @@
+<div class="loadingcontent" id="loadingcontent">
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+</div>
+<div class="loadingcontent" id="dialog">
+    <div class="dialog">
+      <p>¿Habilitar plugin?</p>
+      <div>
+        <button id="pluginbtnyes" class="dialog-button-recommended">
+          SI
+        </button>
+        <button id="pluginbtnno" class="dialog-button-default">
+          NO
+        </button>
+      </div>
+    </div>
+  </div>
+<div class="content">
+    <div class="plugincategory">
+    <% var category; %>
+    <% plugins.forEach(plugin => { %>
+        <% if(plugin.category != category) { %>
+            <% category = plugin.category %>
+            </div>
+            <div class="plugincategory">
+                <p><%= plugin.category %></p>
+        <% } %>
+        <a class="plugininfo" href="/guild/<%= guild.id %>/<%= plugin.name %>">
+            <p> <%= plugin.name %>
+              <label class="pluginswitch">
+                <input type="checkbox" data-plugin="<%= plugin.name %>">
+                <span class="pluginswitchslider"></span>
+              </label>
+            </p>
+            <div class="plugindescription">
+                <% if(plugin.webimage) { %>
+                    <img src="<%= plugin.webimage %>">
+                    </img>
+                    <% } else { %>
+                    <img src="/img/config.svg">
+                    </img>
+                <% } %>
+                <% if (plugin.description) { %>
+                    <span><%= plugin.description %></span>
+                <% } %>
+            </div>
+        </a>
+    <% }) %>
+</div>
+<script src="/js/guild_plugins.js"></script>

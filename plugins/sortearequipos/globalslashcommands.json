@@ -1,0 +1,17 @@
+[
+    {"name": "sortearequipos", "description": "Sistema de sorteo de equipos", "dm_permission": false, "options": [
+        {"type": "${constants:Subcommand}", "name": "crearsorteo", "description": "Crea un sorteo de equipos", "options": [
+            {"type": "${constants:Integer}", "name": "jugadores_por_equipo", "description": "Jugadores Por equipo", "choices": [
+                {"name": "duo", "value": 2}, {"name": "3_man_squad", "value": 3}, {"name": "4_man_squad", "value": 4}, {"name": "5_man_squad", "value": 5}, {"name": "6_man_squad", "value": 6}, {"name": "7_man_squad", "value": 7}, {"name": "8_man_squad", "value": 8}
+            ], "required": true},
+            {"type": "${constants:Integer}", "name": "cant_equipos", "description": "Maxima cantidad de equipos"}
+        ]},
+        {"type": "${constants:Subcommand}", "name": "sortearcanal", "description": "Sortea los jugadores en el canal de voz", "options": [
+            {"type": "${constants:Channel}", "name": "canal", "description": "Canal de voz en el que se sortean los jugadores", "channel_types": ["2"], "required": true},
+            {"type": "${constants:Integer}", "name": "jugadores_por_equipo", "description": "Jugadores Por equipo", "choices": [
+                {"name": "duo", "value": 2}, {"name": "3_man_squad", "value": 3}, {"name": "4_man_squad", "value": 4}, {"name": "5_man_squad", "value": 5}, {"name": "6_man_squad", "value": 6}, {"name": "7_man_squad", "value": 7}, {"name": "8_man_squad", "value": 8}
+            ], "required": true},
+            {"type": "${constants:Boolean}", "name": "caller_too", "description": "Se te debe incluir?"}
+        ]}
+    ]}
+]

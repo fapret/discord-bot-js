@@ -11,6 +11,34 @@ Un programa que no contiene ningun derivado del Software, pero esta diseñado pa
 
 EL SOFTWARE SE PROPORCIONA "COMO ESTA", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O IMPLÍCITA, INCLUYENDO PERO NO LIMITADO A GARANTÍAS DE COMERCIALIZACIÓN, IDONEIDAD PARA UN PROPÓSITO PARTICULAR E INCUMPLIMIENTO. EN NINGÚN CASO LOS AUTORES O PROPIETARIOS DE LOS DERECHOS DE AUTOR SERÁN RESPONSABLES DE NINGUNA RECLAMACIÓN, DAÑOS U OTRAS RESPONSABILIDADES, YA SEA EN UNA ACCIÓN DE CONTRATO, AGRAVIO O CUALQUIER OTRO MOTIVO, DERIVADAS DE, FUERA DE O EN CONEXIÓN CON EL SOFTWARE O SU USO U OTRO TIPO DE ACCIONES EN EL SOFTWARE.
 */
+require('dotenv').config();
+const fs = require('fs');
+const { GlobalLangManager } = require('./langmanager.js');
+const messages = GlobalLangManager.read(process.env.LANG);
+
+/* Parser de fechas */
+/**
+ * @param err A JavaScript value, usually an object or array, to be converted.
+*/
+function logError(err) {
+    d = new Date();
+    if (!fs.existsSync(__dirname + '/../errorlogs')) {
+        fs.mkdirSync(__dirname + '/../errorlogs');
+        console.log('[' + timeParser(d) + '] ' + messages['error-logs-dir-created']);
+    }
+    if(!fs.existsSync(__dirname + '/../errorlogs/' + d.getFullYear()))
+        fs.mkdirSync(__dirname + '/../errorlogs/' + d.getFullYear());
+    if(!fs.existsSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1))
+        fs.mkdirSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1);
+    if(!fs.existsSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1 + '/' + d.getDate()))
+        fs.mkdirSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1 + '/' + d.getDate());
+    if(!fs.existsSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1 + '/' + d.getDate() + '/' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + '.txt'))
+        fs.writeFileSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1 + '/' + d.getDate() + '/' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + '.txt', err);
+    else {
+        fs.appendFileSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1 + '/' + d.getDate() + '/' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + '.txt', '------------------------------------------------------------------------------------------------');
+        fs.appendFileSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1 + '/' + d.getDate() + '/' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + '.txt', err);
+    }
+}
 
 /* Parser de fechas */
 /**
@@ -19,7 +47,7 @@ EL SOFTWARE SE PROPORCIONA "COMO ESTA", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
  */
 const timeParser = function(date){
     day = (date.getDate() < 10 ? '0' : '') + date.getDate();
-    month = (date.getMonth() < 9 ? '0' : '') + date.getMonth() + 1;
+    month = ("0" + (date.getMonth() + 1)).slice(-2);
     hour = (date.getHours() < 10 ? '0' : '') + date.getHours();
     minute = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
     second = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
@@ -47,5 +75,6 @@ module.exports = {
     description: 'Libreria interna del bot',
     author: 'fapret (Santiago Nicolas Diaz Conde)',
     timeParser,
+    logError,
     Mutex
 }

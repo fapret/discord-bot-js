@@ -1,0 +1,64 @@
+<div class="nav">
+    <div class="start" id="start">
+      <% if(leftnav == true){ %>
+        <div class="nav-buttons">
+          <div class="nav-button-div">
+            <a class="nav-button-a" id="btnleftnav">
+              <button id="button" class="nav-button-leftnav" href="#">
+                <img class="nav-button-img" src="/img/left-nav-burgericon.svg">
+                </img>
+              </button>
+            </a>
+          </div>
+        </div>
+      <% } %>
+      <a class="start" href="/"><p>FAPRETBOT</p></a>
+    </div>
+    <div class="center" id="center">
+    </div>
+    <div class="end" id="end">
+      <div class="nav-buttons">
+        <div class="nav-button-div">
+            <a class="nav-button-a" href="/help">
+              <button id="button" class="nav-button">
+                <img class="nav-button-img" src="/img/helpicon.svg" />
+              </button>
+            </a>
+            <div class="hide-btn nav-btn-txt-div">
+              <a class="nav-btn-txt"> Asistencia </a>
+            </div>
+          </div>
+      </div>
+      <div class="nav-profile" id="nav-user">
+        <a class="nav-button-a">
+          <button id="button" class="nav-profile-button">
+            <img class="nav-profile-img" id="avatar" src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.jpg" />
+            <p class="nav-profile-p"><%= user.username %></p>
+            <img class="nav-profile-img-arrow" src="/img/downarrow.svg" />
+          </button>
+        </a>
+      </div>
+      <div class="notification-opt" id="useropt">
+        <a class="notification-opt-a" href="/config">
+          <button class="notification-opt-button">
+            <div class="notification-opt-button-image-div">
+                <img class="notification-opt-button-image" src="/img/config.svg"/>
+            </div>
+            <div class="notification-opt-button-text">
+              Configuracion
+            </div>
+          </button>
+        </a>
+        <a class="notification-opt-a" href="/auth/logout">
+          <button class="notification-opt-button">
+            <div class="notification-opt-button-image-div">
+                <img class="notification-opt-button-image" src="/img/exit.svg"/>
+            </div>
+            <div class="notification-opt-button-text color-red">
+              Cerrar Sesion
+            </div>
+          </button>
+        </a>
+      </div>
+    </div>
+</div>

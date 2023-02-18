@@ -20,28 +20,6 @@ const {fn_sortearcanaldevoz} = require('./fn_sortearcanaldevoz.js');
 //TODO: ARREGLAR PROBLEMA UNDEFINED ES USUARIO 
 
 module.exports = {
-    name: 'sortearequipos',
-    description: 'Sortea los jugadores que ingresen al sorteo entre diferentes equipos',
-    author: 'fapret',
-    version: '2.3.0.7e6a15565',
-    category: 'entertainment',
-    globalSlashCommands: [
-        {name: 'sortearequipos', description: 'Sistema de sorteo de equipos', dm_permission: false, options: [
-            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'crearsorteo', description: 'Crea un sorteo de equipos', options: [
-                {type: Discord.ApplicationCommandOptionType.Integer, name: 'jugadores_por_equipo', description: 'Jugadores Por equipo', choices: [
-                    {name: 'duo', value: 2}, {name: '3_man_squad', value: 3}, {name: '4_man_squad', value: 4}, {name: '5_man_squad', value: 5}, {name: '6_man_squad', value: 6}, {name: '7_man_squad', value: 7}, {name: '8_man_squad', value: 8}
-                ], required: true},
-                {type: Discord.ApplicationCommandOptionType.Integer, name: 'cant_equipos', description: 'Maxima cantidad de equipos'}
-            ]},
-            {type: Discord.ApplicationCommandOptionType.Subcommand, name: 'sortearcanal', description: 'Sortea los jugadores en el canal de voz', options: [
-                {type: Discord.ApplicationCommandOptionType.Channel, name: 'canal', description: 'Canal de voz en el que se sortean los jugadores', channel_types: ['2'], required: true},
-                {type: Discord.ApplicationCommandOptionType.Integer, name: 'jugadores_por_equipo', description: 'Jugadores Por equipo', choices: [
-                    {name: 'duo', value: 2}, {name: '3_man_squad', value: 3}, {name: '4_man_squad', value: 4}, {name: '5_man_squad', value: 5}, {name: '6_man_squad', value: 6}, {name: '7_man_squad', value: 7}, {name: '8_man_squad', value: 8}
-                ], required: true},
-                {type: Discord.ApplicationCommandOptionType.Boolean, name: 'caller_too', description: 'Se te debe incluir?'}
-            ]}
-        ]}
-    ],
     async onSlashCommand(dataManager, slashcommand){
         const {options} = slashcommand;
         if (slashcommand.commandName == 'sortearequipos'){

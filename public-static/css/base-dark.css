@@ -1,0 +1,65 @@
+@media (prefers-color-scheme: dark) {
+  body{
+    background:#373737;
+    scrollbar-color: #606060;
+    color: #DADADA;
+  }
+  body::-webkit-scrollbar {
+      background-color: #B2B2B2;
+  }
+  body::-webkit-scrollbar-thumb:vertical {
+      background-color: #606060;
+  }
+  .nav{
+    background: #6D6D6D;
+  }
+  .nav-button{
+    background-color: gray;
+  }
+  .nav-profile-login{
+    border-color: darkgray;
+  }
+  .nav-profile-p{
+   color: #DADADA;
+  }
+  .nav-btn-txt-div{
+    background-color: #242424;
+  }
+  .nav-profile-login:hover{
+    background-color: lightgray;
+    border-color: lightgray;
+  }
+  .nav-profile:hover .nav-profile-p{
+    color: black;
+  }
+  .nav-button-div:hover .nav-button{
+    background-color: darkgray;
+  }
+  .nav-profile-login:hover .nav-profile-p{
+    color: black;
+  }
+  .notification-title{
+    color: white;
+    background-color: gray;
+  }
+  .notification-window{
+    background-color: lightgray;
+    border-color: darkgray;
+  }
+  .notifications{
+    color: black;
+  }
+  .notification-button{
+    background-color: #D7E3EC;
+  }
+  .warning{
+    color: black;
+    background-color: #C1C334;
+  }
+  .error{
+    background-color: #E13A3A;
+  }
+  .left-nav{
+    background-color: #216683;
+  }
+}

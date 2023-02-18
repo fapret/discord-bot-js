@@ -1,0 +1,11 @@
+{
+    "sessiondata": {
+        "name": "SID",
+        "cookie": {
+            "maxAge": 62208000000,
+            "secure": true
+        },
+        "resave": false,
+        "saveUninitialized": true
+    }
+}

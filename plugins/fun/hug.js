@@ -93,13 +93,13 @@ module.exports = {
         let authorAvatarURL;
         if(!options){ //es garantizado en mensajes
             messageToSend = internalParser(messageToSend, member, message.author);
-            authorAvatarURL = message.author.displayAvatarURL({ format: 'png', size: 1024});
+            authorAvatarURL = message.author.displayAvatarURL({ extension: 'png', size: 1024});
         } else { //es garantizado en slashcommands 
             messageToSend = internalParser(messageToSend, member, message.member.user);
-            authorAvatarURL = message.member.user.displayAvatarURL({ format: 'png', size: 1024});
+            authorAvatarURL = message.member.user.displayAvatarURL({ extension: 'png', size: 1024});
         }
         const authorAvatar = await loadImage(authorAvatarURL);
-        const memberAvatarURL = member.displayAvatarURL({ format: 'png', size: 1024});
+        const memberAvatarURL = member.displayAvatarURL({ extension: 'png', size: 1024});
         const memberAvatar = await loadImage(memberAvatarURL);
 
         const encoder = new GIFEncoder(parseInt(selectedImage.width), parseInt(selectedImage.height));

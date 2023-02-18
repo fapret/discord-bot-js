@@ -1,0 +1,9 @@
+{
+    "name": "custommsg",
+    "description": "modulo de mensajes customizados",
+    "version": "2.3.0.7e70103df",
+    "author": "fapret (Santiago Nicolas Diaz Conde)",
+    "category": "",
+    "license": "Rights Reserved",
+    "main": "main.js"
+}

@@ -1,0 +1,30 @@
+[
+    {"name": "support", "description": "Maneja el sistema de soporte", "dm_permission": false, "options": [
+        {"type": "${constants:Subcommand}", "name": "createembeed", "description": "Crea un mensaje de soporte", "options": [
+            {"type": "${constants:String}", "name": "text", "description": "Texto del mensaje de soporte", "required": true},
+            {"type": "${constants:String}", "name": "title", "description": "Titulo del mensaje de soporte"}
+        ]},
+        {"type": "${constants:Subcommand}", "name": "deleteembeed", "description": "Elimina un mensaje de soporte", "options": [
+            {"type": "${constants:String}", "name": "id", "description": "Id del mensaje de soporte a eliminar", "required": true}
+        ]},
+        {"type": "${constants:Subcommand}", "name": "editembeed", "description": "Edita un mensaje de soporte", "options": [
+            {"type": "${constants:String}", "name": "id", "description": "Id del mensaje a editar", "required": true},
+            {"type": "${constants:String}", "name": "text", "description": "Texto del mensaje de soporte", "required": true}
+        ]},
+        {"type": "${constants:Subcommand}", "name": "addoption", "description": "Agrega una opcion a un mensaje de soporte", "options": [
+            {"type": "${constants:String}", "name": "id", "description": "Id del mensaje a agregarle la opcion", "required": true},
+            {"type": "${constants:String}", "name": "text", "description": "Texto de la opcion(Topico)", "required": true},
+            {"type": "${constants:Role}", "name": "modrole", "description": "Rol de staff soporte", "required": true},
+            {"type": "${constants:Channel}", "name": "category", "channel_types": ["4"], "description": "Categoria donde se crearan los tickets"},
+            {"type": "${constants:String}", "name": "waittime", "description": "Tiempo de gracia entre tickets creados por el usuario"}
+        ]},
+        {"type": "${constants:Subcommand}", "name": "settranscriptchannel", "description": "Setea el canal de transcripciones", "options": [
+            {"type": "${constants:Channel}", "name": "canal", "channel_types": ["0"], "description": "Canal en el que se guardaran las transcripciones", "required": true}
+        ]},
+        {"type": "${constants:Subcommand}", "name": "opentickettouser", "description": "Abre un ticket a un usuario", "options": [
+            {"type": "${constants:User}", "name": "user", "description": "Usuario al que abrirle el ticket", "required": true},
+            {"type": "${constants:Channel}", "name": "category", "channel_types": ["4"], "description": "Categoria donde se crearan los tickets"},
+            {"type": "${constants:Role}", "name": "modrole", "description": "Rol de staff soporte aparte de ti"}
+        ]}
+    ]}
+]
