@@ -27,9 +27,9 @@ const execution = async function(){
     rl.question('Please put default bot language:[enter for default: es (spanish)]\n', (answer));
   });
   if(answer)
-    env.LANG = answer;
+    env.APPLANG = answer;
   else
-    env.LANG = 'es-ES';
+    env.APPLANG = '"es-ES"';
   while(aux){
     answer = await new Promise(answer => {
       rl.question('Would you like to deploy frontEnd over HTTP?[y/n]:\n', (answer));
@@ -101,7 +101,7 @@ const execution = async function(){
       rl.question('Please specify private cert path:\n', (answer));
     });
     if(fs.existsSync(answer)){
-      env.HTTPS_PRIVAYEKEY = answer;
+      env.HTTPS_PRIVATEKEY = answer;
       aux = false;
     } else {
       console.log('Cert doesnt exists on specified path');

@@ -4,7 +4,6 @@
 
 | Version | Codename           | Supported          |
 | ------- | ------------------ | ------------------ |
-| 3.0.x   | Molotov            | :white_check_mark: |
 | 2.3.x   | Ice                | :white_check_mark: |
 | 2.2.x   | Frosty             | :x:                |
 | 2.1.x   | Mint               | :x:                |

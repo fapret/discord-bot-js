@@ -19,6 +19,7 @@ async function init(client) {
     var { generateNewSecret, loadSecrets, saveSecrets } = require("./modules/secrets.js");
     var sessionsecrets = loadSecrets();
     const webconfig = require('./webconfig.json');
+    require('dotenv').config();
     let sessionStore;
 
     const sessionStorage = process.env.SESSION_STORAGE_MODE;

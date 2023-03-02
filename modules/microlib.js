@@ -14,7 +14,7 @@ EL SOFTWARE SE PROPORCIONA "COMO ESTA", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
 require('dotenv').config();
 const fs = require('fs');
 const { GlobalLangManager } = require('./langmanager.js');
-const messages = GlobalLangManager.read(process.env.LANG);
+const messages = GlobalLangManager.read(process.env.APPLANG);
 
 /* Parser de fechas */
 /**

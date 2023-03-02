@@ -61,7 +61,7 @@ function langParser(scope, text) {
             traduced = langRead[toTraduce];
         if(traduced)
             matchescopy.set(element, traduced);
-        else //if(scope != 'global' && lang != 'constants')
+        else if(lang != 'constants')//&& scope != 'global'?
             console.log('[\x1b[33mWARNING\x1b[0m]' + ' ' + element + ' TRADUCTION NOT FOUND ON SCOPE: ' + scope);
     });
     matchescopy.forEach((value, key, map) => {

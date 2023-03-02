@@ -32,7 +32,7 @@ sudo apt update
 sudo apt-get install -y nodejs
  ```
 
- Luego instalamos la dependencias del plugin de musica < music > **(opcional)**
+ Luego instalamos las dependencias opcionales **(opcional)**
  ```sh
 sudo apt-get install -y ffmpeg
  ```

@@ -10,6 +10,5 @@
     "dependencies": [
     ],
     "languages": {
-        "es-ES": "lang/es.json"
     }
 }

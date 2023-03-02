@@ -8,3 +8,4 @@ updatelog.txt
 devversion.js
 test.js
 .env
+node_modules/

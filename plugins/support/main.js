@@ -76,6 +76,7 @@ module.exports = {
             let category = supportMessageData.options[optionindex]?.category;
             let channelmanager = selectMenu.guild.channels;
             supportMessageData.ticketsAmount++;
+            supportMessageData.ticketsOpen++;
             let channel = await channelmanager.create({name: 'ticket-' + supportMessageData.ticketsAmount, type: ChannelType.GuildText, reason: 'Created ticket', topic: supportMessageData.options[optionindex].text, permissionOverwrites: [
                 {
                     id: everyone.id,
@@ -90,13 +91,12 @@ module.exports = {
                     allow: [PermissionsBitField.Flags.ViewChannel]
                 }
             ]});
-             if(category){
+            if(category){
                 channel.setParent(category, { lockPermissions: false });
                 //TODO create category if more than 50 tickets
             }
             pluginManager.writeData(supportID, supportMessageData);
             let ticketinfo = {index: optionindex, supportID: supportID, author: selectMenu.member.id, modrole: supportMessageData.options[optionindex].modrole, topic: supportMessageData.options[optionindex].text, category: category};
-            console.log(channel.id);
             pluginManager.writeData('ticket/' + channel.id, ticketinfo);
 
             //Embeed creation
@@ -149,6 +149,7 @@ module.exports = {
                         let category = supportMessageData.options[0].category;
                         let channelmanager = button.guild.channels;
                         supportMessageData.ticketsAmount++;
+                        supportMessageData.ticketsOpen++;
                         let channel = await channelmanager.create({name: 'ticket-' + supportMessageData.ticketsAmount, type: ChannelType.GuildText, reason: 'Created ticket', topic: supportMessageData.options[0].text, permissionOverwrites: [
                             {
                                 id: everyone.id,
@@ -197,7 +198,7 @@ module.exports = {
                         button.editReply({ content: 'Ticket Creado! <#'+channel.id+'>'});
                     } else {
                         let row = new Discord.ActionRowBuilder();
-                        let selectBuilder = new Discord.SelectMenuBuilder();
+                        let selectBuilder = new Discord.StringSelectMenuBuilder();
                         selectBuilder.setCustomId('support');
                         selectBuilder.setPlaceholder('Selecciona una categoria de soporte');
                         for (let index = 0; index < supportMessageData.optionsAmount; index++) {

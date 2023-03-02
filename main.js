@@ -23,7 +23,7 @@ const { timeParser, Mutex, logError } = require('./modules/microlib.js');
 require('dotenv').config();
 
 //Lee los mensajes en el idioma establecido
-const messages = GlobalLangManager.read(process.env.LANG);
+const messages = GlobalLangManager.read(process.env.APPLANG);
 
 /* Interfaz de lectura de consola */
 const readline = require('readline');
@@ -297,7 +297,7 @@ mainClient.on('interactionCreate', async (interaction) => {
                     API.langManager = new PluginLangManager(plugin);
                     pluginComplete.onSlashCommand(API, interaction);
                 }
-            } else if(interaction.isSelectMenu()){
+            } else if(interaction.isStringSelectMenu()){
                 if (typeof pluginComplete.onSelectMenu === 'function'){
                     let API = new DataInterface(guild, plugin);
                     API.langManager = new PluginLangManager(plugin);

@@ -54,7 +54,7 @@ module.exports = {
             return;
         };
         let channel = member.guild.channels.resolve(welcomeModule.channel);
-        if(welcomeModule.message != ""){
+        if(welcomeModule.message && welcomeModule.message != ""){
             await channel.send(internalParser(welcomeModule.message, member));
         };
         if(welcomeModule.useImage){

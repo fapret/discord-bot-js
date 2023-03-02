@@ -10,8 +10,7 @@
   "author": "fapret (Santiago Nicolas Diaz Conde)",
   "license": "RIGHTS RESERVED",
   "dependencies": {
-    "@discordjs/voice": "^0.13.0",
-    "canvas": "^2.10.2",
+    "canvas": "^2.11.0",
     "discord.js": "^14.6.0",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
@@ -19,11 +18,8 @@
     "express": "^4.18.2",
     "express-mysql-session": "^2.1.8",
     "express-session": "^1.17.3",
-    "ffmpeg-static": "^5.1.0",
     "gifencoder": "^2.0.1",
     "libsodium-wrappers": "^0.7.9",
-    "play-dl": "^1.9.6",
-    "session-file-store": "^1.5.0",
-    "yt-search": "^2.10.1"
+    "session-file-store": "^1.5.0"
   }
 }

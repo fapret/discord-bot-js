@@ -51,6 +51,7 @@ async function fn_addoption(dataManager, slashcommand) {
                 supportMessageData = {
                     optionsAmount: 1,
                     ticketsAmount: 0,
+                    ticketsOpen: 0,
                     options: [{id: 1, modrole: options.getRole('modrole').id, text: options.getString('text').toString(), category: category, timeType: timeType, timeAmount: timeAmount}]
                 }
                 pluginManager.writeData(options.getString('id'), supportMessageData);

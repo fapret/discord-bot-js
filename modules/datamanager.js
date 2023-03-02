@@ -21,7 +21,7 @@ const { GlobalLangManager } = require('./langmanager.js');
 require('dotenv').config();
 
 //Lee los mensajes en el idioma establecido
-const messages = GlobalLangManager.read(process.env.LANG);
+const messages = GlobalLangManager.read(process.env.APPLANG);
 
 /* Path donde se guarda la data si esta en modo file */
 const dataPath = './data/';
