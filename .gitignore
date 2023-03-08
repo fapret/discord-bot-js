@@ -4,6 +4,7 @@ plugins/fun/hug/3/*
 plugins/fun/hug/toBeDone/*
 plugins/music
 plugins/apps
+plugins/support/fn_openai_transcript.js
 updatelog.txt
 devversion.js
 test.js

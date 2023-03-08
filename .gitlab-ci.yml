@@ -1,42 +1,42 @@
 # Official framework image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/node/tags/
-image: node:latest
+#image: node:latest
 
-services:
-  - mysql:latest
-  - postgres:latest
+#services:
+#  - mysql:latest
+#  - postgres:latest
 
 # This folder is cached between builds
 # https://docs.gitlab.com/ee/ci/yaml/index.html#cache
-cache:
-  paths:
-    - node_modules/
+#cache:
+#  paths:
+#    - node_modules/
 
 # Install path
-install_dependencies:
-    stage: build
-    script:
-        - apt-get install -y ffmpeg
-        - apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
-        - npm install
+#install_dependencies:
+#    stage: build
+#    script:
+#        - apt-get install -y ffmpeg
+#        - apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+#        - npm install
 
-env_file_creation:
-    stage: build
-    script:
-        - echo TOKEN=$DISCORD_TOKEN >> .env
-        - echo CLIENTID=$DISCORD_CLIENTID >> .env
-        - echo SECRET=$DISCORD_SECRET >> .env
-        - echo OAUTH_URL=$DISCORD_OAUTHURL >> .env
-        - echo INVITE_LINK=$INVITE_LINK >> .env
-        - echo USEHTTP=$USE_HTTP >> .env
-        - echo HTTP_PORT=$HTTP_PORT >> .env
-        - echo USEHTTPS=$USE_HTTPS >> .env
-        - echo HTTPS_PORT=$HTTPS_PORT >> .env
-        - echo HTTPS_FULLCHAIN=$SSL_FULLCHAIN >> .env
-        - echo HTTPS_PRIVATEKEY=$SSL_PRIVATEKEY >> .env
-        - echo REDIRECT_URI=$REDIRECT_URI >> .env
+#env_file_creation:
+#    stage: build
+#    script:
+#        - echo TOKEN=$DISCORD_TOKEN >> .env
+#        - echo CLIENTID=$DISCORD_CLIENTID >> .env
+#        - echo SECRET=$DISCORD_SECRET >> .env
+#        - echo OAUTH_URL=$DISCORD_OAUTHURL >> .env
+#        - echo INVITE_LINK=$INVITE_LINK >> .env
+#        - echo USEHTTP=$USE_HTTP >> .env
+#        - echo HTTP_PORT=$HTTP_PORT >> .env
+#        - echo USEHTTPS=$USE_HTTPS >> .env
+#        - echo HTTPS_PORT=$HTTPS_PORT >> .env
+#        - echo HTTPS_FULLCHAIN=$SSL_FULLCHAIN >> .env
+#        - echo HTTPS_PRIVATEKEY=$SSL_PRIVATEKEY >> .env
+#        - echo REDIRECT_URI=$REDIRECT_URI >> .env
 
-deploy:
-  stage: deploy
-  script: node main
-  environment: production
+#deploy:
+#  stage: deploy
+#  script: node main
+#  environment: production

@@ -26,6 +26,7 @@ const {fn_lockticket} = require('./fn_lockticket.js');
 const {fn_settranscriptchannel} = require('./fn_settranscriptchannel.js');
 const {fn_opentickettouser} = require('./fn_opentickettouser.js');
 const {fn_calculatetime} = require('./fn_calculatetime.js');
+//const {fn_openai_transcript} = require('./fn_openai_transcript.js');
 
 module.exports = {
     async onSlashCommand(dataManager, slashcommand){
@@ -55,6 +56,12 @@ module.exports = {
             case 'opentickettouser':
                 fn_opentickettouser(dataManager, slashcommand);
                 break;
+            /*
+            case 'aitranscript':
+                await slashcommand.deferReply({ ephemeral: true });
+                fn_openai_transcript(dataManager, slashcommand);
+                break;
+            */
             default:
                 break;
            }

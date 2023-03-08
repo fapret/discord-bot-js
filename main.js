@@ -169,7 +169,7 @@ const flushGlobalSlashCommands = async function(reCreateIfExists = true){
             });
         }
         mainClient.pluginsData.forEach(key => {
-                if(key.globalSlashCommands != undefined && key.globalSlashCommands != null){
+                if(key.globalSlashCommands != undefined && key.globalSlashCommands != null && key.globalSlashCommands != ""){
                     let slashCommands = fs.readFileSync(path.join(key.path, key.globalSlashCommands), 'utf8');
                     let firstParse = GlobalLangManager.langParse(slashCommands, key.name);
                     slashCommands = JSON.parse(GlobalLangManager.langParse(firstParse));

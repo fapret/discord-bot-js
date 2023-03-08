@@ -2,25 +2,18 @@
     {
         "name": "welcome",
         "name_localizations": {
-            "es-ES": "${es-ES:welcomeName}",
-            "en-US": "${en-US:welcomeName}",
-            "en-GB": "${en-US:welcomeName}",
-            "fr": "${fr:welcomeName}"
+            "es-ES": "${es-ES:welcomeName}"
         },
         "description": "${es-ES:welcomeDescription}", 
         "description_localizations": {
-            "es-ES": "${es-ES:welcomeDescription}",
-            "en-US": "${en-US:welcomeDescription}",
-            "en-GB": "${en-US:welcomeDescription}"
+            "es-ES": "${es-ES:welcomeDescription}"
         }, 
         "options": [
             {
                 "type": "${constants:Subcommand}",
                 "name": "settextmessage",
                 "name_localizations": {
-                    "es-ES": "${es-ES:settextmessageName}",
-                    "en-US": "${en-US:settextmessageName}",
-                    "en-GB": "${en-US:settextmessageName}"
+                    "es-ES": "${es-ES:settextmessageName}"
                 },
                 "description": "${es-ES:setwelcome}",
                 "options": [
@@ -28,15 +21,11 @@
                         "type": "${constants:String}",
                         "name": "text",
                         "name_localizations": {
-                            "es-ES": "${es-ES:textName}",
-                            "en-US": "${en-US:textName}",
-                            "en-GB": "${en-US:textName}"
+                            "es-ES": "${es-ES:textName}"
                         },
                         "description": "${es-ES:welcomeMessage}",
                         "description_localizations": {
-                            "es-ES": "${es-ES:welcomeMessage}",
-                            "en-US": "${en-US:welcomeMessage}",
-                            "en-GB": "${en-US:welcomeMessage}"
+                            "es-ES": "${es-ES:welcomeMessage}"
                         },
                         "required": true
                     }
@@ -46,30 +35,22 @@
                 "type": "${constants:Subcommand}",
                 "name": "enableimage",
                 "name_localizations": {
-                    "es-ES": "${es-ES:enableimageName}",
-                    "en-US": "${en-US:enableimageName}",
-                    "en-GB": "${en-US:enableimageName}"
+                    "es-ES": "${es-ES:enableimageName}"
                 },
                 "description": "${es-ES:welcomeMessageImageDesc}",
                 "description_localizations": {
-                    "es-ES": "${es-ES:welcomeMessageImageDesc}",
-                    "en-US": "${en-US:welcomeMessageImageDesc}",
-                    "en-GB": "${en-US:welcomeMessageImageDesc}"
+                    "es-ES": "${es-ES:welcomeMessageImageDesc}"
                 },
                 "options": [
                     {
                         "type": "${constants:Boolean}",
                         "name": "useimage",
                         "name_localizations": {
-                            "es-ES": "${es-ES:useimageName}",
-                            "en-US": "${en-US:useimageName}",
-                            "en-GB": "${en-US:useimageName}"
+                            "es-ES": "${es-ES:useimageName}"
                         },
                         "description": "${es-ES:welcomeMessageImageActive}",
                         "description_localizations": {
-                            "es-ES": "${es-ES:welcomeMessageImageActive}",
-                            "en-US": "${en-US:welcomeMessageImageActive}",
-                            "en-GB": "${en-US:welcomeMessageImageActive}"
+                            "es-ES": "${es-ES:welcomeMessageImageActive}"
                         },
                         "required": true
                     }

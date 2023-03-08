@@ -7,7 +7,7 @@
     "license": "plugin licence",
     "main": "main.js",
     "slashcommands": "slashcommands.json",
-    "globalslashcommands": "globalslashcommands.json",
+    "globalSlashCommands": "globalslashcommands.json",
     "plugin-dependencies": {
 
     },

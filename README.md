@@ -1,5 +1,3 @@
-[👉English version](https://git.fapret.com/fapret/discord-bot-js/-/blob/main/README_en.md)
-
 # Fapret Discord Bot
  Fapret Discord Bot es el bot de discord programado por fapret, posee multiples funcionalidades como musica, acciones, etc.
 # Licencia

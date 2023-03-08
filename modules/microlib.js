@@ -28,15 +28,15 @@ function logError(err) {
     }
     if(!fs.existsSync(__dirname + '/../errorlogs/' + d.getFullYear()))
         fs.mkdirSync(__dirname + '/../errorlogs/' + d.getFullYear());
-    if(!fs.existsSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1))
-        fs.mkdirSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1);
-    if(!fs.existsSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1 + '/' + d.getDate()))
-        fs.mkdirSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1 + '/' + d.getDate());
-    if(!fs.existsSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1 + '/' + d.getDate() + '/' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + '.txt'))
-        fs.writeFileSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1 + '/' + d.getDate() + '/' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + '.txt', err);
+    if(!fs.existsSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + (d.getMonth()+1)))
+        fs.mkdirSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + (d.getMonth()+1));
+    if(!fs.existsSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate()))
+        fs.mkdirSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate());
+    if(!fs.existsSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + '.txt'))
+        fs.writeFileSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + '.txt', err);
     else {
-        fs.appendFileSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1 + '/' + d.getDate() + '/' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + '.txt', '------------------------------------------------------------------------------------------------');
-        fs.appendFileSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + d.getMonth()+1 + '/' + d.getDate() + '/' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + '.txt', err);
+        fs.appendFileSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + '.txt', '------------------------------------------------------------------------------------------------');
+        fs.appendFileSync(__dirname + '/../errorlogs/' + d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + '.txt', err);
     }
 }
 

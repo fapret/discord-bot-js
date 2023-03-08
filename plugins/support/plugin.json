@@ -6,5 +6,5 @@
     "category": "moderation",
     "license": "Rights Reserved",
     "main": "main.js",
-    "globalslashcommands": "globalslashcommands.json"
+    "globalSlashCommands": "globalslashcommands.json"
 }

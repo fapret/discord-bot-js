@@ -1,19 +1,23 @@
-#TODO FINISH DOCKERFILE
-FROM node:16
+FROM node:16-bullseye-slim
+ENV NODE_ENV=production
 
-WORKDIR /usr/src/app
+LABEL author="Fapret"
 
-ARG NODE_ENV
-ENV NODE_ENV $NODE_ENV
-
-COPY package.json /usr/src/app/`
 RUN apt update
-RUN apt install -y ffmpeg
+RUN apt install -y git ffmpeg ca-certificates dnsutils tzdata zip tar curl libtool
 RUN apt install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
-RUN npm install
+RUN npm install npm@latest -g
 
-COPY . /usr/src/app
+WORKDIR /app
 
-EXPOSE 443
-EXPOSE 80
+COPY ./main.js ./main.js
+COPY ./webserver.js ./webserver.js
+COPY ./webconfig.json ./webconfig.json
+COPY ./config.json ./config.json
+COPY ./modules ./modules
+COPY ./plugins ./plugins
+COPY ./views ./views
+COPY ./Routers ./Routers
+COPY ./lang ./lang
+
 CMD [ "npm", "startback" ]
