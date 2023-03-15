@@ -283,34 +283,33 @@ mainClient.on('interactionCreate', async (interaction) => {
     const guild = interaction.guild.id;
     let dataManager = new DataInterface(guild);
     let guilddata = dataManager.GuildDataManager;
+    //TODO chequear los plugin.json y que se ejecuten las funciones solo del plugin correcto
     mainClient.plugins.forEach((pluginComplete, plugin, map) => {
         if(!guilddata.getProperty('DisabledPlugins').includes(plugin)){
+            let API = new DataInterface(guild, plugin);
+            API.langManager = new PluginLangManager(plugin);
             if(interaction.isButton()){
                 if (typeof pluginComplete.onButtonClick === 'function'){
-                    let API = new DataInterface(guild, plugin);
-                    API.langManager = new PluginLangManager(plugin);
                     pluginComplete.onButtonClick(API, interaction);
                 }
             } else if(interaction.isCommand()){
                 if (typeof pluginComplete.onSlashCommand === 'function'){
-                    let API = new DataInterface(guild, plugin);
-                    API.langManager = new PluginLangManager(plugin);
                     pluginComplete.onSlashCommand(API, interaction);
                 }
             } else if(interaction.isStringSelectMenu()){
                 if (typeof pluginComplete.onSelectMenu === 'function'){
-                    let API = new DataInterface(guild, plugin);
-                    API.langManager = new PluginLangManager(plugin);
                     pluginComplete.onSelectMenu(API, interaction);
                 }
             } else if(interaction.isModalSubmit()){
                 if (typeof pluginComplete.onModal === 'function'){
-                    let API = new DataInterface(guild, plugin);
-                    API.langManager = new PluginLangManager(plugin);
                     pluginComplete.onModal(API, interaction);
                 }
             }
-        }
+        } /* else {
+            if(interaction.isRepliable()){
+                interaction.reply({content: "Este plugin esta desabilitado en este servidor.", ephemeral: true});
+            }
+        } */
     });
 });
 

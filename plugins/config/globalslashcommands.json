@@ -1,0 +1,11 @@
+[
+    {"name": "config", "description": "{es-ES:slashCommandDescription}", "dm_permission": false, "options": [
+        {"type": "${constants:Subcommand}", "name": "setoperatorrole", "description": "${es-ES:setOperatorRole}", "options": [
+            {"type": "${constants:Role}", "name": "role", "description": "${es-ES:operatorRole}", "required": true}
+        ]},
+        {"type": "${constants:Subcommand}", "name": "setpluginenable", "description": "${es-ES:activeOrDeactivePlugin}", "options": [
+            {"type": "${constants:String}", "name": "plugin", "description": "${es-ES:pluginToSwitch}", "required": true},
+            {"type": "${constants:Boolean}", "name": "enable", "description": "${es-ES:pluginEnableStatus}", "required": true}
+        ]}
+    ]}
+]

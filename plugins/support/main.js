@@ -134,6 +134,7 @@ module.exports = {
                 selectMenu.reply({ content: 'Ticket Creado! <#'+channel.id+'>', ephemeral: true });
             } catch(err) {
                 console.log(err);
+                dataManager.microlib.logError(err.toString());
             }
         }
     },

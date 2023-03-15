@@ -125,6 +125,7 @@ module.exports = {
             });
         } catch (err) {
             console.log(err);
+            dataManager.microlib.logError(err.toString());
         }
     }
 }

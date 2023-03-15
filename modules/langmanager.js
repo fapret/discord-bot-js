@@ -35,16 +35,24 @@ function registerLang(scope, lang, texts) {
 
 function readLang(scope, lang) {
     let langPath = path.join(__dirname, '../lang/' + lang + '.json');
+    let langPathDefault = path.join(__dirname, '../lang/default.json');
     let data;
+    let dataDefault;
     try{
+        dataDefault = JSON.parse(fs.readFileSync(langPathDefault, 'utf-8'));
         data = JSON.parse(fs.readFileSync(langPath, 'utf-8'));
     } catch (err){
         if(err.code == 'ENOENT'){
-            console.log('[WARNING]' + ' ' + langPath + ' NOT FOUND!');
+            if(dataDefault != undefined && dataDefault.isArray())
+            {
+                console.log('[WARNING]' + ' ' + langPath + ' NOT FOUND!');
+                return dataDefault[scope];
+            }
+            console.log('[WARNING]' + ' ' + langPathDefault + ' NOT FOUND!');
             return undefined;
         }
     }
-    return data[scope];
+    return {...dataDefault[scope], ...data[scope]};
 }
 
 function langParser(scope, text) {

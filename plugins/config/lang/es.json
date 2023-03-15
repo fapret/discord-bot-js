@@ -1,0 +1,8 @@
+{
+    "slashCommandDescription": "Edita la configuracion critica del bot",
+    "setOperatorRole": "Setea el rol de operador",
+    "operatorRole": "Rol de operador",
+    "activeOrDeactivePlugin": "Activa o desactiva un plugin",
+    "pluginToSwitch": "Plugin a activar/desactivar",
+    "pluginEnableStatus": "Estado de habilitacion del plugin"
+}

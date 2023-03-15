@@ -134,6 +134,7 @@ module.exports = {
                     user.roles.add(reactionData.role.slice(3, -1)).catch(async error => {let localchannel = await user.createDM(); localchannel.send('parece que el rango del bot esta por debajo del rol al que se te deberia asignar por reaccionar un mensaje, por favor dile a un administrador de `' + reaction.message.guild.name + '` de dicha situacion para que la solucione.')});
                 } catch(err) {
                     console.log(err);
+                    dataManager.microlib.logError(err.toString());
                 }
             }
         }
@@ -149,6 +150,7 @@ module.exports = {
                     user.roles.remove(reactionData.role.slice(3, -1)).catch(async error => {let localchannel = await user.createDM(); localchannel.send('parece que el rango del bot esta por debajo del rol al que se te deberia remover por reaccionar un mensaje, por favor dile a un administrador de `' + reaction.message.guild.name + '` de dicha situacion para que la solucione.')});
                 } catch(err) {
                     console.log(err);
+                    dataManager.microlib.logError(err.toString());
                 }
             }
         }

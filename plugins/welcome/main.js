@@ -120,30 +120,9 @@ module.exports = {
                         welcomeModule = pluginManager.readData(dataManager.GuildDataManager.getGuildID());
                         if(!welcomeModule){
                             /* Datos default del plugin */
-                            welcomeModule = {
-                                useImage: true,
-                                imageUrl: __dirname + "/default.png",
-                                imagesize: {
-                                    x: "1400",
-                                    y: "600"
-                                },
-                                strokeColor: "#00A9D3",
-                                channel: getchannel(member),
-                                avatar: {
-                                    x: "250",
-                                    y: "300",
-                                    radius: "150",
-                                    border: "5",
-                                    borderColor: "#FFFFFF"
-                                },
-                                texts: [
-                                    {text: "Bienvenid@ ${tag}", size: 80, x: "430", y: "300", font: "Do-Hyeon", color: "#00A9D3"},
-                                    {text: "Miembro ${memberCount}", size: 60, x: "570", y: "400", font: "sans-serif", color: "#00A9D3"}
-                                ],
-                                title: "",
-                                description: "",
-                                message: ""
-                            };
+                            welcomeModule = defaultConf;
+                            welcomeModule.channel = getchannel(tempuser2);
+                            welcomeModule.imageUrl = __dirname + "/default.png";
                         }
                         welcomeModule.message = options.getString('text');
                         pluginManager.writeData(dataManager.GuildDataManager.getGuildID(), welcomeModule);
@@ -154,34 +133,16 @@ module.exports = {
                         welcomeModule = pluginManager.readData(dataManager.GuildDataManager.getGuildID());
                         if(!welcomeModule){
                             /* Datos default del plugin */
-                            welcomeModule = {
-                                useImage: true,
-                                imageUrl: __dirname + "/default.png",
-                                imagesize: {
-                                    x: "1400",
-                                    y: "600"
-                                },
-                                strokeColor: "#00A9D3",
-                                channel: getchannel(member),
-                                avatar: {
-                                    x: "250",
-                                    y: "300",
-                                    radius: "150",
-                                    border: "5",
-                                    borderColor: "#FFFFFF"
-                                },
-                                texts: [
-                                    {text: "Bienvenid@ ${tag}", size: 80, x: "430", y: "300", font: "Do-Hyeon", color: "#00A9D3"},
-                                    {text: "Miembro ${memberCount}", size: 60, x: "570", y: "400", font: "sans-serif", color: "#00A9D3"}
-                                ],
-                                title: "",
-                                description: "",
-                                message: ""
-                            };
+                            welcomeModule = defaultConf;
+                            welcomeModule.channel = getchannel(tempuser2);
+                            welcomeModule.imageUrl = __dirname + "/default.png";
                         }
                         welcomeModule.useImage = options.getBoolean('useimage');
                         pluginManager.writeData(dataManager.GuildDataManager.getGuildID(), welcomeModule);
                         slashcommand.editReply({ content: 'Seteado uso de imagen de bienvenida'});
+                        break;
+                    case 'setimageurl':
+                        //TODO
                         break;
                     default:
                         break;
@@ -189,6 +150,7 @@ module.exports = {
             } catch (err){
                 slashcommand.editReply({ content: 'Un error inesperado ha ocurrido, contacta al soporte'});
                 console.log(err);//TODO manejo de logs
+                dataManager.microlib.logError(err.toString());
             }
         }
     }

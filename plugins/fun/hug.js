@@ -73,6 +73,7 @@ module.exports = {
                 }
             } catch (err) {
                 console.log(err);
+                dataManager.microlib.logError(err.toString());
                 message.channel.send("Valores opcionales erroneos, procesando de forma aleatoria");
                 imageIndex = Math.floor(Math.random() * (animationsAmount) + 1) - 1;
             }

@@ -1,0 +1,38 @@
+{
+    "global": {
+        "language": "Español",
+        "version": "2.3.0.7e70103df",
+        "plugin-doesnt-handle-commands": "El plugin no posee comandos registrados",
+        "disabled-plugin": "El plugin de este comando esta desactivado",
+        "bot-loaded": "Bot cargado",
+        "plugin-load-started": "Carga de plugins iniciada",
+        "activity-setted": "Actividad colocada >> ",
+        "loading-slashcommands": "Carga de comandos slash iniciada",
+        "plugins-loaded": "Plugins cargados:",
+        "created-data-directory": "Creado directorio data",
+        "created-guilds-directory": "Creado directorio guilds",
+        "created-namespace-storage": "Creado storage del namespace: ",
+        "guilddata-not-registered": "directorio data de la guild no existe: ",
+        "created-plugindatapath-directory": "Creado directorio data del plugin: ",
+        "flushplugins-doesnt-refresh-slashcommands": "ADVERTENCIA> Recargar los plugins no recarga los slashcommands, utilice flushAllSlashCommands para hacerlo",
+        "console-help": [
+            "- help : Este mensaje",
+            "- updateActivity : Actualiza la actividad con la que se encuentra en config.json",
+            "- flushPlugins : (beta) Carga nuevos plugins y vuelve a cargar los ya cargados",
+            "- flushAllSlashCommands : Borra todos los slashcommands y luego crea los slashcommands configurados",
+            "- flushSlashCommands : Borra todos los slashcommands de guild y luego crea los slashcommands configurados",
+            "- flushGlobalSlashCommands : Borra todos los slashcommands globales y luego crea los slashcommands configurados"
+        ],
+        "slashCommands-loaded": "Cargados comandos slash para la guild >> ",
+        "globalslashCommands-loaded": "Cargados comandos slash globales",
+        "guild-has-no-permission-for-slashCommands": "La guild no tiene el permiso de modificar o crear comandos slash >> ",
+        "error-on-globalslashcommand-flush": "Error al refrescar los slashcommands globales",
+        "bot-left-guild": "El bot se fue de la guild: ",
+        "starting-webserver": "Iniciando el servidor web...",
+        "guild-not-registered": "Guild no registrada! Registrando guild >> ",
+        "created-cache-directory": "Creado directorio cache",
+        "unknown-command": "Comando Desconocido",
+        "error-logs-dir-created": "Creado directorio de logs de errores.",
+        "plugin-load-succesfull": "Plugin cargado correctamente: "
+    }
+}

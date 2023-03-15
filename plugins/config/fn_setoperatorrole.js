@@ -18,6 +18,7 @@ async function fn_setoperatorrole(dataManager, slashcommand) {
     } catch (err) {
         slashcommand.editReply({ content: 'Un error inesperado ha ocurrido, contacta con el administrador'});
         console.log(err); //TODO: Add bot log system
+        dataManager.microlib.logError(err.toString());
     }
     slashcommand.editReply({ content: 'Rol de operador actualizado'});
 }
